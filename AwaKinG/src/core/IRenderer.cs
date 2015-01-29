@@ -9,7 +9,10 @@ namespace AwaKinG.src.core
     interface IRenderer
     {
         void Render();
-        bool Initialize(int width, int height, bool fullscreen, IntPtr window);
+        bool Initialize(System.Windows.Forms.Control control);
         void ResizeBuffer(System.Drawing.Size s);
+        void AddStaticModelFromFile(String fpath);
+        IInput Input { get; set; }
+
     }
 }

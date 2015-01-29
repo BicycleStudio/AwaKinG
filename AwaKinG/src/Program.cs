@@ -15,12 +15,13 @@ namespace AwaKinG.src
         {
             Engine Engine = new core.Engine();
             Renderer Renderer = new core.Renderer();
+            Input Input = new core.Input();
 
             Engine.Initialize();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1(Engine, Renderer));
+            Application.Run(new Redactor(Engine, Renderer, Input));
 
             Engine.Shutdown();
             Renderer.Shutdown();

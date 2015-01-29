@@ -12,7 +12,6 @@ namespace AwaKinG.src.core
         List<Entity> Entities = new List<Entity>();
         public Engine()
         {
-
         }
         public bool Initialize()
         {
