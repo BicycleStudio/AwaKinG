@@ -1,2 +1,0 @@
-# AwaKinG
-Single RPG
