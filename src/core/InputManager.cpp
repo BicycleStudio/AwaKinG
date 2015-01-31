@@ -56,6 +56,6 @@ bool InputManager::update()
 		"GetDeviceState for mouse");
 	checkResult(_keyboard->GetDeviceState(sizeof(_keyState), (LPVOID)&_keyState),
 		"GetDeviceState for keyboard");
-
+	
 	return true;
 }

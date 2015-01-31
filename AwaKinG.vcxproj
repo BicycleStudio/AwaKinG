@@ -56,7 +56,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dinput8.lib;d3d11.lib;d3dcompiler.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,13 +78,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AwaKinG.cpp" />
+    <ClCompile Include="src\core\Camera.cpp" />
     <ClCompile Include="src\core\Engine.cpp" />
+    <ClCompile Include="src\core\InputManager.cpp" />
     <ClCompile Include="src\core\Scene.cpp" />
     <ClCompile Include="src\render\D3dRender.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\Camera.h" />
     <ClInclude Include="src\core\Engine.h" />
+    <ClInclude Include="src\core\InputManager.h" />
     <ClInclude Include="src\core\Scene.h" />
     <ClInclude Include="src\render\D3dRender.h" />
     <ClInclude Include="src\Window.h" />

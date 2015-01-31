@@ -1,5 +1,7 @@
 #include "Window.h"
 
+#define BITZ 32
+
 LRESULT CALLBACK WndProc(HWND	hWnd, UINT	uMsg, WPARAM	wParam, LPARAM	lParam);
 
 Window::Window()
@@ -8,12 +10,11 @@ Window::Window()
 	_fullscreen = false;
 	_hWnd = NULL;
 }
-bool Window::initialize() 
+bool Window::initialize(HWND* hwnd, int sizeX, int sizeY)
 {
 	HINSTANCE hInstance_ = GetModuleHandle(NULL);
-	_width = 640;
-	_height = 480;
-	int   bitz_ = 32;
+	_width = sizeX;
+	_height = sizeY;
 
 	DWORD		dwExStyle_;
 	DWORD		dwStyle_;
@@ -49,13 +50,14 @@ bool Window::initialize()
 		MessageBox(NULL, "Failed To Register The Window Class.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return false;
 	}
-	if(_fullscreen) {
+	if(_fullscreen) 
+	{
 		DEVMODE dmScreenSettings_;
 		memset(&dmScreenSettings_, 0, sizeof(dmScreenSettings_));
 		dmScreenSettings_.dmSize = sizeof(dmScreenSettings_);
 		dmScreenSettings_.dmPelsWidth = _width;
 		dmScreenSettings_.dmPelsHeight = _height;
-		dmScreenSettings_.dmBitsPerPel = bitz_;
+		dmScreenSettings_.dmBitsPerPel = BITZ;
 		dmScreenSettings_.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
 		// Try To Set Selected Mode And Get Results.  NOTE: CDS_FULLSCREEN Gets Rid Of Start Bar.
@@ -64,8 +66,8 @@ bool Window::initialize()
 			if(MessageBox(NULL, "The Requested Fullscreen Mode Is Not Supported By\nYour Video Card. Use Windowed Mode Instead?", "AwaKinG", MB_YESNO | MB_ICONEXCLAMATION) == IDYES)
 			{
 				_fullscreen = false;
-				_width = 640;
-				_height = 480;
+				_width = sizeX;
+				_height = sizeY;
 				windowRect_.right = (long)_width;
 				windowRect_.bottom = (long)_height;
 			}
@@ -76,12 +78,14 @@ bool Window::initialize()
 			}
 		}
 	}
-	if(_fullscreen) {
+	if(_fullscreen) 
+	{
 		dwExStyle_ = WS_EX_APPWINDOW;
 		dwStyle_ = WS_POPUP;
 		ShowCursor(FALSE);
 	}
-	else {
+	else 
+	{
 		dwExStyle_ = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
 		dwStyle_ = WS_OVERLAPPEDWINDOW;
 	}
@@ -107,6 +111,8 @@ bool Window::initialize()
 	ShowWindow(_hWnd, SW_SHOW);
 	SetForegroundWindow(_hWnd);
 	SetFocus(_hWnd);
+
+	hwnd[0] = _hWnd;
 }
 void Window::shutdown() 
 {
@@ -124,10 +130,4 @@ void Window::shutdown()
 	{
 		MessageBox(NULL, "Could Not Unregister Class.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 	}
-}
-HWND Window::getWindow(int* sizeX, int* sizeY)
-{
-	*sizeX = _width;
-	*sizeY = _height;
-	return _hWnd;
 }

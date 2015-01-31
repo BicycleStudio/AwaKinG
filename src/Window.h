@@ -12,9 +12,8 @@ public:
 		static Window window;
 		return window;
 	};
-	bool initialize();
+	bool initialize(HWND* hwnd, int sizeX, int sizeY);
 	void shutdown();
-	HWND getWindow(int* sizeX, int* sizeY);
 private:
 	Window();
 	Window(const Window&);
