@@ -7,6 +7,18 @@
 using namespace DirectX;
 using namespace std;
 
+namespace Vertex 
+{
+	struct Simple
+	{
+		Simple() {}
+		Simple(XMFLOAT3 pos, XMFLOAT2 tex, XMFLOAT3 nor) { position = pos; texCoord = tex; normal = nor; }
+
+		XMFLOAT3	position;
+		XMFLOAT2	texCoord;
+		XMFLOAT3	normal;
+	};
+}
 class Model
 {
 public:
@@ -15,6 +27,9 @@ public:
 	~Model();
 
 	virtual void shutdown();
+
+	void setBuffers(ID3D11Buffer* vbuf, ID3D11Buffer* ibuf, int indCount);
+	void setTexture(ID3D11ShaderResourceView* texture);
 
 	XMFLOAT4X4*	WorldMatrix();
 	ID3D11ShaderResourceView** Texture();
@@ -34,7 +49,6 @@ class TextureModel : public Model
 public:
 	TextureModel() { ErrorMessage = "TextureModel"; }
 
-	bool initialize();
 	void shutdown();
 };
 

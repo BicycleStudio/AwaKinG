@@ -38,15 +38,19 @@ void Model::shutdown()
 	safeRelease(_vertexBuffer);
 	safeRelease(_texture);
 }
+void Model::setBuffers(ID3D11Buffer* vbuf, ID3D11Buffer* ibuf, int indCount)
+{
+	_vertexBuffer = vbuf;
+	_indexBuffer = ibuf;
+	_countIndexs = indCount;
+}
+void Model::setTexture(ID3D11ShaderResourceView* texture)
+{
+	_texture = texture;
+}
 void TextureModel::shutdown()
 {
 	safeRelease(_indexBuffer);
 	safeRelease(_vertexBuffer);
 	safeRelease(_texture);
 }
-bool TextureModel::initialize()
-{
-
-	return true;
-}
-

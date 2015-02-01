@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <d3d11.h>
+#include "../../include/D3DX11.h"
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include "Model.h"
@@ -12,17 +13,8 @@
 using namespace DirectX;
 using namespace std;
 
-namespace Vertex {
-	struct Simple
-	{
-		Simple() {}
-		Simple(XMFLOAT3 pos, XMFLOAT2 tex, XMFLOAT3 nor) { position = pos; texCoord = tex; normal = nor; }
+#pragma comment(lib, "lib/x86/D3DX11.lib")
 
-		XMFLOAT3	position;
-		XMFLOAT2	texCoord;
-		XMFLOAT3	normal;
-	};
-}
 class D3dRender
 {
 #pragma region structs
@@ -66,6 +58,10 @@ public:
 	void setInitialize(HWND hwnd, int sizeX, int sizeY);
 	void render();
 	void shutdown();
+
+	void addTextureModel(TextureModel* model);
+	bool createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff);
+	bool createTexture(string fileName, ID3D11ShaderResourceView** texture);
 #pragma endregion
 #pragma region private functions
 private:
@@ -86,7 +82,7 @@ public:
 	XMFLOAT4X4*								ViewMatrix;
 #pragma endregion
 #pragma region private vars
-	vector<Model*>			_models;
+	vector<TextureModel*>			_textureModels;
 #pragma region vars for picking 
 	private:
 		D3D11_BOX								_dboxPICK;

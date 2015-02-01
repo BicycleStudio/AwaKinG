@@ -89,13 +89,13 @@ bool InputManager::D()
 }
 float InputManager::MouseX()
 {
-	return ((float)_mouseState.lX) / 100.0f;
+	return ((float)_mouseState.lX) / 500.0f;
 }
 float InputManager::MouseY()
 {
-	return ((float)_mouseState.lY) / 100.0f;
+	return ((float)_mouseState.lY) / 500.0f;
 }
 float InputManager::MouseZ()
 {
-	return ((float)_mouseState.lZ) / 100.0f;
+	return ((float)_mouseState.lZ) / 500.0f;
 }

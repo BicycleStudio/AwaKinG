@@ -29,12 +29,12 @@ D3dRender::D3dRender()
 }
 void D3dRender::shutdown()
 {
-	for(unsigned int i = 0; i < _models.size(); i++)
+	for(unsigned int i = 0; i < _textureModels.size(); i++)
 	{
-		_models[i]->shutdown();
-		delete _models[i];
+		_textureModels[i]->shutdown();
+		delete _textureModels[i];
 	}
-	_models.clear(); 
+	_textureModels.clear();
 
 	safeRelease(_TextureMap.VS);
 	safeRelease(_TextureMap.PS);
@@ -233,8 +233,8 @@ void D3dRender::render()
 	_immediateContext->VSSetConstantBuffers(0, 1, &_bViewProj);
 
 	prepareToRenderTechnique(_TextureMap);
-	for(unsigned int i=0; i< _models.size(); i++)
-		renderTextureMapModel(_models[i]);
+	for(unsigned int i = 0; i< _textureModels.size(); i++)
+		renderTextureMapModel(_textureModels[i]);
 
 	endScene();
 }
@@ -356,5 +356,25 @@ bool D3dRender::compileShaderFromFile(LPCWSTR pFileName, const D3D_SHADER_MACRO*
 		pErrorBlob->Release();
 		return false;
 	}
+	return true;
+}
+bool D3dRender::createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff)
+{
+	ID3D11Buffer* buf_;
+	checkResult(_device->CreateBuffer(bd, data, &buf_), "CreateBuffer failed");
+	buff[0] = buf_;
+	return true;
+}
+void D3dRender::addTextureModel(TextureModel* model)
+{
+	_textureModels.push_back(model);
+}
+bool D3dRender::createTexture(string fileName, ID3D11ShaderResourceView** texture)
+{
+	D3DX11_IMAGE_LOAD_INFO ILI;
+	HRESULT hr;
+	ID3D11ShaderResourceView* res_;
+	D3DX11CreateShaderResourceViewFromFile(_device, fileName.c_str(), NULL, NULL, &res_, &hr);
+	texture[0] = res_;
 	return true;
 }
