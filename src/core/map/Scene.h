@@ -1,8 +1,10 @@
 #pragma once
-#include <string>
+#include <vector>
+#include "Entity.h"
 
 class Scene
 {
+#pragma region singleton
 public:
 	std::string ErrorMessage;
 	static Scene& getInstance()
@@ -10,11 +12,17 @@ public:
 		static Scene scene;
 		return scene;
 	};
-	bool initialize();
-	void shutdown();
 private:
 	Scene();
 	Scene(const Scene&);
+
+public:
+	bool initialize();
+	void update();
+	void shutdown();
+#pragma endregion
+
 private:
+	vector<Entity*>			_entities;
 };
 

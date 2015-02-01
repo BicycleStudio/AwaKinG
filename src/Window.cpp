@@ -113,6 +113,8 @@ bool Window::initialize(HWND* hwnd, int sizeX, int sizeY)
 	SetFocus(_hWnd);
 
 	hwnd[0] = _hWnd;
+
+	return true;
 }
 void Window::shutdown() 
 {

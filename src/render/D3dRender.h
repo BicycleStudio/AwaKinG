@@ -4,6 +4,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
+#include "Model.h"
 
 #define checkResult(hres, msg) if(FAILED(hres)){ErrorMessage = msg;return false; }
 #define safeRelease(d3dpointer) if(d3dpointer){d3dpointer->Release(); d3dpointer = 0;}
@@ -11,6 +12,17 @@
 using namespace DirectX;
 using namespace std;
 
+namespace Vertex {
+	struct Simple
+	{
+		Simple() {}
+		Simple(XMFLOAT3 pos, XMFLOAT2 tex, XMFLOAT3 nor) { position = pos; texCoord = tex; normal = nor; }
+
+		XMFLOAT3	position;
+		XMFLOAT2	texCoord;
+		XMFLOAT3	normal;
+	};
+}
 class D3dRender
 {
 #pragma region structs
@@ -34,7 +46,7 @@ class D3dRender
 		unsigned int VertexStride;
 	};
 #pragma endregion
-#pragma region singlton
+#pragma region singleton
 public:
 	std::string ErrorMessage;
 	static D3dRender& getInstance()
@@ -59,7 +71,7 @@ public:
 private:
 	void beginScene();
 	void prepareToRenderTechnique(TechniqueVP tech);
-	void renderTextureMapModel();
+	void renderTextureMapModel(Model* model);
 	void endScene();
 	bool initializeShaders();
 	bool compileShaderFromFile(LPCWSTR pFileName,
@@ -74,7 +86,8 @@ public:
 	XMFLOAT4X4*								ViewMatrix;
 #pragma endregion
 #pragma region private vars
-	#pragma region vars for picking 
+	vector<Model*>			_models;
+#pragma region vars for picking 
 	private:
 		D3D11_BOX								_dboxPICK;
 		D3D11_TEXTURE2D_DESC		_tex2DDescPICK;

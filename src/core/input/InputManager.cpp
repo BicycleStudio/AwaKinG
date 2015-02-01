@@ -7,7 +7,6 @@ InputManager::InputManager()
 	_mouse = 0;
 	_mayInitialized = false;
 }
-
 bool InputManager::initialize()
 {
 	if(!_mayInitialized){ ErrorMessage = "hwnd not found. InputManager"; return false; }
@@ -36,26 +35,67 @@ bool InputManager::acquire()
 	checkResult(_keyboard->Acquire(), "keyboard acquire");
 	return true;
 }
-
 void InputManager::shutdown()
 {
 	safeRelease(_mouse);
 	safeRelease(_keyboard);
 	safeRelease(_device);
 }
-
 void InputManager::setInitialize(HWND hwnd)
 {
 	_mayInitialized = true;
 	_hwnd = hwnd;
 }
-
 bool InputManager::update()
 {
 	checkResult(_mouse->GetDeviceState(sizeof(DIMOUSESTATE), (LPVOID)&_mouseState),
 		"GetDeviceState for mouse");
 	checkResult(_keyboard->GetDeviceState(sizeof(_keyState), (LPVOID)&_keyState),
 		"GetDeviceState for keyboard");
-	
+
 	return true;
+}
+DIMOUSESTATE* InputManager::getMouseState()
+{
+	return &_mouseState;
+}
+unsigned char** InputManager::getKeyState()
+{
+	return (unsigned char**)(&_keyState);
+}
+bool InputManager::LControl()
+{
+	return _keyState[DIK_LCONTROL];
+}
+bool InputManager::LShift()
+{
+	return _keyState[DIK_LSHIFT];
+}
+bool InputManager::W()
+{
+	return _keyState[DIK_W];
+}
+bool InputManager::A()
+{
+	return _keyState[DIK_A];
+}
+bool InputManager::S()
+{
+	return _keyState[DIK_S];
+}
+bool InputManager::D()
+{
+	return _keyState[DIK_D];
+}
+float InputManager::MouseX()
+{
+	return ((float)_mouseState.lX) / 100.0f;
+}
+float InputManager::MouseY()
+{
+	return ((float)_mouseState.lY) / 100.0f;
+}
+float InputManager::MouseZ()
+{
+	return ((float)_mouseState.lZ) / 100.0f;
 }

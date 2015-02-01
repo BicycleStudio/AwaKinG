@@ -77,20 +77,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\map\Entity.cpp" />
     <ClCompile Include="src\AwaKinG.cpp" />
-    <ClCompile Include="src\core\Camera.cpp" />
+    <ClCompile Include="src\core\cammanager\Camera.cpp" />
+    <ClCompile Include="src\core\cammanager\CameraManager.cpp" />
     <ClCompile Include="src\core\Engine.cpp" />
-    <ClCompile Include="src\core\InputManager.cpp" />
-    <ClCompile Include="src\core\Scene.cpp" />
+    <ClCompile Include="src\core\input\IInputManager.h" />
+    <ClCompile Include="src\core\input\InputManager.cpp" />
+    <ClCompile Include="src\core\map\Scene.cpp" />
+    <ClCompile Include="src\core\Parser.cpp" />
     <ClCompile Include="src\render\D3dRender.cpp" />
+    <ClCompile Include="src\render\Model.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\core\Camera.h" />
+    <ClInclude Include="src\core\map\Entity.h" />
+    <ClInclude Include="src\core\cammanager\Camera.h" />
+    <ClInclude Include="src\core\cammanager\CameraManager.h" />
     <ClInclude Include="src\core\Engine.h" />
-    <ClInclude Include="src\core\InputManager.h" />
-    <ClInclude Include="src\core\Scene.h" />
+    <ClInclude Include="src\core\input\InputManager.h" />
+    <ClInclude Include="src\core\map\Scene.h" />
+    <ClInclude Include="src\core\Parser.h" />
     <ClInclude Include="src\render\D3dRender.h" />
+    <ClInclude Include="src\render\Model.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

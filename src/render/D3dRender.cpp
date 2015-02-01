@@ -29,6 +29,13 @@ D3dRender::D3dRender()
 }
 void D3dRender::shutdown()
 {
+	for(unsigned int i = 0; i < _models.size(); i++)
+	{
+		_models[i]->shutdown();
+		delete _models[i];
+	}
+	_models.clear(); 
+
 	safeRelease(_TextureMap.VS);
 	safeRelease(_TextureMap.PS);
 	safeRelease(_TextureMap.IL);
@@ -226,27 +233,27 @@ void D3dRender::render()
 	_immediateContext->VSSetConstantBuffers(0, 1, &_bViewProj);
 
 	prepareToRenderTechnique(_TextureMap);
-	/*for(int i=0; i< _models.size(); i++)*/
-		renderTextureMapModel(/*model*/);
+	for(unsigned int i=0; i< _models.size(); i++)
+		renderTextureMapModel(_models[i]);
 
 	endScene();
 }
-void D3dRender::renderTextureMapModel(/*model*/)
+void D3dRender::renderTextureMapModel(Model* model)
 {
 	D3D11_MAPPED_SUBRESOURCE MappedResource;
 	_immediateContext->Map(_TextureMap.Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
 	auto pData = reinterpret_cast<ConstantBuffer*>(MappedResource.pData);
-	//XMStoreFloat4x4(&pData->matr, model->WorldMatrix);
+	XMStoreFloat4x4(&pData->matr, XMLoadFloat4x4(model->WorldMatrix()));
 	_immediateContext->Unmap(_TextureMap.Buffer, 0);
 	_immediateContext->VSSetConstantBuffers(_TextureMap.IndexOfBuffer, 1, &_TextureMap.Buffer);
 
-	//_immediateContext->PSSetShaderResources(0, 1,model->Texture);
-	//
-	//UINT Stride = _TextureMap.VertexStride;
-	//UINT Offset = 0;
-	//_immediateContext->IASetVertexBuffers(0, 1, &model->VBuffer, &Stride, &Offset);
-	//_immediateContext->IASetIndexBuffer(model->IBuffer,DXGI_FORMAT_R32_UINT, Offset);
-	//_immediateContext->DrawIndexed(IndexCount, 0, 0);
+	_immediateContext->PSSetShaderResources(0, 1, model->Texture());
+
+	UINT Stride = _TextureMap.VertexStride;
+	UINT Offset = 0;
+	_immediateContext->IASetVertexBuffers(0, 1, model->VertexBuffer(), &Stride, &Offset);
+	_immediateContext->IASetIndexBuffer(model->IndexBuffer(), DXGI_FORMAT_R32_UINT, Offset);
+	_immediateContext->DrawIndexed(model->IndexCount(), 0, 0);
 }
 void D3dRender::prepareToRenderTechnique(TechniqueVP tech)
 {

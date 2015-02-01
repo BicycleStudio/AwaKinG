@@ -1,8 +1,10 @@
 #pragma once
 #include "../render/D3dRender.h"
-#include "InputManager.h"
-#include "Scene.h"
-#include "Camera.h"
+#include "input/InputManager.h"
+#include "map/Scene.h"
+#include "cammanager/Camera.h"
+#include "cammanager/CameraManager.h"
+#include "Parser.h"
 #include <Windows.h>
 
 #define safeInit(obj) if(!obj->initialize()) {MessageBox(NULL, obj->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR); shutdown(); return false;}
@@ -11,6 +13,9 @@
 
 class Engine
 {
+public:
+	enum CameraManagerType { CMT_REDACTOR, CMT_REDACTORFREE };
+#pragma region singleton
 public:
 	std::string ErrorMessage;
 	static Engine& getInstance()
@@ -22,19 +27,37 @@ public:
 private:
 	Engine();
 	Engine(const Engine&);
+#pragma endregion
 
+#pragma region public functions
 public:
+	void setCameraManagerType(CameraManagerType cameraType);
 	bool initialize(HWND* hwnd, int sizeX, int sizeY);
 	void shutdown();
 	void run();
 	void setActive(bool value);
-private:
-	InputManager*		_inputManager;
-	Camera*					_camera;
-	D3dRender*			_d3dRender;
-	Scene*					_scene;
 
-	bool						_keys[256];
-	bool						_active;
+	bool createMapFromFile(string fileName);
+#pragma endregion
+
+#pragma region private functions
+private:
+	void cameraManagerSwitch();
+#pragma endregion
+
+#pragma region private vars
+private:
+	InputManager*									_inputManager;
+	CameraManagerType							_cameraMangerType;
+	CameraManager*								_cameraManager;
+	RedactorCameraManager*				_redactorCameraManager;
+	RedactorFreeCameraManager*		_redactorFreeCameraManager;
+	Camera*												_camera;
+	D3dRender*										_d3dRender;
+	Scene*												_scene;
+	Parser*												_parser;
+
+	bool													_active;
+#pragma endregion
 };
 
