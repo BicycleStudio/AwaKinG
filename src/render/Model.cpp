@@ -2,33 +2,29 @@
 
 Model::Model()
 {
+	_fileName = "";
 	ErrorMessage = "Model";
 	_countIndexs = 0;
 	_indexBuffer = 0;
 	_vertexBuffer = 0;
 	_texture = 0;
-	XMStoreFloat4x4(&_worldMatrix, XMMatrixIdentity());
 }
 Model::~Model()
 {
 }
-XMFLOAT4X4* Model::WorldMatrix()
-{
-	return &_worldMatrix;
-}
-ID3D11ShaderResourceView** Model::Texture()
+ID3D11ShaderResourceView** Model::getTexture()
 {
 	return &_texture;
 }
-ID3D11Buffer** Model::VertexBuffer()
+ID3D11Buffer** Model::getVertexBuffer()
 {
 	return &_vertexBuffer;
 }
-ID3D11Buffer*	Model::IndexBuffer()
+ID3D11Buffer*	Model::getIndexBuffer()
 {
 	return _indexBuffer;
 }
-int Model::IndexCount()
+int Model::getIndexCount()
 {
 	return _countIndexs;
 }
@@ -38,15 +34,27 @@ void Model::shutdown()
 	safeRelease(_vertexBuffer);
 	safeRelease(_texture);
 }
+void Model::setBuffers(ID3D11Buffer* vbuf, ID3D11Buffer* ibuf, int indCount)
+{
+	_vertexBuffer = vbuf;
+	_indexBuffer = ibuf;
+	_countIndexs = indCount;
+}
+void Model::setTexture(ID3D11ShaderResourceView* texture)
+{
+	_texture = texture;
+}
 void TextureModel::shutdown()
 {
 	safeRelease(_indexBuffer);
 	safeRelease(_vertexBuffer);
 	safeRelease(_texture);
 }
-bool TextureModel::initialize()
+const char*	Model::getFileName()
 {
-
-	return true;
+	return _fileName.c_str();
 }
-
+void Model::setFileName(string fileName)
+{
+	_fileName = fileName;
+}

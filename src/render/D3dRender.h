@@ -1,7 +1,9 @@
 #pragma once
 #include <vector>
+#include <map>
 #include <string>
 #include <d3d11.h>
+#include "../../include/D3DX11.h"
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include "Model.h"
@@ -12,19 +14,12 @@
 using namespace DirectX;
 using namespace std;
 
-namespace Vertex {
-	struct Simple
-	{
-		Simple() {}
-		Simple(XMFLOAT3 pos, XMFLOAT2 tex, XMFLOAT3 nor) { position = pos; texCoord = tex; normal = nor; }
+#pragma comment(lib, "lib/x86/D3DX11.lib")
 
-		XMFLOAT3	position;
-		XMFLOAT2	texCoord;
-		XMFLOAT3	normal;
-	};
-}
 class D3dRender
 {
+public:
+	enum AwaKinGModelTechnique { AMT_TEXTUREMAP = 0, AMT_BUMPMAP = 1 };
 #pragma region structs
 	struct RasterizerState
 	{
@@ -66,19 +61,24 @@ public:
 	void setInitialize(HWND hwnd, int sizeX, int sizeY);
 	void render();
 	void shutdown();
+
+	bool needToInitializeModel(string fileName, int* indexTechnique, int* index);
+	XMFLOAT4X4* addModelMatrix(int indexTechnique, int index);
+	XMFLOAT4X4* addTextureModel(TextureModel* model);
+	bool createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff);
+	bool createTexture(string fileName, ID3D11ShaderResourceView** texture);
 #pragma endregion
 #pragma region private functions
 private:
-	void beginScene();
-	void prepareToRenderTechnique(TechniqueVP tech);
-	void renderTextureMapModel(Model* model);
-	void endScene();
-	bool initializeShaders();
-	bool compileShaderFromFile(LPCWSTR pFileName,
-		const D3D_SHADER_MACRO* pDefines,
-		LPCSTR pEntrypoint, LPCSTR pTarget,
-		UINT Flags1, UINT Flags2,
-		ID3DBlob** ppCode);
+	void _beginScene();
+	void _prepareToRenderTechnique(TechniqueVP tech);
+	void _renderTextureMapModel(Model* model, XMFLOAT4X4* worldMatrix);
+	void _endScene();
+	bool _initializeShaders();
+	bool _compileShaderFromFile(LPCWSTR pFileName,	const D3D_SHADER_MACRO* pDefines,
+		LPCSTR pEntrypoint, LPCSTR pTarget,	UINT Flags1, UINT Flags2,	ID3DBlob** ppCode);
+	void _mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* matrix);
+	void _mapViewProjectionBufferResource();
 #pragma endregion
 
 #pragma region public vars
@@ -86,8 +86,10 @@ public:
 	XMFLOAT4X4*								ViewMatrix;
 #pragma endregion
 #pragma region private vars
-	vector<Model*>			_models;
-#pragma region vars for picking 
+	vector<vector<vector<XMFLOAT4X4>>>		_worldMatrixs;
+	vector<vector<Model*>>								_models;
+	 
+	#pragma region vars for picking 
 	private:
 		D3D11_BOX								_dboxPICK;
 		D3D11_TEXTURE2D_DESC		_tex2DDescPICK;

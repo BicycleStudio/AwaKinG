@@ -23,12 +23,32 @@ void Camera::shutdown()
 void Camera::update()
 {
 	XMVECTOR look_ = XMVector3Normalize(XMLoadFloat3(&_look));
+	XMStoreFloat3(&_look, look_);
 	XMVECTOR up_ = XMVector3Cross(look_, XMLoadFloat3(&_right));
 	up_ = XMVector3Normalize(up_);
 	XMStoreFloat3(&_up, up_);
-	XMStoreFloat3(&_look, look_);
+	XMVECTOR right_ = XMVector3Cross(up_, look_);
+	right_ = XMVector3Normalize(right_);
+	XMStoreFloat3(&_right, right_);
+	
+	float x;
+	XMStoreFloat(&x, XMVector3Dot(XMLoadFloat3(&_right), XMLoadFloat3(&_position)));x = -x;
+	float y;
+	XMStoreFloat(&y, XMVector3Dot(XMLoadFloat3(&_up), XMLoadFloat3(&_position))); y = -y;
+	float z;
+	XMStoreFloat(&z, XMVector3Dot(XMLoadFloat3(&_look), XMLoadFloat3(&_position))); z = -z;
 
-	XMStoreFloat4x4(&_viewMatrixRender, XMMatrixLookAtLH(XMLoadFloat3(&_position), XMLoadFloat3(&_look), XMLoadFloat3(&_up)));
+	_viewMatrixRender._11 = _right.x; _viewMatrixRender._12 = _up.x;
+	_viewMatrixRender._21 = _right.y; _viewMatrixRender._22 = _up.y;
+	_viewMatrixRender._31 = _right.z; _viewMatrixRender._32 = _up.z;
+	_viewMatrixRender._41 = x;				_viewMatrixRender._42 = y;
+
+	_viewMatrixRender._13 = _look.x; _viewMatrixRender._14 = 0.0f;
+	_viewMatrixRender._23 = _look.y; _viewMatrixRender._24 = 0.0f;
+	_viewMatrixRender._33 = _look.z; _viewMatrixRender._34 = 0.0f;
+	_viewMatrixRender._43 = z;				_viewMatrixRender._44 = 1.0f;
+
+	//XMStoreFloat4x4(&_viewMatrixRender, XMMatrixLookAtLH(XMLoadFloat3(&_position), XMLoadFloat3(&_look), XMLoadFloat3(&_up)));
 }
 void Camera::pitch(float angle)
 {
@@ -46,9 +66,13 @@ void Camera::yaw(float angle)
 }
 void Camera::walk(float units)
 {
-	XMStoreFloat3(&_position, XMVectorAdd(XMLoadFloat3(&_position), XMVectorMultiply(XMLoadFloat3(&_look), XMLoadFloat(&units))));
+	_position.x += _look.x*units;
+	_position.y += _look.y*units;
+	_position.z += _look.z*units;
 }
 void Camera::strafe(float units)
 {
-	XMStoreFloat3(&_position, XMVectorAdd(XMLoadFloat3(&_position), XMVectorMultiply(XMLoadFloat3(&_right), XMLoadFloat(&units))));
+	_position.x += _right.x*units;
+	_position.y += _right.y*units;
+	_position.z += _right.z*units;
 }

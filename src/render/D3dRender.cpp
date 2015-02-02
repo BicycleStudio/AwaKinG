@@ -1,5 +1,6 @@
 #include "D3dRender.h"
 
+#pragma region mainFunctions
 D3dRender::D3dRender()
 {
 	ErrorMessage = "D3dRender";
@@ -26,15 +27,36 @@ D3dRender::D3dRender()
 	_rs.NonCull = 0;
 	_rs.Solid = 0;
 	_rs.Wireframe = 0;
+
+	vector<Model*> textureModels_;
+	vector<Model*> bumpModels_;
+	_models.push_back(textureModels_);
+	_models.push_back(bumpModels_);
+	vector<vector<XMFLOAT4X4>> worldMatrixsTextureModels_;
+	vector<vector<XMFLOAT4X4>> worldMatrixsbumpModels_;
+	_worldMatrixs.push_back(worldMatrixsTextureModels_);
+	_worldMatrixs.push_back(worldMatrixsbumpModels_);
 }
 void D3dRender::shutdown()
 {
 	for(unsigned int i = 0; i < _models.size(); i++)
 	{
-		_models[i]->shutdown();
-		delete _models[i];
+		for(unsigned int j = 0; j < _models[i].size(); j++)
+		{
+			_models[i][j]->shutdown();
+			delete _models[i][j];
+		}
+		_models[i].clear();
 	}
-	_models.clear(); 
+	_models.clear();
+
+	for(unsigned int i = 0; i < _worldMatrixs.size(); i++)
+	{
+		for(unsigned int j = 0; j < _worldMatrixs[i].size(); j++)
+			_worldMatrixs[i][j].clear();
+		_worldMatrixs[i].clear();
+	}
+	_worldMatrixs.clear();
 
 	safeRelease(_TextureMap.VS);
 	safeRelease(_TextureMap.PS);
@@ -154,7 +176,7 @@ bool D3dRender::initialize()
 	_PerspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)_sizeX / (FLOAT)_sizeY, 0.01f, 1000.0f);
 	_OrthograficMatrix = XMMatrixOrthographicLH((FLOAT)_sizeX, (FLOAT)_sizeY, -100.0f, 1000.0f);
 	
-	if(!initializeShaders()) return false;
+	if(!_initializeShaders()) return false;
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
@@ -181,13 +203,13 @@ bool D3dRender::initialize()
 
 	return true;
 }
-bool D3dRender::initializeShaders()
+bool D3dRender::_initializeShaders()
 {
 	ID3DBlob* BlobVS_ = nullptr;
 	ID3DBlob* BlobPS_ = nullptr;
 
-	if(!compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "VS", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, &BlobVS_)) return false;
-	if(!compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "PS", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, &BlobPS_)) return false;
+	if(!_compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "VS", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, &BlobVS_)) return false;
+	if(!_compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "PS", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, &BlobPS_)) return false;
 	
 	checkResult(_device->CreateVertexShader(BlobVS_->GetBufferPointer(), BlobVS_->GetBufferSize(), nullptr, &_TextureMap.VS),
 		"Creation of Texture_Mapping vertex shader failed");
@@ -220,58 +242,97 @@ bool D3dRender::initializeShaders()
 
 	return true;
 }
+#pragma endregion
+
+#pragma region renderFunctions
 void D3dRender::render()
 {
-	beginScene();
+	_beginScene();
+	_mapViewProjectionBufferResource();
 
-	D3D11_MAPPED_SUBRESOURCE MappedResource;
-	_immediateContext->Map(_bViewProj, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
-	auto pData = reinterpret_cast<ConstantBuffer*>(MappedResource.pData);
-	XMMATRIX mm = XMMatrixMultiply(XMLoadFloat4x4(ViewMatrix), _PerspectiveMatrix);
-	XMStoreFloat4x4(&pData->matr, mm);
-	_immediateContext->Unmap(_bViewProj, 0);
-	_immediateContext->VSSetConstantBuffers(0, 1, &_bViewProj);
+	_prepareToRenderTechnique(_TextureMap);
+	for(unsigned int i = 0; i < _models[AMT_TEXTUREMAP].size(); i++)
+		for(unsigned int j = 0; j < _worldMatrixs[AMT_TEXTUREMAP][i].size(); j++)
+			_renderTextureMapModel(_models[AMT_TEXTUREMAP][i], &_worldMatrixs[AMT_TEXTUREMAP][i][j]);
 
-	prepareToRenderTechnique(_TextureMap);
-	for(unsigned int i=0; i< _models.size(); i++)
-		renderTextureMapModel(_models[i]);
-
-	endScene();
+	_endScene();
 }
-void D3dRender::renderTextureMapModel(Model* model)
+void D3dRender::_renderTextureMapModel(Model* model, XMFLOAT4X4* worldMatrix)
 {
-	D3D11_MAPPED_SUBRESOURCE MappedResource;
-	_immediateContext->Map(_TextureMap.Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
-	auto pData = reinterpret_cast<ConstantBuffer*>(MappedResource.pData);
-	XMStoreFloat4x4(&pData->matr, XMLoadFloat4x4(model->WorldMatrix()));
-	_immediateContext->Unmap(_TextureMap.Buffer, 0);
-	_immediateContext->VSSetConstantBuffers(_TextureMap.IndexOfBuffer, 1, &_TextureMap.Buffer);
-
-	_immediateContext->PSSetShaderResources(0, 1, model->Texture());
-
 	UINT Stride = _TextureMap.VertexStride;
 	UINT Offset = 0;
-	_immediateContext->IASetVertexBuffers(0, 1, model->VertexBuffer(), &Stride, &Offset);
-	_immediateContext->IASetIndexBuffer(model->IndexBuffer(), DXGI_FORMAT_R32_UINT, Offset);
-	_immediateContext->DrawIndexed(model->IndexCount(), 0, 0);
+
+	_mapConstantBufferResource(&_TextureMap.Buffer, worldMatrix);
+	_immediateContext->VSSetConstantBuffers(_TextureMap.IndexOfBuffer, 1, &_TextureMap.Buffer);
+	_immediateContext->PSSetShaderResources(0, 1, model->getTexture());
+
+	_immediateContext->IASetVertexBuffers(0, 1, model->getVertexBuffer(), &Stride, &Offset);
+	_immediateContext->IASetIndexBuffer(model->getIndexBuffer(), DXGI_FORMAT_R32_UINT, Offset);
+	_immediateContext->DrawIndexed(model->getIndexCount(), 0, 0);
 }
-void D3dRender::prepareToRenderTechnique(TechniqueVP tech)
+void D3dRender::_prepareToRenderTechnique(TechniqueVP tech)
 {
 	_immediateContext->VSSetShader(tech.VS, nullptr, 0);
 	_immediateContext->PSSetShader(tech.PS, nullptr, 0);
 	_immediateContext->IASetInputLayout(tech.IL);
 	_immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
-void D3dRender::beginScene()
+void D3dRender::_beginScene()
 {
 	_immediateContext->ClearRenderTargetView(_renderTargetView, _sceneColor);
 	_immediateContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
-void D3dRender::endScene()
+void D3dRender::_endScene()
 {
 	_swapChain->Present(0, 0);
 }
-bool D3dRender::compileShaderFromFile(LPCWSTR pFileName, const D3D_SHADER_MACRO* pDefines,
+#pragma endregion
+
+#pragma region additionalFunctions
+bool D3dRender::needToInitializeModel(string fileName, int* indexTechnique, int* index)
+{
+	for(unsigned int i = 0; i < _models.size(); i++)
+		for(unsigned int j = 0; j < _models[i].size(); j++)
+			if(!strcmp(fileName.c_str(),  _models[i][j]->getFileName()))
+			{
+				indexTechnique[0] = i;
+				index[0] = j;
+				return false;
+			}
+	return true;
+}
+XMFLOAT4X4* D3dRender::addModelMatrix(int indexTechnique, int index)
+{
+	XMFLOAT4X4 worldMatrix_;
+	XMStoreFloat4x4(&worldMatrix_, XMMatrixIdentity());
+	_worldMatrixs[indexTechnique][index].push_back(worldMatrix_);
+	return &_worldMatrixs[indexTechnique][index][_worldMatrixs[indexTechnique][index].size() - 1];
+}
+void D3dRender::_mapViewProjectionBufferResource()
+{
+	XMMATRIX viewProjection_ = XMMatrixMultiply(XMLoadFloat4x4(ViewMatrix), _PerspectiveMatrix);
+	D3D11_MAPPED_SUBRESOURCE MappedResource;
+	_immediateContext->Map(_bViewProj, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
+	auto pData = reinterpret_cast<ConstantBuffer*>(MappedResource.pData);
+	XMStoreFloat4x4(&pData->matr, viewProjection_);
+	_immediateContext->Unmap(_bViewProj, 0);
+
+	_immediateContext->VSSetConstantBuffers(0, 1, &_bViewProj);
+//	_immediateContext->GSSetConstantBuffers(0, 1, &_bViewProj);
+//	_immediateContext->CSSetConstantBuffers(0, 1, &_bViewProj);
+//	_immediateContext->PSSetConstantBuffers(0, 1, &_bViewProj);
+//	_immediateContext->HSSetConstantBuffers(0, 1, &_bViewProj);
+//	_immediateContext->DSSetConstantBuffers(0, 1, &_bViewProj);
+}
+void D3dRender::_mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* matrix)
+{
+	D3D11_MAPPED_SUBRESOURCE MappedResource;
+	HRESULT hr = _immediateContext->Map(buffer[0], 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
+	auto pData = reinterpret_cast<ConstantBuffer*>(MappedResource.pData);
+	XMStoreFloat4x4(&pData->matr, XMLoadFloat4x4(matrix));
+	_immediateContext->Unmap(buffer[0], 0);
+}
+bool D3dRender::_compileShaderFromFile(LPCWSTR pFileName, const D3D_SHADER_MACRO* pDefines,
 	LPCSTR pEntrypoint, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppCode)
 {
 	HRESULT hr;
@@ -358,3 +419,27 @@ bool D3dRender::compileShaderFromFile(LPCWSTR pFileName, const D3D_SHADER_MACRO*
 	}
 	return true;
 }
+bool D3dRender::createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff)
+{
+	ID3D11Buffer* buf_;
+	checkResult(_device->CreateBuffer(bd, data, &buf_), "CreateBuffer failed");
+	buff[0] = buf_;
+	return true;
+}
+XMFLOAT4X4* D3dRender::addTextureModel(TextureModel* model)
+{
+	vector<XMFLOAT4X4> list_;
+	_worldMatrixs[AMT_TEXTUREMAP].push_back(list_);
+	_models[AMT_TEXTUREMAP].push_back(model);
+	return addModelMatrix(AMT_TEXTUREMAP, 0);
+}
+bool D3dRender::createTexture(string fileName, ID3D11ShaderResourceView** texture)
+{
+	D3DX11_IMAGE_LOAD_INFO ILI;
+	HRESULT hr;
+	ID3D11ShaderResourceView* res_;
+	D3DX11CreateShaderResourceViewFromFile(_device, fileName.c_str(), NULL, NULL, &res_, &hr);
+	texture[0] = res_;
+	return true;
+}
+#pragma endregion

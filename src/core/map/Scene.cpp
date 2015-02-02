@@ -20,3 +20,7 @@ void Scene::update()
 		_entities[i]->update();
 	}
 }
+void Scene::addEntity(Entity* ent)
+{
+	_entities.push_back(ent);
+}

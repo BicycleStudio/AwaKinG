@@ -7,9 +7,10 @@
 #include "Parser.h"
 #include <Windows.h>
 
-#define safeInit(obj) if(!obj->initialize()) {MessageBox(NULL, obj->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR); shutdown(); return false;}
+#define safeSystemInit(obj) if(!obj->initialize()) {MessageBox(NULL, obj->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR); shutdown(); return false;}
 #define safeUpdate(obj) if(!obj->update()) {MessageBox(NULL, obj->ErrorMessage.c_str(), "update error", MB_OK | MB_ICONERROR); done_; PostQuitMessage(0);shutdown();break; }
 #define safeShutdown(obj) if(obj) {obj->shutdown(); obj = 0;}
+#define checkRenderResult(boolean) if(!boolean) {MessageBox(NULL, _d3dRender->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR);  return false;}
 
 class Engine
 {
@@ -43,6 +44,7 @@ public:
 #pragma region private functions
 private:
 	void cameraManagerSwitch();
+	bool createEntity(Entity** entity, string fileName);
 #pragma endregion
 
 #pragma region private vars

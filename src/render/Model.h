@@ -7,6 +7,18 @@
 using namespace DirectX;
 using namespace std;
 
+namespace Vertex 
+{
+	struct Simple
+	{
+		Simple() {}
+		Simple(XMFLOAT3 pos, XMFLOAT2 tex, XMFLOAT3 nor) { position = pos; texCoord = tex; normal = nor; }
+
+		XMFLOAT3	position;
+		XMFLOAT2	texCoord;
+		XMFLOAT3	normal;
+	};
+}
 class Model
 {
 public:
@@ -16,13 +28,17 @@ public:
 
 	virtual void shutdown();
 
-	XMFLOAT4X4*	WorldMatrix();
-	ID3D11ShaderResourceView** Texture();
-	ID3D11Buffer** VertexBuffer();
-	ID3D11Buffer*	IndexBuffer();
-	int	IndexCount();
+	void setBuffers(ID3D11Buffer* vbuf, ID3D11Buffer* ibuf, int indCount);
+	void setTexture(ID3D11ShaderResourceView* texture);
+
+	ID3D11ShaderResourceView** getTexture();
+	ID3D11Buffer** getVertexBuffer();
+	ID3D11Buffer*	getIndexBuffer();
+	const char*	getFileName();
+	void setFileName(string fileName);
+	int	getIndexCount();
 protected:
-	XMFLOAT4X4									_worldMatrix;
+	string											_fileName;
 	ID3D11ShaderResourceView*		_texture;
 	ID3D11Buffer*								_vertexBuffer;
 	ID3D11Buffer*								_indexBuffer;
@@ -34,7 +50,6 @@ class TextureModel : public Model
 public:
 	TextureModel() { ErrorMessage = "TextureModel"; }
 
-	bool initialize();
 	void shutdown();
 };
 

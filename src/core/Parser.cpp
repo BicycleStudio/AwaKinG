@@ -4,83 +4,63 @@ Parser::Parser()
 {
 
 }
-bool Parser::readFromFile(string str)
+bool Parser::readString(char** var)
 {
-	// chack extension, make dicision what file ".amp", ".aml" etc
-	// for now we only have ".aml"
-
-	FILE* file_;
-	fopen_s(&file_, str.c_str(), "r");
-
-	int numV_ = 0; int numTV_ = 0; int numF_ = 0;
-	fscanf_s(file_, "%d %d %d ", numV_, numF_, numTV_);
-
-	vector<XMFLOAT3> verts_;		vector<XMFLOAT2> tVerts_; vector<XMFLOAT3> norms_;
-	vector<XMINT3> vertFaces;	vector<XMINT3> tVertFaces;
-
-	for(int i = 0; i < numV_; i++)
+	try
 	{
-		XMFLOAT3 float3_;
-		fscanf_s(file_, "%f %f %f ", float3_.x, float3_.y, float3_.z);
-		verts_.push_back(float3_);
-		fscanf_s(file_, "%f %f %f ", float3_.x, float3_.y, float3_.z);
-		norms_.push_back(float3_);
+		fscanf_s(_fileStreams[_fileStreams.size() - 1], "%s ", var[0], 255);
+		return true;
 	}
-	for(int i = 0; i < numTV_; i++)
+	catch(exception ex_)
 	{
-		XMFLOAT2 float2_;
-		fscanf_s(file_, "%f %f ", float2_.x, float2_.y);
-		tVerts_.push_back(float2_);
+		ErrorMessage = ex_.what();
+		return false;
 	}
-	for(int i = 0; i < numF_; i++)
+}
+bool Parser::readInt(int* var)
+{
+	try
 	{
-		XMINT3 int3_;
-		fscanf_s(file_, "%d %d %d ", int3_.x, int3_.y, int3_.z);
-		vertFaces.push_back(int3_);
-		fscanf_s(file_, "%d %d %d ", int3_.x, int3_.y, int3_.z);
-		tVertFaces.push_back(int3_);
+		fscanf_s(_fileStreams[_fileStreams.size() - 1], "%d ", var);
+		return true;
 	}
-
-	vector<Vertex::Simple> simpleVerts_;
-	vector<Vertex::Simple> optimizedVerts_;
-	unsigned int countV = 0;
-	for(int i = 0; i < numF_; i++)
+	catch(exception ex_)
 	{
-		simpleVerts_.push_back(Vertex::Simple(verts_[vertFaces[i].x], tVerts_[tVertFaces[i].x], norms_[vertFaces[i].x]));
-		simpleVerts_.push_back(Vertex::Simple(verts_[vertFaces[i].y], tVerts_[tVertFaces[i].y], norms_[vertFaces[i].y]));
-		simpleVerts_.push_back(Vertex::Simple(verts_[vertFaces[i].z], tVerts_[tVertFaces[i].z], norms_[vertFaces[i].z]));
+		ErrorMessage = ex_.what();
+		return false;
 	}
-	verts_.clear();	tVerts_.clear();	norms_.clear();	vertFaces.clear();	tVertFaces.clear();
-	unsigned int* inds_ = new unsigned int[countV];
-
-	for(unsigned int i = 0; i < countV; i++) inds_[i] = i;
-	bool write = true;
-	optimizedVerts_.push_back(simpleVerts_[0]);
-	for(unsigned int i = 1; i < countV; i++)
+}
+bool Parser::readFloat(float* var)
+{
+	try
 	{
-		write = true;
-		for(unsigned int j = 0; j < optimizedVerts_.size(); j++)
-		{
-			if(simpleVerts_[i].position.x == optimizedVerts_[j].position.x && simpleVerts_[i].texCoord.x == optimizedVerts_[j].texCoord.x &&
-				simpleVerts_[i].position.y == optimizedVerts_[j].position.y && simpleVerts_[i].texCoord.y == optimizedVerts_[j].texCoord.y &&
-				simpleVerts_[i].position.z == optimizedVerts_[j].position.z)
-			{
-				write = false;
-				inds_[i] = j;
-			}
-		}
-		if(write)
-		{
-			optimizedVerts_.push_back(simpleVerts_[i]);
-			inds_[i] = optimizedVerts_.size() - 1;
-		}
+		fscanf_s(_fileStreams[_fileStreams.size() - 1], "%f ", var);
+		return true;
 	}
-
-	Vertex::Simple* vertsForBuffer = new Vertex::Simple[optimizedVerts_.size()];
-	//CountInds = count_v;
-	for(unsigned int i = 0; i < optimizedVerts_.size(); i++) vertsForBuffer[i] = optimizedVerts_[i];
-
-	fclose(file_);
-
+	catch(exception ex_)
+	{
+		ErrorMessage = ex_.what();
+		return false;
+	}
+}
+bool Parser::openFile(string fileName)
+{
+	FILE* file;
+	if(fopen_s(&file, fileName.c_str(), "r"))
+	{
+		ErrorMessage = "File "+ fileName + " does not exists!";
+		return false;
+	}
+	_fileStreams.push_back(file);
+	return true;
+}
+bool Parser::closeFile(string fileName)
+{
+	if(fclose(_fileStreams[_fileStreams.size() - 1]))
+	{
+		_fileStreams.pop_back();
+		return false;
+	}
+	_fileStreams.pop_back();
 	return true;
 }
