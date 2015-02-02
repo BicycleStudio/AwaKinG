@@ -15,11 +15,14 @@ public:
 private:
 	Scene();
 	Scene(const Scene&);
+#pragma endregion
 
+#pragma region public functions
 public:
 	bool initialize();
 	void update();
 	void shutdown();
+	void addEntity(Entity* ent);
 #pragma endregion
 
 private:

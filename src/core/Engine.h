@@ -44,7 +44,7 @@ public:
 #pragma region private functions
 private:
 	void cameraManagerSwitch();
-	bool createModelFromFile(string fileName);
+	bool createEntity(Entity** entity, string fileName);
 #pragma endregion
 
 #pragma region private vars

@@ -2,33 +2,29 @@
 
 Model::Model()
 {
+	_fileName = "";
 	ErrorMessage = "Model";
 	_countIndexs = 0;
 	_indexBuffer = 0;
 	_vertexBuffer = 0;
 	_texture = 0;
-	XMStoreFloat4x4(&_worldMatrix, XMMatrixIdentity());
 }
 Model::~Model()
 {
 }
-XMFLOAT4X4* Model::WorldMatrix()
-{
-	return &_worldMatrix;
-}
-ID3D11ShaderResourceView** Model::Texture()
+ID3D11ShaderResourceView** Model::getTexture()
 {
 	return &_texture;
 }
-ID3D11Buffer** Model::VertexBuffer()
+ID3D11Buffer** Model::getVertexBuffer()
 {
 	return &_vertexBuffer;
 }
-ID3D11Buffer*	Model::IndexBuffer()
+ID3D11Buffer*	Model::getIndexBuffer()
 {
 	return _indexBuffer;
 }
-int Model::IndexCount()
+int Model::getIndexCount()
 {
 	return _countIndexs;
 }
@@ -53,4 +49,12 @@ void TextureModel::shutdown()
 	safeRelease(_indexBuffer);
 	safeRelease(_vertexBuffer);
 	safeRelease(_texture);
+}
+const char*	Model::getFileName()
+{
+	return _fileName.c_str();
+}
+void Model::setFileName(string fileName)
+{
+	_fileName = fileName;
 }

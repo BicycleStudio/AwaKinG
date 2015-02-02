@@ -31,13 +31,14 @@ public:
 	void setBuffers(ID3D11Buffer* vbuf, ID3D11Buffer* ibuf, int indCount);
 	void setTexture(ID3D11ShaderResourceView* texture);
 
-	XMFLOAT4X4*	WorldMatrix();
-	ID3D11ShaderResourceView** Texture();
-	ID3D11Buffer** VertexBuffer();
-	ID3D11Buffer*	IndexBuffer();
-	int	IndexCount();
+	ID3D11ShaderResourceView** getTexture();
+	ID3D11Buffer** getVertexBuffer();
+	ID3D11Buffer*	getIndexBuffer();
+	const char*	getFileName();
+	void setFileName(string fileName);
+	int	getIndexCount();
 protected:
-	XMFLOAT4X4									_worldMatrix;
+	string											_fileName;
 	ID3D11ShaderResourceView*		_texture;
 	ID3D11Buffer*								_vertexBuffer;
 	ID3D11Buffer*								_indexBuffer;

@@ -4,6 +4,19 @@ Parser::Parser()
 {
 
 }
+bool Parser::readString(char** var)
+{
+	try
+	{
+		fscanf_s(_fileStreams[_fileStreams.size() - 1], "%s ", var[0], 255);
+		return true;
+	}
+	catch(exception ex_)
+	{
+		ErrorMessage = ex_.what();
+		return false;
+	}
+}
 bool Parser::readInt(int* var)
 {
 	try
@@ -34,7 +47,10 @@ bool Parser::openFile(string fileName)
 {
 	FILE* file;
 	if(fopen_s(&file, fileName.c_str(), "r"))
+	{
+		ErrorMessage = "File "+ fileName + " does not exists!";
 		return false;
+	}
 	_fileStreams.push_back(file);
 	return true;
 }

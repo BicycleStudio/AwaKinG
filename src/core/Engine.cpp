@@ -67,7 +67,7 @@ void Engine::setActive(bool value)
 }
 void Engine::run()
 {
-	createMapFromFile("resources/aml/rock_1.aml");
+	createMapFromFile("resources/map/winterfell.map");
 	MSG msg_;
 	bool done_ = false;
 	while(!done_)
@@ -101,9 +101,8 @@ void Engine::run()
 				else*/
 				{
 					safeUpdate(_inputManager);
-					//_scene->update();
+					_scene->update();
 					_cameraManager->update();
-					//_camera->update();
 					_d3dRender->render();
 				}
 			}
@@ -117,13 +116,44 @@ void Engine::setCameraManagerType(CameraManagerType cameraType)
 }
 bool Engine::createMapFromFile(string fileName)
 {
-	//tryOpenStream(fileName);
-	createModelFromFile(fileName);
-	//tryCloseStream();
+	tryOpenStream(fileName);
+	string errorsOpening_;
+	int countEntities_ = 0; tryReadInt(&countEntities_);
+	for(int i = 0; i < countEntities_; i++)
+	{
+		Entity* entity_;
+		char* mdlFileName = new char[255];
+		XMFLOAT3 pos_; XMFLOAT3 scl_; XMFLOAT3 rot_;
+		tryReadString(&mdlFileName);
+		if(!createEntity(&entity_, mdlFileName))
+		{
+			errorsOpening_ += _parser->ErrorMessage + "\n";
+			tryReadFloat(&pos_.x); tryReadFloat(&pos_.y); tryReadFloat(&pos_.z);
+			tryReadFloat(&scl_.x); tryReadFloat(&scl_.y); tryReadFloat(&scl_.z);
+			tryReadFloat(&rot_.x); tryReadFloat(&rot_.y); tryReadFloat(&rot_.z);
+			continue;
+		}
+		tryReadFloat(&pos_.x); tryReadFloat(&pos_.y); tryReadFloat(&pos_.z);
+		tryReadFloat(&scl_.x); tryReadFloat(&scl_.y); tryReadFloat(&scl_.z);
+		tryReadFloat(&rot_.x); tryReadFloat(&rot_.y); tryReadFloat(&rot_.z);
+		
+		entity_->setTransformation(pos_, scl_, rot_);
+		_scene->addEntity(entity_);
+	}
+	if(errorsOpening_ !="")
+		MessageBox(NULL, errorsOpening_.c_str(), "openMapError error", MB_OK | MB_ICONERROR);
+	tryCloseStream();
 	return true;
 }
-bool Engine::createModelFromFile(string fileName)
+bool Engine::createEntity(Entity** entity, string fileName)
 {
+	int modelIndex_ = 0;	int techniqueIndex_ = 0;
+	if(!_d3dRender->needToInitializeModel(fileName, &techniqueIndex_, &modelIndex_))
+	{
+		entity[0] = new Entity();
+		entity[0]->initialize(_d3dRender->addModelMatrix(techniqueIndex_, modelIndex_));
+		return true;
+	}
 	tryOpenStream(fileName);
 
 	int numV_ = 0;  int numF_ = 0; int numTV_ = 0;
@@ -134,9 +164,9 @@ bool Engine::createModelFromFile(string fileName)
 	for(int i = 0; i < numV_; i++)
 	{
 		XMFLOAT3 float3_;
-		tryReadFloat(&float3_.x); tryReadFloat(&float3_.y); tryReadFloat(&float3_.z);
+		tryReadFloat(&float3_.x); tryReadFloat(&float3_.z); tryReadFloat(&float3_.y);
 		verts_.push_back(float3_);
-		tryReadFloat(&float3_.x); tryReadFloat(&float3_.y); tryReadFloat(&float3_.z);
+		tryReadFloat(&float3_.x); tryReadFloat(&float3_.z); tryReadFloat(&float3_.y);
 		norms_.push_back(float3_);
 	}
 	for(int i = 0; i < numTV_; i++)
@@ -148,9 +178,9 @@ bool Engine::createModelFromFile(string fileName)
 	for(int i = 0; i < numF_; i++)
 	{
 		XMINT3 int3_;
-		tryReadInt(&int3_.x);	tryReadInt(&int3_.y);	tryReadInt(&int3_.z);
+		tryReadInt(&int3_.x);	tryReadInt(&int3_.z);	tryReadInt(&int3_.y);
 		vertFaces.push_back(int3_);
-		tryReadInt(&int3_.x); tryReadInt(&int3_.y); tryReadInt(&int3_.z);
+		tryReadInt(&int3_.x); tryReadInt(&int3_.z); tryReadInt(&int3_.y);
 		tVertFaces.push_back(int3_);
 	}
 	vector<Vertex::Simple> simpleVerts_;
@@ -225,7 +255,12 @@ bool Engine::createModelFromFile(string fileName)
 	TextureModel* mdl = new TextureModel();
 	mdl->setBuffers(vBuf_, iBuf_, countInds_);
 	mdl->setTexture(texture_);
-	//mdl->WorldMatrix;		FOR ENTITY
-	_d3dRender->addTextureModel(mdl);
+	mdl->setFileName(fileName);
+
+	entity[0] = new Entity();
+	entity[0]->initialize(_d3dRender->addTextureModel(mdl));
+
+	//entity_->WorldMatrix = ;		FOR ENTITY
+	
 	return true;
 }
