@@ -8,7 +8,7 @@
 #include <Windows.h>
 
 #define safeSystemInit(obj) if(!obj->initialize()) {MessageBox(NULL, obj->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR); shutdown(); return false;}
-#define safeUpdate(obj) if(!obj->update()) {MessageBox(NULL, obj->ErrorMessage.c_str(), "update error", MB_OK | MB_ICONERROR); done_; PostQuitMessage(0);shutdown();break; }
+#define safeUpdate(obj) if(!obj->update()) {MessageBox(NULL, obj->ErrorMessage.c_str(), "update error", MB_OK | MB_ICONERROR); PostQuitMessage(0); shutdown(); return true; }
 #define safeShutdown(obj) if(obj) {obj->shutdown(); obj = 0;}
 #define checkRenderResult(boolean) if(!boolean) {MessageBox(NULL, _d3dRender->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR);  return false;}
 
@@ -32,11 +32,12 @@ private:
 
 #pragma region public functions
 public:
-	void setCameraManagerType(CameraManagerType cameraType);
 	bool initialize(HWND* hwnd, int sizeX, int sizeY);
 	void shutdown();
-	void run();
+	bool active();
+	bool update();
 	void setActive(bool value);
+	void setCameraManagerType(CameraManagerType cameraType);
 
 	bool createMapFromFile(string fileName);
 #pragma endregion

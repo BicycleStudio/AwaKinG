@@ -252,23 +252,25 @@ void D3dRender::render()
 
 	_prepareToRenderTechnique(_TextureMap);
 	for(unsigned int i = 0; i < _models[AMT_TEXTUREMAP].size(); i++)
-		for(unsigned int j = 0; j < _worldMatrixs[AMT_TEXTUREMAP][i].size(); j++)
-			_renderTextureMapModel(_models[AMT_TEXTUREMAP][i], &_worldMatrixs[AMT_TEXTUREMAP][i][j]);
+		_renderTextureMapModel(_models[AMT_TEXTUREMAP][i], &_worldMatrixs[AMT_TEXTUREMAP][i]);
 
 	_endScene();
 }
-void D3dRender::_renderTextureMapModel(Model* model, XMFLOAT4X4* worldMatrix)
+void D3dRender::_renderTextureMapModel(Model* model, vector<XMFLOAT4X4>* matrixs)
 {
 	UINT Stride = _TextureMap.VertexStride;
 	UINT Offset = 0;
 
-	_mapConstantBufferResource(&_TextureMap.Buffer, worldMatrix);
-	_immediateContext->VSSetConstantBuffers(_TextureMap.IndexOfBuffer, 1, &_TextureMap.Buffer);
 	_immediateContext->PSSetShaderResources(0, 1, model->getTexture());
-
 	_immediateContext->IASetVertexBuffers(0, 1, model->getVertexBuffer(), &Stride, &Offset);
 	_immediateContext->IASetIndexBuffer(model->getIndexBuffer(), DXGI_FORMAT_R32_UINT, Offset);
-	_immediateContext->DrawIndexed(model->getIndexCount(), 0, 0);
+
+	for(unsigned int j = 0; j < matrixs->size(); j++)
+	{
+		_mapConstantBufferResource(&_TextureMap.Buffer, &matrixs[0][j]);
+		_immediateContext->VSSetConstantBuffers(_TextureMap.IndexOfBuffer, 1, &_TextureMap.Buffer);
+		_immediateContext->DrawIndexed(model->getIndexCount(), 0, 0);
+	}
 }
 void D3dRender::_prepareToRenderTechnique(TechniqueVP tech)
 {
@@ -284,7 +286,7 @@ void D3dRender::_beginScene()
 }
 void D3dRender::_endScene()
 {
-	_swapChain->Present(0, 0);
+	_swapChain->Present(1, 0);
 }
 #pragma endregion
 

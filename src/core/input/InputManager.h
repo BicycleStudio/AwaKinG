@@ -1,8 +1,11 @@
 #pragma once
-#include <dinput.h>
+#include "../../../Include/dinput.h"		
+//#include <dinput.h>
 #include <vector>
 #include "../../render/D3dRender.h"
 #include "IInputManager.h"
+
+#pragma comment(lib, "lib/x86/dinput8.lib")
 
 class InputManager : public IInputManager
 {

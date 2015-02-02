@@ -52,6 +52,8 @@ bool Engine::initialize(HWND* hwnd, int sizeX, int sizeY)
 
 	_d3dRender->ViewMatrix = _camera->getViewMatrixPointer();
 
+	createMapFromFile("resources/map/winterfell.map");
+
 	return true;
 }
 void Engine::shutdown()
@@ -65,49 +67,13 @@ void Engine::setActive(bool value)
 	_active = value;
 	if(_active && _inputManager) _inputManager->acquire();
 }
-void Engine::run()
+bool Engine::update()
 {
-	createMapFromFile("resources/map/winterfell.map");
-	MSG msg_;
-	bool done_ = false;
-	while(!done_)
-	{
-		if(PeekMessage(&msg_, NULL, 0, 0, PM_REMOVE))
-		{
-			if(msg_.message == WM_QUIT)
-			{
-				done_ = true;
-			}
-			// may be need to update direct input not every frame
-			/*else if(msg_.message == WM_KEYDOWN)
-			{
-			}
-			else if(msg_.message == WM_KEYUP)
-			{
-			}*/
-			else
-			{
-				TranslateMessage(&msg_);
-				DispatchMessage(&msg_);
-			}
-		}
-		else
-		{
-			if(_active)
-			{
-				// need to think about this function!
-				/*if(_keys[VK_ESCAPE])
-				done_ = true;
-				else*/
-				{
-					safeUpdate(_inputManager);
-					_scene->update();
-					_cameraManager->update();
-					_d3dRender->render();
-				}
-			}
-		}
-	}
+	safeUpdate(_inputManager);
+	_scene->update();
+	_cameraManager->update();
+	_d3dRender->render();
+	return false;
 }
 void Engine::setCameraManagerType(CameraManagerType cameraType)
 {
@@ -263,4 +229,8 @@ bool Engine::createEntity(Entity** entity, string fileName)
 	//entity_->WorldMatrix = ;		FOR ENTITY
 	
 	return true;
+}
+bool Engine::active()
+{
+	return _active;
 }

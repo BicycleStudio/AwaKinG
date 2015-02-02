@@ -72,7 +72,7 @@ public:
 private:
 	void _beginScene();
 	void _prepareToRenderTechnique(TechniqueVP tech);
-	void _renderTextureMapModel(Model* model, XMFLOAT4X4* worldMatrix);
+	void _renderTextureMapModel(Model* model, vector<XMFLOAT4X4>* matrixs);
 	void _endScene();
 	bool _initializeShaders();
 	bool _compileShaderFromFile(LPCWSTR pFileName,	const D3D_SHADER_MACRO* pDefines,

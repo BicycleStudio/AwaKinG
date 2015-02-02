@@ -11,7 +11,9 @@ bool gMinimized = false;
 
 #define tryInit(obj) if(!obj->initialize(&gHwnd,SCREEN_WIDTH,SCREEN_HEIGHT)){MessageBox(NULL, obj->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR);shutdown();return 1;}
 
+void messageLoop();
 void shutdown();
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine, int	nCmdShow) 
 {
 	gWindow = &Window::getInstance(); 
@@ -20,7 +22,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 	gEngine = &Engine::getInstance();
 	tryInit(gEngine);
 
-	gEngine->run();
+	messageLoop();
 
 	shutdown();
 	return 0;
@@ -36,17 +38,17 @@ LRESULT CALLBACK WndProc(HWND	hWnd, UINT	uMsg, WPARAM	wParam, LPARAM	lParam)			/
 	{
 		case WM_ACTIVATE:
 		{
-				if(!gMinimized)
+			if(!gMinimized)
+			{
+				if(wParam)
 				{
-					if(wParam)
-					{
-						if(gEngine)gEngine->setActive(true);
-					}
-					else
-					{
-						if(gEngine)gEngine->setActive(false);
-					}
-					return 0;
+					if(gEngine)gEngine->setActive(true);
+				}
+				else
+				{
+					if(gEngine)gEngine->setActive(false);
+				}
+				return 0;
 			}
 		}
 		case WM_SYSCOMMAND:	
@@ -80,4 +82,27 @@ LRESULT CALLBACK WndProc(HWND	hWnd, UINT	uMsg, WPARAM	wParam, LPARAM	lParam)			/
 		}
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+}
+void messageLoop()
+{
+	MSG msg_;
+	bool done_ = false;
+	while(!done_)
+	{
+		if(PeekMessage(&msg_, NULL, 0, 0, PM_REMOVE))
+		{
+			if(msg_.message == WM_QUIT)
+				done_ = true;
+			else
+			{
+				TranslateMessage(&msg_);
+				DispatchMessage(&msg_);
+			}
+		}
+		else
+		{
+			if(gEngine->active())
+				done_ = gEngine->update();
+		}
+	}
 }
