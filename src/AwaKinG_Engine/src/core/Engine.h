@@ -1,10 +1,9 @@
 #pragma once
-#include "../render/D3dRender.h"
+#include "terrain/TerrainManager.h"
 #include "input/InputManager.h"
 #include "map/Scene.h"
-#include "cammanager/Camera.h"
-#include "cammanager/CameraManager.h"
-#include "Parser.h"
+#include "camera/Camera.h"
+#include "camera/CameraManager.h"
 #include <Windows.h>
 
 #define safeSystemInit(obj) if(!obj->initialize()) {MessageBox(NULL, obj->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR); shutdown(); return false;}

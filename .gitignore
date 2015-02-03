@@ -46,6 +46,9 @@ build/
 *.log
 *.scc
 
+*.exp
+dll/AwaKinG_Engine.lib
+
 # Visual C++ cache files
 ipch/
 *.aps

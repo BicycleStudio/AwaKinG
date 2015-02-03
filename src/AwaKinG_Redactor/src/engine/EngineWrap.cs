@@ -9,7 +9,7 @@ namespace AwaKinG_Redactor.src.engine
 {
     public class EngineWrap
     {
-        const String _dllPath = "../../../../lib/AwaKinG_Engine.dll";
+        const String _dllPath = "../../../../dll/AwaKinG_Engine.dll";
         #region dll import
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineRenderResizeBuffer")]

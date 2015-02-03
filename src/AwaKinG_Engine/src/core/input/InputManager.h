@@ -1,13 +1,12 @@
 #pragma once
-#include "../../../../../Include/dinput.h"		
-//#include <dinput.h>
 #include <vector>
+#include "../../../../../Include/dinput.h"		
 #include "../../render/D3dRender.h"
-#include "IInputManager.h"
+#include "IIMMouseKeyboard.h"
 
 #pragma comment(lib, "../../lib/x86/dinput8.lib")
 
-class InputManager : public IInputManager
+class InputManager : public IIMMouseKeyboard
 {
 #pragma region Singleton
 public:

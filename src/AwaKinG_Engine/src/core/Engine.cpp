@@ -42,11 +42,11 @@ bool Engine::initialize(HWND mainHwnd, HWND renderHwnd, int sizeX, int sizeY)
 	//Create redactor now & use RedactorCameraManager;
 	_redactorFreeCameraManager = new RedactorFreeCameraManager();
 	_redactorFreeCameraManager->initialize(_camera);
-	_redactorFreeCameraManager->setInputInterface(_inputManager);
+	_redactorFreeCameraManager->setInputInterface();
 
 	_redactorCameraManager = new RedactorCameraManager();
 	_redactorCameraManager->initialize(_camera);
-	_redactorCameraManager->setInputInterface(_inputManager);
+	_redactorCameraManager->setInputInterface();
 
 	cameraManagerSwitch();
 #pragma endregion
@@ -226,8 +226,6 @@ bool Engine::createEntity(Entity** entity, string fileName)
 
 	entity[0] = new Entity();
 	entity[0]->initialize(_d3dRender->addTextureModel(mdl));
-
-	//entity_->WorldMatrix = ;		FOR ENTITY
 
 	return true;
 }

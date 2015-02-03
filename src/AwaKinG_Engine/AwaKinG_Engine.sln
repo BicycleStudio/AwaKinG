@@ -8,11 +8,17 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		DllExport|Win32 = DllExport|Win32
+		LibExport|Win32 = LibExport|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B065F386-4CC4-47D2-A4BC-626B4E39EA16}.Debug|Win32.ActiveCfg = Debug|Win32
 		{B065F386-4CC4-47D2-A4BC-626B4E39EA16}.Debug|Win32.Build.0 = Debug|Win32
+		{B065F386-4CC4-47D2-A4BC-626B4E39EA16}.DllExport|Win32.ActiveCfg = DllExport|Win32
+		{B065F386-4CC4-47D2-A4BC-626B4E39EA16}.DllExport|Win32.Build.0 = DllExport|Win32
+		{B065F386-4CC4-47D2-A4BC-626B4E39EA16}.LibExport|Win32.ActiveCfg = LibExport|Win32
+		{B065F386-4CC4-47D2-A4BC-626B4E39EA16}.LibExport|Win32.Build.0 = LibExport|Win32
 		{B065F386-4CC4-47D2-A4BC-626B4E39EA16}.Release|Win32.ActiveCfg = Release|Win32
 		{B065F386-4CC4-47D2-A4BC-626B4E39EA16}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
