@@ -86,5 +86,8 @@
     <ClInclude Include="src\core\terrain\TerrainManager.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="src\render\IRTerrain.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

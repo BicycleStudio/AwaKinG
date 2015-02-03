@@ -1,22 +1,7 @@
 #pragma once
-#include <vector>
-#include <map>
-#include <string>
-#include <d3d11.h>
-#include "../../../../include/D3DX11.h"
-#include <d3dcompiler.h>
-#include <DirectXMath.h>
-#include "Model.h"
+#include "IRTerrain.h"
 
-#define checkResult(hres, msg) if(FAILED(hres)){ErrorMessage = msg;return false; }
-#define safeRelease(d3dpointer) if(d3dpointer){d3dpointer->Release(); d3dpointer = 0;}
-
-using namespace DirectX;
-using namespace std;
-
-#pragma comment(lib, "../../lib/x86/D3DX11.lib")
-
-class D3dRender
+class D3dRender : public IRTerrain
 {
 public:
 	enum AwaKinGModelTechnique { AMT_TEXTUREMAP = 0, AMT_BUMPMAP = 1 };
@@ -73,12 +58,18 @@ public:
 	XMFLOAT4X4* addTextureModel(TextureModel* model);
 	bool createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff);
 	bool createTexture(string fileName, ID3D11ShaderResourceView** texture);
+
+	void setRasterizerState(int stateType);
+	#pragma region interface for terrain
+	void setTerrainModels(ID3D11Buffer** vertexBuffers, ID3D11ShaderResourceView** textures, int count, ID3D11Buffer* indexBuffer, int indexCount);
+	#pragma endregion
 #pragma endregion
 #pragma region private functions
 private:
 	void _beginScene();
 	void _prepareToRenderTechnique(TechniqueVP tech);
-	void _renderTextureMapModel(Model* model, vector<XMFLOAT4X4>* matrixs);
+	void _renderTerrainTile(Model* model);
+	void _renderTextureMapModel(ModelEx* model, vector<XMFLOAT4X4>* matrixs);
 	void _endScene();
 	bool _initializeShaders();
 	bool _compileShaderFromFile(LPCWSTR pFileName,	const D3D_SHADER_MACRO* pDefines,
@@ -93,7 +84,9 @@ public:
 #pragma endregion
 #pragma region private vars
 	vector<vector<vector<XMFLOAT4X4>>>		_worldMatrixs;
-	vector<vector<Model*>>								_models;
+	vector<vector<ModelEx*>>							_models;
+	vector<Model*>												_terrainTiles;
+	ID3D11Buffer*													_terrainTileIndexBuffer;
 	 
 	#pragma region vars for picking 
 	private:
@@ -102,12 +95,14 @@ public:
 		ID3D11Texture2D*        _backReadFromPICK;
 	#pragma endregion
 	#pragma region shader vars 
-		TechniqueVP							_TextureMap;
+		TechniqueVP							_terrainTech;
+		TechniqueVP							_textureMap;
 	
 		ID3D11Buffer*           _bViewProj;
 		ConstantBuffer					_cbViewProj;
 		ID3D11SamplerState*     _ssLinear;
 		RasterizerState					_rs;
+		ID3D11SamplerState*			_ssDefault;
 	#pragma endregion
 
 	#pragma region d3d main vars

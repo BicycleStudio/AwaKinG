@@ -19,17 +19,22 @@ D3dRender::D3dRender()
 	_bViewProj = 0;
 	_ssLinear = 0;
 
-	_TextureMap.VS = 0;
-	_TextureMap.PS = 0;
-	_TextureMap.IL = 0;
-	_TextureMap.Buffer = 0;
+	_textureMap.VS = 0;
+	_textureMap.PS = 0;
+	_textureMap.IL = 0;
+	_textureMap.Buffer = 0;
+
+	_terrainTech.VS = 0;
+	_terrainTech.PS = 0;
+	_terrainTech.IL = 0;
+	_terrainTech.Buffer = 0;
 
 	_rs.NonCull = 0;
 	_rs.Solid = 0;
 	_rs.Wireframe = 0;
 
-	vector<Model*> textureModels_;
-	vector<Model*> bumpModels_;
+	vector<ModelEx*> textureModels_;
+	vector<ModelEx*> bumpModels_;
 	_models.push_back(textureModels_);
 	_models.push_back(bumpModels_);
 	vector<vector<XMFLOAT4X4>> worldMatrixsTextureModels_;
@@ -58,22 +63,19 @@ void D3dRender::shutdown()
 	}
 	_worldMatrixs.clear();
 
-	safeRelease(_TextureMap.VS);
-	safeRelease(_TextureMap.PS);
-	safeRelease(_TextureMap.IL);
-	safeRelease(_TextureMap.Buffer);
-
-	safeRelease(_rs.NonCull);
-	safeRelease(_rs.Solid);
-	safeRelease(_rs.Wireframe);
-
-	safeRelease(_depthStencilView);
-	safeRelease(_depthStencil);
-	safeRelease(_backBuffer);
-	safeRelease(_renderTargetView);
-	safeRelease(_immediateContext);
-	safeRelease(_swapChain);
-	safeRelease(_device);
+	for(unsigned int j = 0; j < _terrainTiles.size(); j++)
+	{
+		_terrainTiles[j]->shutdown();
+		delete _terrainTiles[j];
+	}
+	_terrainTiles.clear();
+	
+	safeRelease(_textureMap.VS);		safeRelease(_textureMap.PS);		safeRelease(_textureMap.IL);		safeRelease(_textureMap.Buffer);
+	safeRelease(_terrainTech.VS);		safeRelease(_terrainTech.PS);		safeRelease(_terrainTech.IL);		safeRelease(_terrainTech.Buffer);
+	safeRelease(_rs.NonCull);				safeRelease(_rs.Solid);					safeRelease(_rs.Wireframe);
+	safeRelease(_depthStencilView);	safeRelease(_depthStencil);
+	safeRelease(_backBuffer);				safeRelease(_renderTargetView);
+	safeRelease(_immediateContext);	safeRelease(_swapChain);				safeRelease(_device);
 }
 void D3dRender::setInitialize(HWND hwnd, int sizeX, int sizeY)
 {
@@ -204,19 +206,34 @@ bool D3dRender::initialize()
 	checkResult(_device->CreateRasterizerState(&RasterDesc, &_rs.Wireframe),
 		"Creation of Wireframe RS failed");
 		
+	D3D11_SAMPLER_DESC samplDesc_;
+	samplDesc_.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplDesc_.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplDesc_.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplDesc_.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplDesc_.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplDesc_.MaxAnisotropy = 16;
+	samplDesc_.MipLODBias = 0;
+	samplDesc_.MinLOD = 0;
+	samplDesc_.MaxLOD = 16;
+	checkResult(_device->CreateSamplerState(&samplDesc_, &_ssDefault),
+		"Creation of Wireframe RS failed");
+		//BorderColor = SharpDX.Color.Black,
+	_immediateContext->PSSetSamplers(0, 1, &_ssDefault);
+
 	return true;
 }
 bool D3dRender::_initializeShaders()
 {
-	ID3DBlob* BlobVS_ = nullptr;
-	ID3DBlob* BlobPS_ = nullptr;
+	ID3DBlob* BlobVS_ = nullptr;	ID3DBlob* BlobPS_ = nullptr;
+	UINT flags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR;
 
-	if(!_compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "VS", "vs_5_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, &BlobVS_)) return false;
-	if(!_compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "PS", "ps_5_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR, 0, &BlobPS_)) return false;
+	if(!_compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "VS", "vs_5_0", flags, 0, &BlobVS_)) return false;
+	if(!_compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "PS", "ps_5_0", flags, 0, &BlobPS_)) return false;
 	
-	checkResult(_device->CreateVertexShader(BlobVS_->GetBufferPointer(), BlobVS_->GetBufferSize(), nullptr, &_TextureMap.VS),
+	checkResult(_device->CreateVertexShader(BlobVS_->GetBufferPointer(), BlobVS_->GetBufferSize(), nullptr, &_textureMap.VS),
 		"Creation of Texture_Mapping vertex shader failed");
-	checkResult(_device->CreatePixelShader(BlobPS_->GetBufferPointer(), BlobPS_->GetBufferSize(), nullptr, &_TextureMap.PS),
+	checkResult(_device->CreatePixelShader(BlobPS_->GetBufferPointer(), BlobPS_->GetBufferSize(), nullptr, &_textureMap.PS),
 		"Creation of Texture_Mapping pixel shader failed");
 	
 	const D3D11_INPUT_ELEMENT_DESC layout[] =
@@ -225,10 +242,19 @@ bool D3dRender::_initializeShaders()
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
-	checkResult(_device->CreateInputLayout(layout, ARRAYSIZE(layout), BlobVS_->GetBufferPointer(), BlobVS_->GetBufferSize(), &_TextureMap.IL),
+	checkResult(_device->CreateInputLayout(layout, ARRAYSIZE(layout), BlobVS_->GetBufferPointer(), BlobVS_->GetBufferSize(), &_textureMap.IL),
 		"Creation of Texture_Mapping input layout failed");
 
-	_TextureMap.VertexStride = 32;
+	if(!_compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "VSTerrain", "vs_5_0", flags, 0, &BlobVS_)) return false;
+	if(!_compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "PSTerrain", "ps_5_0", flags, 0, &BlobPS_)) return false;
+
+	checkResult(_device->CreateVertexShader(BlobVS_->GetBufferPointer(), BlobVS_->GetBufferSize(), nullptr, &_terrainTech.VS),
+		"Creation of Texture_Mapping vertex shader failed");
+	checkResult(_device->CreatePixelShader(BlobPS_->GetBufferPointer(), BlobPS_->GetBufferSize(), nullptr, &_terrainTech.PS),
+		"Creation of Texture_Mapping pixel shader failed");
+	_terrainTech.IL = _textureMap.IL;
+
+	_textureMap.VertexStride = 32;_terrainTech.VertexStride = 32;
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
@@ -237,8 +263,8 @@ bool D3dRender::_initializeShaders()
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bd.ByteWidth = sizeof(ConstantBuffer);
 	bd.MiscFlags = 0;
-	checkResult(_device->CreateBuffer(&bd, NULL, &_TextureMap.Buffer), "Creation of constant buffer for ViewProj failed");
-	_TextureMap.IndexOfBuffer = 1;
+	checkResult(_device->CreateBuffer(&bd, NULL, &_textureMap.Buffer), "Creation of constant buffer for ViewProj failed");
+	_textureMap.IndexOfBuffer = 1; _terrainTech.IndexOfBuffer = 1;
 
 	safeRelease(BlobVS_);
 	safeRelease(BlobPS_);
@@ -252,26 +278,37 @@ void D3dRender::render()
 {
 	_beginScene();
 	_mapViewProjectionBufferResource();
+	_immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	_prepareToRenderTechnique(_TextureMap);
+	_prepareToRenderTechnique(_textureMap);
 	for(unsigned int i = 0; i < _models[AMT_TEXTUREMAP].size(); i++)
 		_renderTextureMapModel(_models[AMT_TEXTUREMAP][i], &_worldMatrixs[AMT_TEXTUREMAP][i]);
 
+	_prepareToRenderTechnique(_terrainTech);
+	_immediateContext->IASetIndexBuffer(_terrainTileIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	for(unsigned int i = 0; i < _terrainTiles.size(); i++)
+		_renderTerrainTile(_terrainTiles[i]);
+
 	_endScene();
 }
-void D3dRender::_renderTextureMapModel(Model* model, vector<XMFLOAT4X4>* matrixs)
+void D3dRender::_renderTerrainTile(Model* model)
 {
-	UINT Stride = _TextureMap.VertexStride;
-	UINT Offset = 0;
-
+	UINT offset_ = 0;
 	_immediateContext->PSSetShaderResources(0, 1, model->getTexture());
-	_immediateContext->IASetVertexBuffers(0, 1, model->getVertexBuffer(), &Stride, &Offset);
-	_immediateContext->IASetIndexBuffer(model->getIndexBuffer(), DXGI_FORMAT_R32_UINT, Offset);
+	_immediateContext->IASetVertexBuffers(0, 1, &model->vertexBuffer, &_terrainTech.VertexStride, &offset_);
+	_immediateContext->DrawIndexed(model->getIndexCount(), 0, 0);
+}
+void D3dRender::_renderTextureMapModel(ModelEx* model, vector<XMFLOAT4X4>* matrixs)
+{
+	UINT offset_ = 0;
+	_immediateContext->PSSetShaderResources(0, 1, model->getTexture());
+	_immediateContext->IASetVertexBuffers(0, 1, &model->vertexBuffer, &_textureMap.VertexStride, &offset_);
+	_immediateContext->IASetIndexBuffer(model->getIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
 
 	for(unsigned int j = 0; j < matrixs->size(); j++)
 	{
-		_mapConstantBufferResource(&_TextureMap.Buffer, &matrixs[0][j]);
-		_immediateContext->VSSetConstantBuffers(_TextureMap.IndexOfBuffer, 1, &_TextureMap.Buffer);
+		_mapConstantBufferResource(&_textureMap.Buffer, &matrixs[0][j]);
+		_immediateContext->VSSetConstantBuffers(_textureMap.IndexOfBuffer, 1, &_textureMap.Buffer);
 		_immediateContext->DrawIndexed(model->getIndexCount(), 0, 0);
 	}
 }
@@ -280,7 +317,6 @@ void D3dRender::_prepareToRenderTechnique(TechniqueVP tech)
 	_immediateContext->VSSetShader(tech.VS, nullptr, 0);
 	_immediateContext->PSSetShader(tech.PS, nullptr, 0);
 	_immediateContext->IASetInputLayout(tech.IL);
-	_immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 void D3dRender::_beginScene()
 {
@@ -294,6 +330,19 @@ void D3dRender::_endScene()
 #pragma endregion
 
 #pragma region additionalFunctions
+void D3dRender::setRasterizerState(int stateType)
+{
+	switch(stateType)
+	{
+	case 0:
+		_immediateContext->RSSetState(_rs.Solid);
+		break;
+	case 1:
+		_immediateContext->RSSetState(_rs.Wireframe);
+		break;
+	default:		break;
+	}
+}
 bool D3dRender::resizeBuffer(int sizeX, int sizeY)
 {
 	_sizeX = sizeX; _sizeY = sizeY;
@@ -486,5 +535,23 @@ bool D3dRender::createTexture(string fileName, ID3D11ShaderResourceView** textur
 	D3DX11CreateShaderResourceViewFromFile(_device, fileName.c_str(), NULL, NULL, &res_, &hr);
 	texture[0] = res_;
 	return true;
+}
+#pragma endregion
+
+#pragma region interface for terrain
+void D3dRender::setTerrainModels(ID3D11Buffer** vertexBuffers, ID3D11ShaderResourceView** textures, int count, ID3D11Buffer* indexBuffer, int indexCount)
+{
+	for(unsigned int j = 0; j < _terrainTiles.size(); j++)	{	_terrainTiles[j]->shutdown();	delete _terrainTiles[j]; }
+	_terrainTiles.clear();
+
+	for(int i = 0; i < count; i++)
+	{
+		Model* mdl = new Model();
+		mdl->setBuffers(vertexBuffers[i], NULL, indexCount);
+		mdl->setTexture(textures[i]);
+		_terrainTiles.push_back(mdl);
+	}
+
+	_terrainTileIndexBuffer = indexBuffer;
 }
 #pragma endregion

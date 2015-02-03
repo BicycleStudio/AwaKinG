@@ -237,3 +237,7 @@ bool Engine::resizeRenderBuffer(int sizeX, int sizeY)
 {
 	return _d3dRender->resizeBuffer(sizeX, sizeY);
 }
+bool Engine::createTerrain(int gridX, int gridY)
+{
+	return TerrainManager::getInstance().generate(gridX, gridY);
+}

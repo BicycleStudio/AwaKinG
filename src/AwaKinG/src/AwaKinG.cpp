@@ -28,6 +28,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 	}
 
 	gEngine->createMapFromFile("../../resources/map/winterfell.map");
+	gEngine->createTerrain(2,2);
 	gEngine->setActive(true);
 	messageLoop();
 

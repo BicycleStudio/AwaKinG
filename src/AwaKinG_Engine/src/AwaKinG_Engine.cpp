@@ -54,3 +54,7 @@ bool EngineRenderResizeBuffer(Engine* pointer, int sizeX, int sizeY)
 {
 	return pointer->resizeRenderBuffer(sizeX, sizeY);
 }
+bool EngineTerrainGenerate(Engine* pointer, int sizeX, int sizeY)
+{
+	return pointer->createTerrain(sizeX, sizeY);
+}

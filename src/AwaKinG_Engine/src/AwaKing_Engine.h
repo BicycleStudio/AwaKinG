@@ -19,5 +19,6 @@ DLL_SPEC int EngineSetActive(Engine* pointer, int value);
 DLL_SPEC bool EngineGetActive(Engine* pointer);
 DLL_SPEC void EngineSetCameraManagerType(Engine* pointer, int type);
 DLL_SPEC bool EngineRenderResizeBuffer(Engine* pointer, int sizeX, int sizeY);
+DLL_SPEC bool EngineTerrainGenerate(Engine* pointer, int sizeX, int sizeY);
 
 #endif // __AWAKING_ENGINE_H setCameraManagerType

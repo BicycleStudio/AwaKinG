@@ -42,6 +42,7 @@ public:
 #pragma endregion
 
 #pragma region redactor functions
+	bool createTerrain(int gridX, int gridY);
 	bool createMapFromFile(string fileName);
 #pragma endregion
 

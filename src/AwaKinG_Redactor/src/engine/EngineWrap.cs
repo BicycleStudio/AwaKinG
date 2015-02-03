@@ -12,6 +12,9 @@ namespace AwaKinG_Redactor.src.engine
         const String _dllPath = "../../../../dll/AwaKinG_Engine.dll";
         #region dll import
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+            EntryPoint = "EngineTerrainGenerate")]
+        private static extern bool _generateTerrain(IntPtr pointer, int sizeX, int sizeY);
+        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineRenderResizeBuffer")]
         private static extern bool _resizeBuffers(IntPtr pointer, int sizeX, int sizeY);
 
@@ -90,6 +93,10 @@ namespace AwaKinG_Redactor.src.engine
             {
                 bool b = _resizeBuffers(_engine, size.Width, size.Height);
             }
+        }
+        public void GenerateTerrain(int gridX, int gridY)
+        {
+            _generateTerrain(_engine, gridX, gridY);
         }
     }
 }

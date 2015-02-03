@@ -106,5 +106,9 @@ namespace AwaKinG_Redactor
         {
             _engine.ResizeRenderBuffers(pnlRender.Size);
         }
+        private void awA_Button1_Click(object sender, EventArgs e)
+        {
+            _engine.GenerateTerrain((int)awA_Value_Button1.Value, (int)awA_Value_Button2.Value);
+        }
     }
 }

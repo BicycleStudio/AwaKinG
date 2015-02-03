@@ -3,9 +3,9 @@
 Camera::Camera()
 {
 	XMStoreFloat4x4(&_viewMatrixRender, XMMatrixIdentity());
-	_position = XMFLOAT3(0.0f, 0.0f, -10.0f);
-	_look = XMFLOAT3(0.0f, 0.0f, 1.0f);
-	_up = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	_position = XMFLOAT3(0.0f, 100.0f, 0.0f);
+	_look = XMFLOAT3(0.0f, -1.0f, 0.0f);
+	_up = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	_right = XMFLOAT3(1.0f, 0.0f, 0.0f);
 }
 Camera::~Camera()

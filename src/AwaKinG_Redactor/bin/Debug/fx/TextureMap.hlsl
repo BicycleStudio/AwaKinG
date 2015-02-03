@@ -29,7 +29,20 @@ PS_IN VS(VS_IN input)
 
 	return output;
 }
+PS_IN VSTerrain(VS_IN input)
+{
+	PS_IN output = (PS_IN)0;
+	output.Pos = mul(float4(input.Pos, 1.0f), ViewProj);
+	output.Tex = input.Tex;
+	output.Normal = input.Normal;
+
+	return output;
+}
 float4 PS(PS_IN input) : SV_Target
+{
+	return texDiffuse.Sample(samLinear, input.Tex);
+}
+float4 PSTerrain(PS_IN input) : SV_Target
 {
 	return texDiffuse.Sample(samLinear, input.Tex);
 }

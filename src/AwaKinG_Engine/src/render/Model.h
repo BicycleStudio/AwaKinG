@@ -28,28 +28,36 @@ public:
 
 	virtual void shutdown();
 
-	void setBuffers(ID3D11Buffer* vbuf, ID3D11Buffer* ibuf, int indCount);
+	virtual void setBuffers(ID3D11Buffer* vbuf, ID3D11Buffer* ibuf, int indCount);
 	void setTexture(ID3D11ShaderResourceView* texture);
 
 	ID3D11ShaderResourceView** getTexture();
-	ID3D11Buffer** getVertexBuffer();
-	ID3D11Buffer*	getIndexBuffer();
-	const char*	getFileName();
-	void setFileName(string fileName);
+	ID3D11Buffer* getVertexBuffer();
 	int	getIndexCount();
+
+
+	ID3D11Buffer*								vertexBuffer;
 protected:
-	string											_fileName;
 	ID3D11ShaderResourceView*		_texture;
-	ID3D11Buffer*								_vertexBuffer;
-	ID3D11Buffer*								_indexBuffer;
 	int													_countIndexs;
 };
-
-class TextureModel : public Model
+class ModelEx : public Model
 {
 public:
-	TextureModel() { ErrorMessage = "TextureModel"; }
-
+	ModelEx() { _fileName = ""; _indexBuffer = 0; ErrorMessage = "ModelEx"; }
+	virtual void setBuffers(ID3D11Buffer* vbuf, ID3D11Buffer* ibuf, int indCount);
+	
 	void shutdown();
+	void setFileName(string fileName);
+	const char*	getFileName();
+	ID3D11Buffer*	getIndexBuffer();
+protected:
+	string											_fileName;
+	ID3D11Buffer*								_indexBuffer;
 };
-
+class TextureModel : public ModelEx
+{
+public:
+	TextureModel() { _fileName = ""; _indexBuffer = 0; ErrorMessage = "TextureModel"; }
+protected:
+};

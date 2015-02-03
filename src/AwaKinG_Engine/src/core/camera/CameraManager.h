@@ -1,6 +1,5 @@
 #pragma once
 #include "Camera.h"
-#include "../input/IIMMouseKeyboard.h"
 #include "../input/InputManager.h"
 #include <dinput.h>
 
