@@ -21,6 +21,11 @@ class D3dRender
 public:
 	enum AwaKinGModelTechnique { AMT_TEXTUREMAP = 0, AMT_BUMPMAP = 1 };
 #pragma region structs
+	struct SystemConfiguration
+	{
+		const float Zfar = 100000.0f;
+		const float Znear = 0.01f;
+	}; SystemConfiguration _config;
 	struct RasterizerState
 	{
 		ID3D11RasterizerState* Solid;
@@ -61,6 +66,7 @@ public:
 	void setInitialize(HWND hwnd, int sizeX, int sizeY);
 	void render();
 	void shutdown();
+	bool resizeBuffer(int sizeX, int sizeY);
 
 	bool needToInitializeModel(string fileName, int* indexTechnique, int* index);
 	XMFLOAT4X4* addModelMatrix(int indexTechnique, int index);

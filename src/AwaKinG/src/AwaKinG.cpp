@@ -1,6 +1,5 @@
 #include "Window.h"
-#include "../../AwaKinG_Engine/AwaKing_Engine.h"
-
+#include "../../AwaKinG_Engine/src/AwaKing_Engine.h"
 #pragma comment(lib, "../../Lib/AwaKinG_Engine.lib")
 
 #define SCREEN_WIDTH 800

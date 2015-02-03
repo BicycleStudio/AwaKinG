@@ -235,3 +235,7 @@ bool Engine::active()
 {
 	return _active;
 }
+bool Engine::resizeRenderBuffer(int sizeX, int sizeY)
+{
+	return _d3dRender->resizeBuffer(sizeX, sizeY);
+}

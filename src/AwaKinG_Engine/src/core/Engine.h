@@ -39,6 +39,7 @@ public:
 	void setActive(bool value);
 	void setCameraManagerType(CameraManagerType cameraType);
 
+	bool resizeRenderBuffer(int sizeX, int sizeY);
 #pragma endregion
 
 #pragma region redactor functions

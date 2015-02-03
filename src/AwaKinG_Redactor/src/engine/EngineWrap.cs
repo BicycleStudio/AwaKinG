@@ -9,66 +9,72 @@ namespace AwaKinG_Redactor.src.engine
 {
     public class EngineWrap
     {
-        const String _dllPath = "../../../../dll/AwaKinG_Engine.dll";
+        const String _dllPath = "../../../../lib/AwaKinG_Engine.dll";
         #region dll import
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+            EntryPoint = "EngineRenderResizeBuffer")]
+        private static extern bool _resizeBuffers(IntPtr pointer, int sizeX, int sizeY);
+
+        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineSetCameraManagerType")]
-        public static extern void EngineSetCameraManagerType(IntPtr pointer, int type);
+        private static extern void _setCameraManagerType(IntPtr pointer, int type);
 
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineGetActive")]
-        public static extern bool EngineGetActive(IntPtr pointer);
+        private static extern bool _getActive(IntPtr pointer);
 
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineSetActive")]
-        public static extern int EngineSetActive(IntPtr pointer, int value);
+        private static extern int _setActive(IntPtr pointer, int value);
         
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineCreateMapFromFile")]
-        public static extern void EngineCreateMapFromFile(IntPtr pointer, String fileName, int len);
+        private static extern void _createMapFromFile(IntPtr pointer, String fileName, int len);
 
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineGetPointer")]
-        public static extern IntPtr EngineGetPointer();
+        private static extern IntPtr _getPointer();
 
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineInitialize")]
-        public static extern bool EngineInitialize(IntPtr pointer, IntPtr mainHwnd, IntPtr hwnd, int sizeX, int sizeY);
+        private static extern bool _initialize(IntPtr pointer, IntPtr mainHwnd, IntPtr hwnd, int sizeX, int sizeY);
 
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineRelease")]
-        public static extern void EngineRelease(IntPtr pointer);
+        private static extern void _release(IntPtr pointer);
 
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineUpdate")]
-        public static extern bool EngineUpdate(IntPtr pointer);
+        private static extern bool _update(IntPtr pointer);
         #endregion
         public bool Done { get { return _done; } set { _done = value; } }
         bool _done = false;
+        bool _initialized;
         IntPtr _engine;
         bool _active;
         public EngineWrap(IntPtr mainWindow, IntPtr window, System.Drawing.Size size) 
         {
-            _engine = EngineGetPointer();
-            bool init = EngineInitialize(_engine, mainWindow, window, size.Width, size.Height);
+            _engine = _getPointer();
+            _initialize(_engine, mainWindow, window, size.Width, size.Height);
+            _initialized = true;
         }
         public void Update()
         {
-            Done = EngineUpdate(_engine);
+            Done = _update(_engine);
         }
         public void Shutdown()
         {
-            EngineRelease(_engine);
+            _release(_engine);
         }
         public void CreateMapFromFile(String fileName)
         {
-            EngineCreateMapFromFile(_engine, fileName, fileName.Length);
+            _createMapFromFile(_engine, fileName, fileName.Length);
         }
         public void SetActive(bool setValue)
         {
             _active = setValue;
             if (_active)
-                EngineSetActive(_engine, 1);
+                _setActive(_engine, 1);
         }
         public bool GetActive()
         {
@@ -76,7 +82,14 @@ namespace AwaKinG_Redactor.src.engine
         }
         public void SetCameraManagerType(int type)
         {
-            EngineSetCameraManagerType(_engine, type);
+            _setCameraManagerType(_engine, type);
+        }
+        public void ResizeRenderBuffers(System.Drawing.Size size)
+        {
+            if(_initialized)
+            {
+                bool b = _resizeBuffers(_engine, size.Width, size.Height);
+            }
         }
     }
 }

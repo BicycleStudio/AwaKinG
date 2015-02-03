@@ -21,7 +21,8 @@ namespace AwaKinG_Redactor
         {
             InitializeComponent();
 
-            _engine = new EngineWrap(Handle, pnlRender.Handle, pnlRender.Size);
+            _engine = new EngineWrap(Handle, pnlRender.Handle, new System.Drawing.Size(2000,1500));
+            _engine.ResizeRenderBuffers(pnlRender.Size);
             _engine.SetCameraManagerType(0);
 
             _mapOFD.InitialDirectory = System.IO.Path.GetFullPath(@"../../../../resources/map/");
@@ -100,6 +101,10 @@ namespace AwaKinG_Redactor
                     MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                 }
             }
+        }
+        private void pnlRender_SizeChanged(object sender, EventArgs e)
+        {
+            _engine.ResizeRenderBuffers(pnlRender.Size);
         }
     }
 }

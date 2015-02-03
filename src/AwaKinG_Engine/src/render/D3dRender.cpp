@@ -175,8 +175,9 @@ bool D3dRender::initialize()
 	vp.TopLeftY = 0;
 	_immediateContext->RSSetViewports(1, &vp);
 
-	_PerspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)_sizeX / (FLOAT)_sizeY, 0.01f, 1000.0f);
-	_OrthograficMatrix = XMMatrixOrthographicLH((FLOAT)_sizeX, (FLOAT)_sizeY, -100.0f, 1000.0f);
+
+	_PerspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)_sizeX / (FLOAT)_sizeY, _config.Znear, _config.Zfar);
+	_OrthograficMatrix = XMMatrixOrthographicLH((FLOAT)_sizeX, (FLOAT)_sizeY, -_config.Zfar, _config.Zfar);
 
 	if(!_initializeShaders()) return false;
 
@@ -293,6 +294,46 @@ void D3dRender::_endScene()
 #pragma endregion
 
 #pragma region additionalFunctions
+bool D3dRender::resizeBuffer(int sizeX, int sizeY)
+{
+	_sizeX = sizeX; _sizeY = sizeY;
+	_immediateContext->ClearState();
+	_immediateContext->OMSetRenderTargets(0, NULL, NULL);
+
+	_depthStencil->Release();
+	_depthStencilView->Release();
+	_backBuffer->Release();
+	_renderTargetView->Release();
+
+	checkResult(_swapChain->ResizeBuffers(1, sizeX, sizeY, DXGI_FORMAT_UNKNOWN, 0),"ResizeBuffersError");
+	checkResult(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer), "Getting backbuffer of swapChain failed");
+	checkResult(_device->CreateRenderTargetView(_backBuffer, NULL, &_renderTargetView), "Creation of RenderTargetView failed");
+
+	D3D11_TEXTURE2D_DESC descDepth;
+	ZeroMemory(&descDepth, sizeof(descDepth));
+	descDepth.Width = _sizeX;	descDepth.Height = _sizeY;
+	descDepth.MipLevels = 1;	descDepth.ArraySize = 1;
+	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	descDepth.SampleDesc.Count = 1;	descDepth.SampleDesc.Quality = 0;
+	descDepth.Usage = D3D11_USAGE_DEFAULT;	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	descDepth.CPUAccessFlags = 0;	descDepth.MiscFlags = 0;
+	checkResult(_device->CreateTexture2D(&descDepth, NULL, &_depthStencil), "Creation of depth stencil texture failed");
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+	ZeroMemory(&descDSV, sizeof(descDSV));	descDSV.Format = descDepth.Format;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;	descDSV.Texture2D.MipSlice = 0;
+	checkResult(_device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView), "Creation of depth stencil view failed");
+	
+	D3D11_VIEWPORT vp;	vp.Width = (FLOAT)_sizeX;	vp.Height = (FLOAT)_sizeY;	vp.MinDepth = 0.0f;	vp.MaxDepth = 1.0f;	vp.TopLeftX = 0;	vp.TopLeftY = 0;
+	_immediateContext->RSSetViewports(1, &vp);
+
+	_immediateContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
+
+	_PerspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)_sizeX / (FLOAT)_sizeY, _config.Znear, _config.Zfar);
+	_OrthograficMatrix = XMMatrixOrthographicLH((FLOAT)_sizeX, (FLOAT)_sizeY, -_config.Zfar, _config.Zfar);
+
+	return true;
+}
 bool D3dRender::needToInitializeModel(string fileName, int* indexTechnique, int* index)
 {
 	for(unsigned int i = 0; i < _models.size(); i++)

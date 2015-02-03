@@ -50,3 +50,7 @@ void EngineSetCameraManagerType(Engine* pointer, int type)
 	}
 	pointer->setCameraManagerType(type_);
 }
+bool EngineRenderResizeBuffer(Engine* pointer, int sizeX, int sizeY)
+{
+	return pointer->resizeRenderBuffer(sizeX, sizeY);
+}
