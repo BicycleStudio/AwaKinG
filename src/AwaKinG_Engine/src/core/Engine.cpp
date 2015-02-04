@@ -241,3 +241,11 @@ bool Engine::createTerrain(int gridX, int gridY)
 {
 	return TerrainManager::getInstance().generate(gridX, gridY);
 }
+void Engine::randomizeTerrain(int diapazon)
+{
+	TerrainManager::getInstance().randomize(diapazon);
+}
+void Engine::blurTerrain(int value)
+{
+	TerrainManager::getInstance().blurHeightmap(value);
+}

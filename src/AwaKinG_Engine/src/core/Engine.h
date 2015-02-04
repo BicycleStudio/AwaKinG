@@ -42,6 +42,8 @@ public:
 #pragma endregion
 
 #pragma region redactor functions
+	void randomizeTerrain(int diapazon);
+	void blurTerrain(int value);
 	bool createTerrain(int gridX, int gridY);
 	bool createMapFromFile(string fileName);
 #pragma endregion

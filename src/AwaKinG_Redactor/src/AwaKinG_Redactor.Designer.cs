@@ -39,10 +39,13 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.pnlRender = new System.Windows.Forms.Panel();
-            this.awA_Value_Button1 = new GUI_elements.AWA_Value_Button();
-            this.awA_Value_Button2 = new GUI_elements.AWA_Value_Button();
             this.awA_Button1 = new GUI_elements.AWA_Button();
+            this.awA_Value_Button2 = new GUI_elements.AWA_Value_Button();
+            this.awA_Value_Button1 = new GUI_elements.AWA_Value_Button();
+            this.pnlRender = new System.Windows.Forms.Panel();
+            this.awA_Value_Button3 = new GUI_elements.AWA_Value_Button();
+            this.awA_Button2 = new GUI_elements.AWA_Button();
+            this.awA_Button3 = new GUI_elements.AWA_Button();
             this.menuStrip1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
@@ -139,6 +142,9 @@
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.panel3.Controls.Add(this.awA_Button3);
+            this.panel3.Controls.Add(this.awA_Button2);
+            this.panel3.Controls.Add(this.awA_Value_Button3);
             this.panel3.Controls.Add(this.awA_Button1);
             this.panel3.Controls.Add(this.awA_Value_Button2);
             this.panel3.Controls.Add(this.awA_Value_Button1);
@@ -148,36 +154,23 @@
             this.panel3.Size = new System.Drawing.Size(173, 481);
             this.panel3.TabIndex = 3;
             // 
-            // pnlRender
+            // awA_Button1
             // 
-            this.pnlRender.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlRender.Location = new System.Drawing.Point(173, 52);
-            this.pnlRender.Name = "pnlRender";
-            this.pnlRender.Size = new System.Drawing.Size(611, 481);
-            this.pnlRender.TabIndex = 4;
-            this.pnlRender.SizeChanged += new System.EventHandler(this.pnlRender_SizeChanged);
-            // 
-            // awA_Value_Button1
-            // 
-            this.awA_Value_Button1.ARROWHEIGHT = 0;
-            this.awA_Value_Button1.ARROWTOOLSH = 1;
-            this.awA_Value_Button1.ARRWIDTH = 20;
-            this.awA_Value_Button1.BackColor = System.Drawing.Color.Transparent;
-            this.awA_Value_Button1.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.awA_Value_Button1.BORDERCOLOR = System.Drawing.Color.Black;
-            this.awA_Value_Button1.BORDERRADIUS = 5;
-            this.awA_Value_Button1.BORDERWIDTH = 1;
-            this.awA_Value_Button1.Image = null;
-            this.awA_Value_Button1.Location = new System.Drawing.Point(13, 36);
-            this.awA_Value_Button1.MaxValue = 32F;
-            this.awA_Value_Button1.MinValue = 1F;
-            this.awA_Value_Button1.Name = "awA_Value_Button1";
-            this.awA_Value_Button1.Size = new System.Drawing.Size(60, 31);
-            this.awA_Value_Button1.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
-            this.awA_Value_Button1.TabIndex = 0;
-            this.awA_Value_Button1.Text = "awA_Value_Button1";
-            this.awA_Value_Button1.UseVisualStyleBackColor = false;
-            this.awA_Value_Button1.VALUEV = 1F;
+            this.awA_Button1.BackColor = System.Drawing.Color.Transparent;
+            this.awA_Button1.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.awA_Button1.BORDERCOLOR = System.Drawing.Color.Black;
+            this.awA_Button1.BORDERRADIUS = 5;
+            this.awA_Button1.BORDERWIDTH = 1;
+            this.awA_Button1.Image = null;
+            this.awA_Button1.Location = new System.Drawing.Point(31, 79);
+            this.awA_Button1.Name = "awA_Button1";
+            this.awA_Button1.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.awA_Button1.SCALEBORD = true;
+            this.awA_Button1.Size = new System.Drawing.Size(107, 20);
+            this.awA_Button1.TabIndex = 2;
+            this.awA_Button1.Text = "create";
+            this.awA_Button1.UseVisualStyleBackColor = false;
+            this.awA_Button1.Click += new System.EventHandler(this.awA_Button1_Click);
             // 
             // awA_Value_Button2
             // 
@@ -201,23 +194,94 @@
             this.awA_Value_Button2.UseVisualStyleBackColor = false;
             this.awA_Value_Button2.VALUEV = 1F;
             // 
-            // awA_Button1
+            // awA_Value_Button1
             // 
-            this.awA_Button1.BackColor = System.Drawing.Color.Transparent;
-            this.awA_Button1.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.awA_Button1.BORDERCOLOR = System.Drawing.Color.Black;
-            this.awA_Button1.BORDERRADIUS = 5;
-            this.awA_Button1.BORDERWIDTH = 1;
-            this.awA_Button1.Image = null;
-            this.awA_Button1.Location = new System.Drawing.Point(31, 79);
-            this.awA_Button1.Name = "awA_Button1";
-            this.awA_Button1.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-            this.awA_Button1.SCALEBORD = true;
-            this.awA_Button1.Size = new System.Drawing.Size(107, 20);
-            this.awA_Button1.TabIndex = 2;
-            this.awA_Button1.Text = "create";
-            this.awA_Button1.UseVisualStyleBackColor = false;
-            this.awA_Button1.Click += new System.EventHandler(this.awA_Button1_Click);
+            this.awA_Value_Button1.ARROWHEIGHT = 0;
+            this.awA_Value_Button1.ARROWTOOLSH = 1;
+            this.awA_Value_Button1.ARRWIDTH = 20;
+            this.awA_Value_Button1.BackColor = System.Drawing.Color.Transparent;
+            this.awA_Value_Button1.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.awA_Value_Button1.BORDERCOLOR = System.Drawing.Color.Black;
+            this.awA_Value_Button1.BORDERRADIUS = 5;
+            this.awA_Value_Button1.BORDERWIDTH = 1;
+            this.awA_Value_Button1.Image = null;
+            this.awA_Value_Button1.Location = new System.Drawing.Point(13, 36);
+            this.awA_Value_Button1.MaxValue = 32F;
+            this.awA_Value_Button1.MinValue = 1F;
+            this.awA_Value_Button1.Name = "awA_Value_Button1";
+            this.awA_Value_Button1.Size = new System.Drawing.Size(60, 31);
+            this.awA_Value_Button1.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
+            this.awA_Value_Button1.TabIndex = 0;
+            this.awA_Value_Button1.Text = "awA_Value_Button1";
+            this.awA_Value_Button1.UseVisualStyleBackColor = false;
+            this.awA_Value_Button1.VALUEV = 1F;
+            // 
+            // pnlRender
+            // 
+            this.pnlRender.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlRender.Location = new System.Drawing.Point(173, 52);
+            this.pnlRender.Name = "pnlRender";
+            this.pnlRender.Size = new System.Drawing.Size(611, 481);
+            this.pnlRender.TabIndex = 4;
+            this.pnlRender.SizeChanged += new System.EventHandler(this.pnlRender_SizeChanged);
+            // 
+            // awA_Value_Button3
+            // 
+            this.awA_Value_Button3.ARROWHEIGHT = 0;
+            this.awA_Value_Button3.ARROWTOOLSH = 1;
+            this.awA_Value_Button3.ARRWIDTH = 20;
+            this.awA_Value_Button3.BackColor = System.Drawing.Color.Transparent;
+            this.awA_Value_Button3.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.awA_Value_Button3.BORDERCOLOR = System.Drawing.Color.Black;
+            this.awA_Value_Button3.BORDERRADIUS = 5;
+            this.awA_Value_Button3.BORDERWIDTH = 1;
+            this.awA_Value_Button3.Image = null;
+            this.awA_Value_Button3.Location = new System.Drawing.Point(13, 119);
+            this.awA_Value_Button3.MaxValue = 100F;
+            this.awA_Value_Button3.MinValue = 0F;
+            this.awA_Value_Button3.Name = "awA_Value_Button3";
+            this.awA_Value_Button3.Size = new System.Drawing.Size(60, 46);
+            this.awA_Value_Button3.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
+            this.awA_Value_Button3.TabIndex = 3;
+            this.awA_Value_Button3.Text = "awA_Value_Button3";
+            this.awA_Value_Button3.UseVisualStyleBackColor = false;
+            this.awA_Value_Button3.VALUEV = 0F;
+            // 
+            // awA_Button2
+            // 
+            this.awA_Button2.BackColor = System.Drawing.Color.Transparent;
+            this.awA_Button2.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.awA_Button2.BORDERCOLOR = System.Drawing.Color.Black;
+            this.awA_Button2.BORDERRADIUS = 5;
+            this.awA_Button2.BORDERWIDTH = 1;
+            this.awA_Button2.Image = null;
+            this.awA_Button2.Location = new System.Drawing.Point(79, 119);
+            this.awA_Button2.Name = "awA_Button2";
+            this.awA_Button2.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.awA_Button2.SCALEBORD = true;
+            this.awA_Button2.Size = new System.Drawing.Size(88, 20);
+            this.awA_Button2.TabIndex = 4;
+            this.awA_Button2.Text = "randomize";
+            this.awA_Button2.UseVisualStyleBackColor = false;
+            this.awA_Button2.Click += new System.EventHandler(this.awA_Button2_Click);
+            // 
+            // awA_Button3
+            // 
+            this.awA_Button3.BackColor = System.Drawing.Color.Transparent;
+            this.awA_Button3.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.awA_Button3.BORDERCOLOR = System.Drawing.Color.Black;
+            this.awA_Button3.BORDERRADIUS = 5;
+            this.awA_Button3.BORDERWIDTH = 1;
+            this.awA_Button3.Image = null;
+            this.awA_Button3.Location = new System.Drawing.Point(79, 145);
+            this.awA_Button3.Name = "awA_Button3";
+            this.awA_Button3.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.awA_Button3.SCALEBORD = true;
+            this.awA_Button3.Size = new System.Drawing.Size(88, 20);
+            this.awA_Button3.TabIndex = 5;
+            this.awA_Button3.Text = "blur";
+            this.awA_Button3.UseVisualStyleBackColor = false;
+            this.awA_Button3.Click += new System.EventHandler(this.awA_Button3_Click);
             // 
             // AwaKinG_Redactor
             // 
@@ -264,6 +328,9 @@
         private GUI_elements.AWA_Value_Button awA_Value_Button2;
         private GUI_elements.AWA_Value_Button awA_Value_Button1;
         private GUI_elements.AWA_Button awA_Button1;
+        private GUI_elements.AWA_Button awA_Button3;
+        private GUI_elements.AWA_Button awA_Button2;
+        private GUI_elements.AWA_Value_Button awA_Value_Button3;
     }
 }
 

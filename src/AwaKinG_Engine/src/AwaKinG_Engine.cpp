@@ -58,3 +58,11 @@ bool EngineTerrainGenerate(Engine* pointer, int sizeX, int sizeY)
 {
 	return pointer->createTerrain(sizeX, sizeY);
 }
+void EngineTerrainRandomize(Engine* pointer, int diapazon)
+{
+	pointer->randomizeTerrain(diapazon);
+}
+void EngineTerrainBlur(Engine* pointer, int value)
+{
+	pointer->blurTerrain(value);
+}

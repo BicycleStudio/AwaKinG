@@ -110,5 +110,14 @@ namespace AwaKinG_Redactor
         {
             _engine.GenerateTerrain((int)awA_Value_Button1.Value, (int)awA_Value_Button2.Value);
         }
+
+        private void awA_Button2_Click(object sender, EventArgs e)
+        {
+            _engine.RandomizeTerrain((int)awA_Value_Button3.Value);
+        }
+        private void awA_Button3_Click(object sender, EventArgs e)
+        {
+            _engine.BlurTerrain(1);
+        }
     }
 }

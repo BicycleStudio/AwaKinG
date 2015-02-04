@@ -2,8 +2,8 @@
 #include "../Parser.h"
 #include "../../render/D3dRender.h"
 
-#define TILE_VERT_NUM 32
-#define TILE_CELL_SPACE 10.0f 
+#define TILE_VERT_NUM 64
+#define TILE_CELL_SPACE 20.0f 
 
 
 class TerrainManager
@@ -21,13 +21,16 @@ private:
 	TerrainManager();
 	TerrainManager(const TerrainManager&);
 #pragma endregion
-
+void smoothVert(int id);
+void updateVertexBuffer(int idTerrain);
 
 #pragma region public functions
 public:
 	bool generate(int gridX, int gridY);
 	void shutdown();
-
+	void randomize(int diapazon);
+	void normalizeNormals();
+	void blurHeightmap(int blurHard);
 #pragma endregion
 private:
 	struct Properties
