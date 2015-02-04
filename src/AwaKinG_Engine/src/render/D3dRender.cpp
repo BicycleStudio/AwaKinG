@@ -426,6 +426,14 @@ void D3dRender::_mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* ma
 	XMStoreFloat4x4(&pData->matr, XMLoadFloat4x4(matrix));
 	_immediateContext->Unmap(buffer[0], 0);
 }
+void D3dRender::mapResource(ID3D11Buffer* buf, D3D11_MAPPED_SUBRESOURCE* mappedSubResource, D3D11_MAP mapType)
+{
+	HRESULT hr = _immediateContext->Map(buf, 0, mapType, 0, mappedSubResource);
+}
+void D3dRender::unmapResource(ID3D11Buffer* buf)
+{
+	_immediateContext->Unmap(buf, 0);
+}
 bool D3dRender::_compileShaderFromFile(LPCWSTR pFileName, const D3D_SHADER_MACRO* pDefines,
 	LPCSTR pEntrypoint, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppCode)
 {
@@ -531,14 +539,22 @@ bool D3dRender::createTexture(string fileName, ID3D11ShaderResourceView** textur
 {
 	D3DX11_IMAGE_LOAD_INFO ILI;
 	HRESULT hr;
-	ID3D11ShaderResourceView* res_;
-	D3DX11CreateShaderResourceViewFromFile(_device, fileName.c_str(), NULL, NULL, &res_, &hr);
-	texture[0] = res_;
+	D3DX11CreateShaderResourceViewFromFile(_device, fileName.c_str(), NULL, NULL, &texture[0], &hr);
+	return true;
+}
+bool D3dRender::createTexture(string fileName, D3DX11_IMAGE_LOAD_INFO* ili, ID3D11ShaderResourceView** texture)
+{
+	HRESULT hr;
+	D3DX11CreateShaderResourceViewFromFile(_device, fileName.c_str(), ili, NULL, &texture[0], &hr);
 	return true;
 }
 #pragma endregion
 
 #pragma region interface for terrain
+void D3dRender::saveResourceToFile(string fileName, ID3D11Resource* resource)
+{
+	D3DX11SaveTextureToFile(_immediateContext, resource, D3DX11_IMAGE_FILE_FORMAT::D3DX11_IFF_DDS, fileName.c_str());
+}
 void D3dRender::setTerrainModels(ID3D11Buffer** vertexBuffers, ID3D11ShaderResourceView** textures, int count, ID3D11Buffer* indexBuffer, int indexCount)
 {
 	for(unsigned int j = 0; j < _terrainTiles.size(); j++)	{	_terrainTiles[j]->shutdown();	delete _terrainTiles[j]; }

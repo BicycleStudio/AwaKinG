@@ -1,33 +1,32 @@
 #include "AwaKinG_Engine.h" 
-Engine* EngineGetPointer()
+RedactorEngine* EngineGetPointer()
 {
-	return &Engine::getInstance();
+	return new RedactorEngine();
+	//return Engine::getInstance(Engine::ERT_REDACTOR);
 }
-bool EngineInitialize(Engine* pointer, HWND mainHwnd, HWND hwnd, int sizeX, int sizeY)
+bool EngineInitialize(RedactorEngine* pointer, HWND mainHwnd, HWND hwnd, int sizeX, int sizeY)
 {
 	if(pointer->initialize(mainHwnd, hwnd, sizeX, sizeY))
 		return true;
 	pointer->shutdown();
 	return false;
 }
-void EngineRelease(Engine* pointer)
+void EngineRelease(RedactorEngine* pointer)
 {
 	pointer->shutdown();
 }
-bool EngineUpdate(Engine* pointer)
+bool EngineUpdate(RedactorEngine* pointer)
 {
 	return pointer->update();
 }
-void EngineCreateMapFromFile(Engine* pointer, const char* fileName, int len)
+void EngineCreateMapFromFile(RedactorEngine* pointer, const char* fileName, int len)
 {
 	char* str = new char[len*2];
 	for(int i = 0; i < len * 2; i++)
-	{
 		str[i] = fileName[i*2];
-	}
 	if(!pointer->createMapFromFile(str));
 }
-int EngineSetActive(Engine* pointer, int value)
+int EngineSetActive(RedactorEngine* pointer, int value)
 {
 	bool val = true;
 	if(value == 0)
@@ -35,11 +34,11 @@ int EngineSetActive(Engine* pointer, int value)
 	pointer->setActive(val);
 	return value;
 }
-bool EngineGetActive(Engine* pointer)
+bool EngineGetActive(RedactorEngine* pointer)
 {
 	return pointer->active();
 }
-void EngineSetCameraManagerType(Engine* pointer, int type)
+void EngineSetCameraManagerType(RedactorEngine* pointer, int type)
 {
 	Engine::CameraManagerType type_;
 	switch(type)
@@ -50,11 +49,34 @@ void EngineSetCameraManagerType(Engine* pointer, int type)
 	}
 	pointer->setCameraManagerType(type_);
 }
-bool EngineRenderResizeBuffer(Engine* pointer, int sizeX, int sizeY)
+bool EngineRenderResizeBuffer(RedactorEngine* pointer, int sizeX, int sizeY)
 {
 	return pointer->resizeRenderBuffer(sizeX, sizeY);
 }
-bool EngineTerrainGenerate(Engine* pointer, int sizeX, int sizeY)
+bool EngineTerrainGenerate(RedactorEngine* pointer, int sizeX, int sizeY)
 {
 	return pointer->createTerrain(sizeX, sizeY);
+}
+void EngineTerrainRandomize(RedactorEngine* pointer, int diapazon)
+{
+	pointer->randomizeTerrain(diapazon);
+}
+void EngineTerrainBlur(RedactorEngine* pointer, int value)
+{
+	pointer->blurTerrain(value);
+}
+char* EngineTerrainSave(RedactorEngine* pointer, const char* fileName, int len)
+{
+	char* str = new char[len * 2];
+	for(int i = 0; i < len * 2; i++)
+		str[i] = fileName[i * 2];
+	pointer->saveTerrain(str);
+	return str;
+}
+void EngineTerrainLoad(RedactorEngine* pointer, const char* fileName, int len)
+{
+	char* str = new char[len * 2];
+	for(int i = 0; i < len * 2; i++)
+		str[i] = fileName[i * 2];
+	pointer->loadTerrain(str);
 }

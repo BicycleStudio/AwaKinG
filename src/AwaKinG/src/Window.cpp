@@ -133,3 +133,11 @@ void Window::shutdown()
 		MessageBox(NULL, "Could Not Unregister Class.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 	}
 }
+int Window::getWidth()
+{
+	return _width;
+}
+int Window::getHeight()
+{
+	return _height;
+}

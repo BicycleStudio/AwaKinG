@@ -2,6 +2,7 @@
 
 Engine::Engine()
 {
+
 	_cameraMangerType = CMT_REDACTORFREE;
 	ErrorMessage = "Engine";
 	_active = true;
@@ -9,8 +10,20 @@ Engine::Engine()
 	_scene = 0;
 	_camera = 0;
 	_inputManager = 0;
+	_terrainManager = new TerrainManager();
 }
-void Engine::cameraManagerSwitch()
+RedactorEngine::RedactorEngine()
+{
+	_cameraMangerType = CMT_REDACTOR;
+	ErrorMessage = "RedactorEngine";
+	_active = true;
+	_d3dRender = 0;
+	_scene = 0;
+	_camera = 0;
+	_inputManager = 0;
+	_redactorTerrainManager = new RedactorTerrainManager();
+}
+void Engine::_cameraManagerSwitch()
 {
 	switch(_cameraMangerType)
 	{
@@ -48,7 +61,7 @@ bool Engine::initialize(HWND mainHwnd, HWND renderHwnd, int sizeX, int sizeY)
 	_redactorCameraManager->initialize(_camera);
 	_redactorCameraManager->setInputInterface();
 
-	cameraManagerSwitch();
+	_cameraManagerSwitch();
 #pragma endregion
 
 	_d3dRender->ViewMatrix = _camera->getViewMatrixPointer();
@@ -79,40 +92,9 @@ bool Engine::update()
 void Engine::setCameraManagerType(CameraManagerType cameraType)
 {
 	_cameraMangerType = cameraType;
-	cameraManagerSwitch();
+	_cameraManagerSwitch();
 }
-bool Engine::createMapFromFile(string fileName)
-{
-	tryOpenStream(fileName);
-	string errorsOpening_;
-	int countEntities_ = 0; tryReadInt(&countEntities_);
-	for(int i = 0; i < countEntities_; i++)
-	{
-		Entity* entity_;
-		char* mdlFileName = new char[255];
-		XMFLOAT3 pos_; XMFLOAT3 scl_; XMFLOAT3 rot_;
-		tryReadString(&mdlFileName);
-		if(!createEntity(&entity_, mdlFileName))
-		{
-			errorsOpening_ += _parser->ErrorMessage + "\n";
-			tryReadFloat(&pos_.x); tryReadFloat(&pos_.y); tryReadFloat(&pos_.z);
-			tryReadFloat(&scl_.x); tryReadFloat(&scl_.y); tryReadFloat(&scl_.z);
-			tryReadFloat(&rot_.x); tryReadFloat(&rot_.y); tryReadFloat(&rot_.z);
-			continue;
-		}
-		tryReadFloat(&pos_.x); tryReadFloat(&pos_.y); tryReadFloat(&pos_.z);
-		tryReadFloat(&scl_.x); tryReadFloat(&scl_.y); tryReadFloat(&scl_.z);
-		tryReadFloat(&rot_.x); tryReadFloat(&rot_.y); tryReadFloat(&rot_.z);
-
-		entity_->setTransformation(pos_, scl_, rot_);
-		_scene->addEntity(entity_);
-	}
-	if(errorsOpening_ != "")
-		MessageBox(NULL, errorsOpening_.c_str(), "openMapError error", MB_OK | MB_ICONERROR);
-	tryCloseStream();
-	return true;
-}
-bool Engine::createEntity(Entity** entity, string fileName)
+bool Engine::_createEntity(Entity** entity, string fileName)
 {
 	int modelIndex_ = 0;	int techniqueIndex_ = 0;
 	if(!_d3dRender->needToInitializeModel(fileName, &techniqueIndex_, &modelIndex_))
@@ -121,7 +103,7 @@ bool Engine::createEntity(Entity** entity, string fileName)
 		entity[0]->initialize(_d3dRender->addModelMatrix(techniqueIndex_, modelIndex_));
 		return true;
 	}
-	tryOpenStream(fileName);
+	tryOpenStream(fileName, "r");
 
 	int numV_ = 0;  int numF_ = 0; int numTV_ = 0;
 	tryReadInt(&numV_); tryReadInt(&numF_); tryReadInt(&numTV_);
@@ -237,7 +219,59 @@ bool Engine::resizeRenderBuffer(int sizeX, int sizeY)
 {
 	return _d3dRender->resizeBuffer(sizeX, sizeY);
 }
-bool Engine::createTerrain(int gridX, int gridY)
+
+bool RedactorEngine::createTerrain(int gridX, int gridY)
 {
-	return TerrainManager::getInstance().generate(gridX, gridY);
+	return _redactorTerrainManager->generate(gridX, gridY, 32, 10.0f);
+}
+void RedactorEngine::randomizeTerrain(int diapazon)
+{
+	_redactorTerrainManager->randomize(diapazon);
+}
+void RedactorEngine::blurTerrain(int value)
+{
+	_redactorTerrainManager->blurHeightmap(value);
+}
+void RedactorEngine::saveTerrain(string fileName)
+{
+	_redactorTerrainManager->saveToFile(fileName);
+}
+void Engine::loadTerrain(string fileName)
+{
+	_terrainManager->loadFromFile(fileName);
+}
+void RedactorEngine::loadTerrain(string fileName)
+{
+	_redactorTerrainManager->loadFromFile(fileName);
+}
+bool RedactorEngine::createMapFromFile(string fileName)
+{
+	tryOpenStream(fileName, "r");
+	string errorsOpening_;
+	int countEntities_ = 0; tryReadInt(&countEntities_);
+	for(int i = 0; i < countEntities_; i++)
+	{
+		Entity* entity_;
+		char* mdlFileName = new char[255];
+		XMFLOAT3 pos_; XMFLOAT3 scl_; XMFLOAT3 rot_;
+		tryReadString(&mdlFileName);
+		if(!_createEntity(&entity_, mdlFileName))
+		{
+			errorsOpening_ += _parser->ErrorMessage + "\n";
+			tryReadFloat(&pos_.x); tryReadFloat(&pos_.y); tryReadFloat(&pos_.z);
+			tryReadFloat(&scl_.x); tryReadFloat(&scl_.y); tryReadFloat(&scl_.z);
+			tryReadFloat(&rot_.x); tryReadFloat(&rot_.y); tryReadFloat(&rot_.z);
+			continue;
+		}
+		tryReadFloat(&pos_.x); tryReadFloat(&pos_.y); tryReadFloat(&pos_.z);
+		tryReadFloat(&scl_.x); tryReadFloat(&scl_.y); tryReadFloat(&scl_.z);
+		tryReadFloat(&rot_.x); tryReadFloat(&rot_.y); tryReadFloat(&rot_.z);
+
+		entity_->setTransformation(pos_, scl_, rot_);
+		_scene->addEntity(entity_);
+	}
+	if(errorsOpening_ != "")
+		MessageBox(NULL, errorsOpening_.c_str(), "openMapError error", MB_OK | MB_ICONERROR);
+	tryCloseStream();
+	return true;
 }

@@ -16,6 +16,8 @@ namespace AwaKinG_Redactor
     #region private vars
         EngineWrap _engine;
         OpenFileDialog _mapOFD = new OpenFileDialog();
+        OpenFileDialog _terrainOFD = new OpenFileDialog();
+        SaveFileDialog _terrainSFD = new SaveFileDialog();
     #endregion
         public AwaKinG_Redactor()
         {
@@ -25,10 +27,13 @@ namespace AwaKinG_Redactor
             _engine.ResizeRenderBuffers(pnlRender.Size);
             _engine.SetCameraManagerType(0);
 
+            _terrainSFD.InitialDirectory = _terrainOFD.InitialDirectory = System.IO.Path.GetFullPath(@"../../../../resources/map/terrain/");
+            _terrainSFD.Filter = _terrainOFD.Filter = "ter files (*.ter)|*.ter";
+            _terrainSFD.FilterIndex = _terrainOFD.FilterIndex = 1;
+
             _mapOFD.InitialDirectory = System.IO.Path.GetFullPath(@"../../../../resources/map/");
             _mapOFD.Filter = "map files (*.map)|*.map";
             _mapOFD.FilterIndex = 1;
-            _mapOFD.RestoreDirectory = true;
 
             Application.Idle += Application_Idle;
         }
@@ -91,10 +96,8 @@ namespace AwaKinG_Redactor
                 try
                 {
                     if (_mapOFD.OpenFile() != null)
-                    {
                         if (_mapOFD.FileName != "")
                             _engine.CreateMapFromFile(_mapOFD.FileName);
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -109,6 +112,39 @@ namespace AwaKinG_Redactor
         private void awA_Button1_Click(object sender, EventArgs e)
         {
             _engine.GenerateTerrain((int)awA_Value_Button1.Value, (int)awA_Value_Button2.Value);
+        }
+
+        private void awA_Button2_Click(object sender, EventArgs e)
+        {
+            _engine.RandomizeTerrain((int)awA_Value_Button3.Value);
+        }
+        private void awA_Button3_Click(object sender, EventArgs e)
+        {
+            _engine.BlurTerrain(1);
+        }
+        private void loadFromFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_terrainOFD.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if (_terrainOFD.OpenFile() != null)
+                        if (_terrainOFD.FileName != "")
+                            _engine.LoadTerrain(_terrainOFD.FileName);
+                }
+                catch (Exception ex)
+                { 
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                }
+            }
+        }
+        private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_terrainSFD.ShowDialog() == DialogResult.OK)
+            {
+                if (_terrainSFD.FileName != "")
+                    _engine.SaveTerrain(_terrainSFD.FileName);
+            }
         }
     }
 }

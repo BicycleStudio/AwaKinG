@@ -14,6 +14,8 @@ public:
 	};
 	bool initialize(HWND* hwnd, int sizeX, int sizeY);
 	void shutdown();
+	int getWidth();
+	int getHeight();
 private:
 	Window();
 	Window(const Window&);

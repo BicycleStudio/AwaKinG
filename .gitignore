@@ -48,6 +48,7 @@ build/
 
 *.exp
 dll/AwaKinG_Engine.lib
+*.tlog
 
 # Visual C++ cache files
 ipch/

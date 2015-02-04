@@ -58,9 +58,13 @@ public:
 	XMFLOAT4X4* addTextureModel(TextureModel* model);
 	bool createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff);
 	bool createTexture(string fileName, ID3D11ShaderResourceView** texture);
+	bool createTexture(string fileName, D3DX11_IMAGE_LOAD_INFO* ili, ID3D11ShaderResourceView** texture);
 
 	void setRasterizerState(int stateType);
 	#pragma region interface for terrain
+	void saveResourceToFile(string fileName, ID3D11Resource* resource);
+	void unmapResource(ID3D11Buffer* buf);
+	void mapResource(ID3D11Buffer* buf, D3D11_MAPPED_SUBRESOURCE* mappedSubResource, D3D11_MAP mapType);
 	void setTerrainModels(ID3D11Buffer** vertexBuffers, ID3D11ShaderResourceView** textures, int count, ID3D11Buffer* indexBuffer, int indexCount);
 	#pragma endregion
 #pragma endregion
