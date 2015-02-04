@@ -12,23 +12,33 @@
 #define checkRenderResult(boolean) if(!boolean) {MessageBox(NULL, _d3dRender->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR);  return false;}
 
 class Engine
-{
+{  
 public:
 	enum CameraManagerType { CMT_REDACTOR, CMT_REDACTORFREE };
+	std::string ErrorMessage;
+	Engine();
+	/*
 #pragma region singleton
 public:
 	std::string ErrorMessage;
-	static Engine& getInstance()
+	static Engine* getInstance(EngineRunType type)
 	{
-		static Engine engine;
-		return engine;
+		switch(type)
+		{
+		case ERT_REDACTOR:
+			return _redactorEngine;
+		case ERT_GAME:
+			return _engine;
+		}
 	};
 
 private:
+	static RedactorEngine* _redactorEngine;
+	static Engine* _engine;
 	Engine();
 	Engine(const Engine&);
 #pragma endregion
-
+	*/
 #pragma region public functions
 public:
 	bool initialize(HWND mainHwnd, HWND renderHwnd, int sizeX, int sizeY);
@@ -36,26 +46,23 @@ public:
 	bool active();
 	bool update();
 	void setActive(bool value);
-	void setCameraManagerType(CameraManagerType cameraType);
-
 	bool resizeRenderBuffer(int sizeX, int sizeY);
+
+	void setCameraManagerType(CameraManagerType cameraType);
+	virtual void loadTerrain(string fileName);
 #pragma endregion
 
-#pragma region redactor functions
-	void randomizeTerrain(int diapazon);
-	void blurTerrain(int value);
-	bool createTerrain(int gridX, int gridY);
-	bool createMapFromFile(string fileName);
-#pragma endregion
 
 #pragma region private functions
-private:
-	void cameraManagerSwitch();
-	bool createEntity(Entity** entity, string fileName);
+protected:
+	void _cameraManagerSwitch();
+	bool _createEntity(Entity** entity, string fileName);
 #pragma endregion
 
 #pragma region private vars
 private:
+	TerrainManager*								_terrainManager;
+protected:
 	InputManager*									_inputManager;
 	CameraManagerType							_cameraMangerType;
 	CameraManager*								_cameraManager;
@@ -65,8 +72,22 @@ private:
 	D3dRender*										_d3dRender;
 	Scene*												_scene;
 	Parser*												_parser;
-
 	bool													_active;
 #pragma endregion
 };
 
+class RedactorEngine : public Engine
+{
+public:
+	RedactorEngine();
+#pragma region redactor functions
+	void saveTerrain(string fileName);
+	void randomizeTerrain(int diapazon);
+	void blurTerrain(int value);
+	bool createTerrain(int gridX, int gridY);
+	bool createMapFromFile(string fileName);
+	void loadTerrain(string fileName);
+#pragma endregion
+private: 
+	RedactorTerrainManager*								_redactorTerrainManager;
+};

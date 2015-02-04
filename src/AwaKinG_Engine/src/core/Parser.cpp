@@ -4,6 +4,25 @@ Parser::Parser()
 {
 
 }
+void Parser::newLine()
+{
+	fprintf_s(_fileStreams[_fileStreams.size() - 1], "\n");
+}
+bool Parser::writeInt(int var)
+{
+	fprintf_s(_fileStreams[_fileStreams.size() - 1], "%d ", var);
+	return true;
+}
+bool Parser::writeFloat(float var)
+{
+	fprintf_s(_fileStreams[_fileStreams.size() - 1], "%f ", var);
+	return true;
+}
+bool Parser::writeString(char* var, int len)
+{
+	fprintf_s(_fileStreams[_fileStreams.size() - 1], "%s ", var, len);
+	return true;
+}
 bool Parser::readString(char** var)
 {
 	try
@@ -43,10 +62,10 @@ bool Parser::readFloat(float* var)
 		return false;
 	}
 }
-bool Parser::openFile(string fileName)
+bool Parser::openFile(string fileName, string spec)
 {
 	FILE* file;
-	if(fopen_s(&file, fileName.c_str(), "r"))
+	if(fopen_s(&file, fileName.c_str(), spec.c_str()))
 	{
 		ErrorMessage = "File "+ fileName + " does not exists!";
 		return false;

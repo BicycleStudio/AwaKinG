@@ -39,13 +39,16 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.awA_Button3 = new GUI_elements.AWA_Button();
+            this.awA_Button2 = new GUI_elements.AWA_Button();
+            this.awA_Value_Button3 = new GUI_elements.AWA_Value_Button();
             this.awA_Button1 = new GUI_elements.AWA_Button();
             this.awA_Value_Button2 = new GUI_elements.AWA_Value_Button();
             this.awA_Value_Button1 = new GUI_elements.AWA_Value_Button();
             this.pnlRender = new System.Windows.Forms.Panel();
-            this.awA_Value_Button3 = new GUI_elements.AWA_Value_Button();
-            this.awA_Button2 = new GUI_elements.AWA_Button();
-            this.awA_Button3 = new GUI_elements.AWA_Button();
+            this.terrainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.SuspendLayout();
@@ -54,7 +57,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.editToolStripMenuItem});
+            this.editToolStripMenuItem,
+            this.terrainToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(784, 24);
@@ -98,7 +102,7 @@
             this.freeToolStripMenuItem,
             this.freeToolStripMenuItem1});
             this.cameraToolStripMenuItem.Name = "cameraToolStripMenuItem";
-            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.cameraToolStripMenuItem.Text = "Camera ";
             // 
             // freeToolStripMenuItem
@@ -153,6 +157,64 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(173, 481);
             this.panel3.TabIndex = 3;
+            // 
+            // awA_Button3
+            // 
+            this.awA_Button3.BackColor = System.Drawing.Color.Transparent;
+            this.awA_Button3.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.awA_Button3.BORDERCOLOR = System.Drawing.Color.Black;
+            this.awA_Button3.BORDERRADIUS = 5;
+            this.awA_Button3.BORDERWIDTH = 1;
+            this.awA_Button3.Image = null;
+            this.awA_Button3.Location = new System.Drawing.Point(79, 145);
+            this.awA_Button3.Name = "awA_Button3";
+            this.awA_Button3.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.awA_Button3.SCALEBORD = true;
+            this.awA_Button3.Size = new System.Drawing.Size(88, 20);
+            this.awA_Button3.TabIndex = 5;
+            this.awA_Button3.Text = "blur";
+            this.awA_Button3.UseVisualStyleBackColor = false;
+            this.awA_Button3.Click += new System.EventHandler(this.awA_Button3_Click);
+            // 
+            // awA_Button2
+            // 
+            this.awA_Button2.BackColor = System.Drawing.Color.Transparent;
+            this.awA_Button2.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.awA_Button2.BORDERCOLOR = System.Drawing.Color.Black;
+            this.awA_Button2.BORDERRADIUS = 5;
+            this.awA_Button2.BORDERWIDTH = 1;
+            this.awA_Button2.Image = null;
+            this.awA_Button2.Location = new System.Drawing.Point(79, 119);
+            this.awA_Button2.Name = "awA_Button2";
+            this.awA_Button2.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.awA_Button2.SCALEBORD = true;
+            this.awA_Button2.Size = new System.Drawing.Size(88, 20);
+            this.awA_Button2.TabIndex = 4;
+            this.awA_Button2.Text = "randomize";
+            this.awA_Button2.UseVisualStyleBackColor = false;
+            this.awA_Button2.Click += new System.EventHandler(this.awA_Button2_Click);
+            // 
+            // awA_Value_Button3
+            // 
+            this.awA_Value_Button3.ARROWHEIGHT = 0;
+            this.awA_Value_Button3.ARROWTOOLSH = 1;
+            this.awA_Value_Button3.ARRWIDTH = 20;
+            this.awA_Value_Button3.BackColor = System.Drawing.Color.Transparent;
+            this.awA_Value_Button3.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.awA_Value_Button3.BORDERCOLOR = System.Drawing.Color.Black;
+            this.awA_Value_Button3.BORDERRADIUS = 5;
+            this.awA_Value_Button3.BORDERWIDTH = 1;
+            this.awA_Value_Button3.Image = null;
+            this.awA_Value_Button3.Location = new System.Drawing.Point(13, 119);
+            this.awA_Value_Button3.MaxValue = 100F;
+            this.awA_Value_Button3.MinValue = 0F;
+            this.awA_Value_Button3.Name = "awA_Value_Button3";
+            this.awA_Value_Button3.Size = new System.Drawing.Size(60, 46);
+            this.awA_Value_Button3.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
+            this.awA_Value_Button3.TabIndex = 3;
+            this.awA_Value_Button3.Text = "awA_Value_Button3";
+            this.awA_Value_Button3.UseVisualStyleBackColor = false;
+            this.awA_Value_Button3.VALUEV = 0F;
             // 
             // awA_Button1
             // 
@@ -225,63 +287,28 @@
             this.pnlRender.TabIndex = 4;
             this.pnlRender.SizeChanged += new System.EventHandler(this.pnlRender_SizeChanged);
             // 
-            // awA_Value_Button3
+            // terrainToolStripMenuItem
             // 
-            this.awA_Value_Button3.ARROWHEIGHT = 0;
-            this.awA_Value_Button3.ARROWTOOLSH = 1;
-            this.awA_Value_Button3.ARRWIDTH = 20;
-            this.awA_Value_Button3.BackColor = System.Drawing.Color.Transparent;
-            this.awA_Value_Button3.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.awA_Value_Button3.BORDERCOLOR = System.Drawing.Color.Black;
-            this.awA_Value_Button3.BORDERRADIUS = 5;
-            this.awA_Value_Button3.BORDERWIDTH = 1;
-            this.awA_Value_Button3.Image = null;
-            this.awA_Value_Button3.Location = new System.Drawing.Point(13, 119);
-            this.awA_Value_Button3.MaxValue = 100F;
-            this.awA_Value_Button3.MinValue = 0F;
-            this.awA_Value_Button3.Name = "awA_Value_Button3";
-            this.awA_Value_Button3.Size = new System.Drawing.Size(60, 46);
-            this.awA_Value_Button3.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
-            this.awA_Value_Button3.TabIndex = 3;
-            this.awA_Value_Button3.Text = "awA_Value_Button3";
-            this.awA_Value_Button3.UseVisualStyleBackColor = false;
-            this.awA_Value_Button3.VALUEV = 0F;
+            this.terrainToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadFromFileToolStripMenuItem,
+            this.saveToFileToolStripMenuItem});
+            this.terrainToolStripMenuItem.Name = "terrainToolStripMenuItem";
+            this.terrainToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.terrainToolStripMenuItem.Text = "Terrain";
             // 
-            // awA_Button2
+            // loadFromFileToolStripMenuItem
             // 
-            this.awA_Button2.BackColor = System.Drawing.Color.Transparent;
-            this.awA_Button2.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.awA_Button2.BORDERCOLOR = System.Drawing.Color.Black;
-            this.awA_Button2.BORDERRADIUS = 5;
-            this.awA_Button2.BORDERWIDTH = 1;
-            this.awA_Button2.Image = null;
-            this.awA_Button2.Location = new System.Drawing.Point(79, 119);
-            this.awA_Button2.Name = "awA_Button2";
-            this.awA_Button2.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-            this.awA_Button2.SCALEBORD = true;
-            this.awA_Button2.Size = new System.Drawing.Size(88, 20);
-            this.awA_Button2.TabIndex = 4;
-            this.awA_Button2.Text = "randomize";
-            this.awA_Button2.UseVisualStyleBackColor = false;
-            this.awA_Button2.Click += new System.EventHandler(this.awA_Button2_Click);
+            this.loadFromFileToolStripMenuItem.Name = "loadFromFileToolStripMenuItem";
+            this.loadFromFileToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.loadFromFileToolStripMenuItem.Text = "Load from file...";
+            this.loadFromFileToolStripMenuItem.Click += new System.EventHandler(this.loadFromFileToolStripMenuItem_Click);
             // 
-            // awA_Button3
+            // saveToFileToolStripMenuItem
             // 
-            this.awA_Button3.BackColor = System.Drawing.Color.Transparent;
-            this.awA_Button3.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.awA_Button3.BORDERCOLOR = System.Drawing.Color.Black;
-            this.awA_Button3.BORDERRADIUS = 5;
-            this.awA_Button3.BORDERWIDTH = 1;
-            this.awA_Button3.Image = null;
-            this.awA_Button3.Location = new System.Drawing.Point(79, 145);
-            this.awA_Button3.Name = "awA_Button3";
-            this.awA_Button3.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-            this.awA_Button3.SCALEBORD = true;
-            this.awA_Button3.Size = new System.Drawing.Size(88, 20);
-            this.awA_Button3.TabIndex = 5;
-            this.awA_Button3.Text = "blur";
-            this.awA_Button3.UseVisualStyleBackColor = false;
-            this.awA_Button3.Click += new System.EventHandler(this.awA_Button3_Click);
+            this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.saveToFileToolStripMenuItem.Text = "Save to file..";
+            this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
             // 
             // AwaKinG_Redactor
             // 
@@ -331,6 +358,9 @@
         private GUI_elements.AWA_Button awA_Button3;
         private GUI_elements.AWA_Button awA_Button2;
         private GUI_elements.AWA_Value_Button awA_Value_Button3;
+        private System.Windows.Forms.ToolStripMenuItem terrainToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadFromFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToFileToolStripMenuItem;
     }
 }
 

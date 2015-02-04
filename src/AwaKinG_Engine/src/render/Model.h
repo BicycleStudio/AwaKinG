@@ -12,6 +12,7 @@ namespace Vertex
 	struct Simple
 	{
 		Simple() {}
+		Simple(XMFLOAT3 pos, XMFLOAT2 tex) { position = pos; texCoord = tex; normal = XMFLOAT3(0.0f,1.0f,0.0f); }
 		Simple(XMFLOAT3 pos, XMFLOAT2 tex, XMFLOAT3 nor) { position = pos; texCoord = tex; normal = nor; }
 
 		XMFLOAT3	position;

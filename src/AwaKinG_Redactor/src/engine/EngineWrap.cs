@@ -12,6 +12,14 @@ namespace AwaKinG_Redactor.src.engine
         const String _dllPath = "../../../../dll/AwaKinG_Engine.dll";
         #region dll import
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+           EntryPoint = "EngineTerrainLoad")]
+        private static extern void _loadTerrain(IntPtr pointer, String fileName, int len);
+        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+           EntryPoint = "EngineTerrainSave")]
+        private static extern IntPtr _saveTerrain(IntPtr pointer, String fileName, int len);
+
+
+        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineTerrainRandomize")]
         private static extern bool _randomizeTerrain(IntPtr pointer, int diapazon);
       
@@ -114,6 +122,16 @@ namespace AwaKinG_Redactor.src.engine
         public void BlurTerrain(int value)
         {
             _blurTerrain(_engine, value);
+        }
+        public void LoadTerrain(String fileName)
+        {
+            _loadTerrain(_engine, fileName, fileName.Length);
+        }
+        public void SaveTerrain(String fileName)
+        {
+            IntPtr str = _saveTerrain(_engine, fileName, fileName.Length);
+
+            string sttt =Marshal.PtrToStringAnsi(str);
         }
     }
 }

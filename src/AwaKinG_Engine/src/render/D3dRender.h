@@ -62,6 +62,7 @@ public:
 
 	void setRasterizerState(int stateType);
 	#pragma region interface for terrain
+	void saveResourceToFile(string fileName, ID3D11Resource* resource);
 	void unmapResource(ID3D11Buffer* buf);
 	void mapResource(ID3D11Buffer* buf, D3D11_MAPPED_SUBRESOURCE* mappedSubResource, D3D11_MAP mapType);
 	void setTerrainModels(ID3D11Buffer** vertexBuffers, ID3D11ShaderResourceView** textures, int count, ID3D11Buffer* indexBuffer, int indexCount);

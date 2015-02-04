@@ -551,6 +551,10 @@ bool D3dRender::createTexture(string fileName, D3DX11_IMAGE_LOAD_INFO* ili, ID3D
 #pragma endregion
 
 #pragma region interface for terrain
+void D3dRender::saveResourceToFile(string fileName, ID3D11Resource* resource)
+{
+	D3DX11SaveTextureToFile(_immediateContext, resource, D3DX11_IMAGE_FILE_FORMAT::D3DX11_IFF_DDS, fileName.c_str());
+}
 void D3dRender::setTerrainModels(ID3D11Buffer** vertexBuffers, ID3D11ShaderResourceView** textures, int count, ID3D11Buffer* indexBuffer, int indexCount)
 {
 	for(unsigned int j = 0; j < _terrainTiles.size(); j++)	{	_terrainTiles[j]->shutdown();	delete _terrainTiles[j]; }
