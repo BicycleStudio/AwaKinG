@@ -31,11 +31,14 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.freeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.freeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mtsiCameraRedactor = new System.Windows.Forms.ToolStripMenuItem();
+            this.mtsiCameraFree = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.terrainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,6 +77,7 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openMapToolStripMenuItem,
+            this.toolStripSeparator3,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -86,6 +90,11 @@
             this.openMapToolStripMenuItem.Text = "Open map...";
             this.openMapToolStripMenuItem.Click += new System.EventHandler(this.openMapToolStripMenuItem_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(136, 6);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
@@ -96,7 +105,9 @@
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cameraToolStripMenuItem});
+            this.cameraToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.settingsToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
@@ -104,31 +115,43 @@
             // cameraToolStripMenuItem
             // 
             this.cameraToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.freeToolStripMenuItem,
-            this.freeToolStripMenuItem1});
+            this.mtsiCameraRedactor,
+            this.mtsiCameraFree});
             this.cameraToolStripMenuItem.Name = "cameraToolStripMenuItem";
-            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.cameraToolStripMenuItem.Text = "Camera ";
             // 
-            // freeToolStripMenuItem
+            // mtsiCameraRedactor
             // 
-            this.freeToolStripMenuItem.Checked = true;
-            this.freeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.freeToolStripMenuItem.Name = "freeToolStripMenuItem";
-            this.freeToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.freeToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.freeToolStripMenuItem.Tag = "0";
-            this.freeToolStripMenuItem.Text = "Redactor";
-            this.freeToolStripMenuItem.Click += new System.EventHandler(this.freeToolStripMenuItem_Click);
+            this.mtsiCameraRedactor.Checked = true;
+            this.mtsiCameraRedactor.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mtsiCameraRedactor.Name = "mtsiCameraRedactor";
+            this.mtsiCameraRedactor.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.mtsiCameraRedactor.Size = new System.Drawing.Size(162, 22);
+            this.mtsiCameraRedactor.Tag = "0";
+            this.mtsiCameraRedactor.Text = "Redactor";
+            this.mtsiCameraRedactor.Click += new System.EventHandler(this.freeToolStripMenuItem_Click);
             // 
-            // freeToolStripMenuItem1
+            // mtsiCameraFree
             // 
-            this.freeToolStripMenuItem1.Name = "freeToolStripMenuItem1";
-            this.freeToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.freeToolStripMenuItem1.Size = new System.Drawing.Size(162, 22);
-            this.freeToolStripMenuItem1.Tag = "1";
-            this.freeToolStripMenuItem1.Text = "Free";
-            this.freeToolStripMenuItem1.Click += new System.EventHandler(this.freeToolStripMenuItem_Click);
+            this.mtsiCameraFree.Name = "mtsiCameraFree";
+            this.mtsiCameraFree.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+            this.mtsiCameraFree.Size = new System.Drawing.Size(162, 22);
+            this.mtsiCameraFree.Tag = "1";
+            this.mtsiCameraFree.Text = "Free";
+            this.mtsiCameraFree.Click += new System.EventHandler(this.freeToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Text = "Settings...";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // terrainToolStripMenuItem
             // 
@@ -425,8 +448,8 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cameraToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem freeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem freeToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem mtsiCameraRedactor;
+        private System.Windows.Forms.ToolStripMenuItem mtsiCameraFree;
         private GUI_elements.AWA_Value_Button awA_Value_Button2;
         private GUI_elements.AWA_Value_Button awA_Value_Button1;
         private GUI_elements.AWA_Button awA_Button1;
@@ -440,6 +463,9 @@
         private GUI_elements.AWA_Button awA_Button5;
         private GUI_elements.AWA_Button awA_Button4;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
     }
 }
 

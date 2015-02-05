@@ -64,6 +64,9 @@ public:
 	void setShortPaths();
 
 #pragma region redactor functions
+	void setCameraSpeed(float speed);
+	void setTerrainGenerationSettings(int numVerts, float cellSpace);
+
 	void saveTerrain(string fileName);
 	void randomizeTerrain(int diapazon);
 	void blurTerrain(int value);
@@ -75,5 +78,7 @@ public:
 	int pickTerrain(int posX, int posY);
 #pragma endregion
 private: 
-	RedactorTerrainManager*								_redactorTerrainManager;
+	RedactorTerrainManager*					_redactorTerrainManager;
+	int															_terrainNumVerts;
+	float														_terrainCellSpace;
 };

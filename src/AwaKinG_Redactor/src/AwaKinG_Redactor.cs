@@ -14,6 +14,8 @@ namespace AwaKinG_Redactor
     public partial class AwaKinG_Redactor : Form
     {
     #region private vars
+        string _configPath = System.IO.Path.GetFullPath(@"../../../../config/redactor.cfg");
+        src.SettingsForm _settings = new src.SettingsForm();
         EngineWrap _engine;
         OpenFileDialog _mapOFD = new OpenFileDialog();
         OpenFileDialog _terrainOFD = new OpenFileDialog();
@@ -49,6 +51,10 @@ namespace AwaKinG_Redactor
         private void AwaKinG_Redactor_Load(object sender, EventArgs e)
         {
             _engine.SetActive(true);
+
+            Config.GetInstance().Load(_configPath);
+            _engine.SetConfig();
+            setFileCameraType();
         }
         private void AwaKinG_Redactor_Activated(object sender, EventArgs e)
         {
@@ -72,16 +78,17 @@ namespace AwaKinG_Redactor
         {
             _engine.Done = true;
             _engine.Shutdown();
+            Config.GetInstance().Save(_configPath);
         }
         private void freeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _engine.SetCameraManagerType(Convert.ToInt32(((ToolStripMenuItem)sender).Tag));
-            foreach (ToolStripMenuItem it in cameraToolStripMenuItem.DropDownItems)
-            {
-                if(it != sender) it.Checked = false;
-            }
-            ((ToolStripMenuItem)sender).Checked = true;
+            mtsiCameraRedactor.Checked = false;
+            mtsiCameraFree.Checked = false;
 
+            ((ToolStripMenuItem)sender).Checked = true;
+            if (mtsiCameraRedactor.Checked) Camera.GetInstance().Type = CameraType.Redactor;
+            if (mtsiCameraFree.Checked) Camera.GetInstance().Type = CameraType.RedactorFree;
         }
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -162,6 +169,38 @@ namespace AwaKinG_Redactor
         {
             int id = _engine.PickTerrain(e.Location);
             label1.Text = "Log: " + id.ToString();
+        }
+        private void setFileCameraType()
+        {
+            mtsiCameraFree.Checked = false;
+            mtsiCameraRedactor.Checked = false;
+            switch (Camera.GetInstance().Type)
+            {
+                case CameraType.Redactor: mtsiCameraRedactor.Checked = true; break;
+                case CameraType.RedactorFree: mtsiCameraFree.Checked = true; break;
+            }
+        }
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _engine.SetActive(false);
+            Application.Idle -= Application_Idle;
+            if (_settings.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (_settings.rbtnFast.Checked) Camera.GetInstance().Speed = 10.0f;
+                if (_settings.rbtnNormal.Checked) Camera.GetInstance().Speed = 5.0f;
+                if (_settings.rbtnSlow.Checked) Camera.GetInstance().Speed = 1.0f;
+
+                if (_settings.rbtnRedactor.Checked) Camera.GetInstance().setType(Camera.SystemStrings.CameraTypeRedactor);
+                if (_settings.rbtnRedactorFree.Checked) Camera.GetInstance().setType(Camera.SystemStrings.CameraTypeRedactorFree);
+
+                Terrain.GetInstance().NumVerts = (int)_settings.vbtnCountVerts.Value;
+                Terrain.GetInstance().CellSpace = _settings.vbtnCellSpace.Value;
+
+                _engine.SetConfig();
+                setFileCameraType();
+            }
+            _engine.SetActive(true);
+            Application.Idle += Application_Idle;
         }
     }
 }

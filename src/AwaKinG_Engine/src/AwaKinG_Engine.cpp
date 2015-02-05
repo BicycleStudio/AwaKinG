@@ -2,7 +2,6 @@
 RedactorEngine* EngineGetPointer()
 {
 	return new RedactorEngine();
-	//return Engine::getInstance(Engine::ERT_REDACTOR);
 }
 bool EngineInitialize(RedactorEngine* pointer, HWND mainHwnd, HWND hwnd, int sizeX, int sizeY)
 {
@@ -26,19 +25,18 @@ void EngineCreateMapFromFile(RedactorEngine* pointer, const char* fileName, int 
 		str[i] = fileName[i*2];
 	if(!pointer->createMapFromFile(str));
 }
-int EngineSetActive(RedactorEngine* pointer, int value)
+void EngineSetActive(RedactorEngine* pointer, int value)
 {
 	bool val = true;
 	if(value == 0)
 		val = false;
 	pointer->setActive(val);
-	return value;
 }
 bool EngineGetActive(RedactorEngine* pointer)
 {
 	return pointer->active();
 }
-void EngineSetCameraManagerType(RedactorEngine* pointer, int type)
+void EngineCameraManagerSetType(RedactorEngine* pointer, int type)
 {
 	Engine::CameraManagerType type_;
 	switch(type)
@@ -65,13 +63,12 @@ void EngineTerrainBlur(RedactorEngine* pointer, int value)
 {
 	pointer->blurTerrain(value);
 }
-char* EngineTerrainSave(RedactorEngine* pointer, const char* fileName, int len)
+void EngineTerrainSave(RedactorEngine* pointer, const char* fileName, int len)
 {
 	char* str = new char[len * 2];
 	for(int i = 0; i < len * 2; i++)
 		str[i] = fileName[i * 2];
 	pointer->saveTerrain(str);
-	return str;
 }
 void EngineTerrainLoad(RedactorEngine* pointer, const char* fileName, int len)
 {
@@ -87,4 +84,12 @@ void EngineTerrainSetWorkType(RedactorEngine* pointer, int type)
 int EngineTerrainPick(RedactorEngine* pointer, int posX, int posY)
 {
 	return pointer->pickTerrain(posX, posY);
+}
+void EngineTerrainSetSettings(RedactorEngine* pointer, int numVerts, float cellSpace)
+{
+	pointer->setTerrainGenerationSettings(numVerts, cellSpace);
+}
+void EngineCameraManagerSetSpeed(RedactorEngine* pointer, float speed)
+{
+	pointer->setCameraSpeed(speed);
 }

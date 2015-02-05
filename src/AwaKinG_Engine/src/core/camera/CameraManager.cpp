@@ -21,9 +21,9 @@ void RedactorCameraManager::setInputInterface()
 }
 void RedactorCameraManager::update()
 {
-	float delta = 1.0f;
+	float delta = _speed;
 	if(_iInputManager->LShift())
-		delta = 8.0f;
+		delta *= 8.0f;
 
 	if(_iInputManager->LControl())
 	{
@@ -34,11 +34,15 @@ void RedactorCameraManager::update()
 
 	_camera->update();
 }
+void RedactorCameraManager::setSpeed(float speed)
+{
+	_speed = speed;
+}
 void RedactorFreeCameraManager::update()
 {
-	float delta = 0.1f;
+	float delta = _speed;
 	if(_iInputManager->LShift())
-		delta = 4.0f;
+		delta *= 4.0f;
 
 	_camera->yaw(_iInputManager->MouseX());
 	_camera->pitch(_iInputManager->MouseY());

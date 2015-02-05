@@ -18,12 +18,14 @@ protected:
 class RedactorCameraManager : public CameraManager
 {
 public:
-	RedactorCameraManager(){}
+	RedactorCameraManager()	{ _speed = 1.0f; }
 	void setInputInterface();
 
 	virtual void update();
+	void setSpeed(float speed);
 protected:
 	IIMMouseKeyboard* _iInputManager;
+	float							_speed;
 };
 
 class RedactorFreeCameraManager : public RedactorCameraManager

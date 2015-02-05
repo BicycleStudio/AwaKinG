@@ -14,6 +14,8 @@ Engine::Engine()
 }
 RedactorEngine::RedactorEngine()
 {
+	_terrainNumVerts = 32;
+	_terrainCellSpace = 10.0f;
 	_shortPaths = false;
 	_cameraMangerType = CMT_REDACTOR;
 	ErrorMessage = "RedactorEngine";
@@ -234,7 +236,7 @@ bool Engine::resizeRenderBuffer(int sizeX, int sizeY)
 }
 bool RedactorEngine::createTerrain(int gridX, int gridY)
 {
-	return _redactorTerrainManager->generate(gridX, gridY, 3, 10.0f);
+	return _redactorTerrainManager->generate(gridX, gridY, _terrainNumVerts, _terrainCellSpace);
 }
 void RedactorEngine::randomizeTerrain(int diapazon)
 {
@@ -292,4 +294,14 @@ void RedactorEngine::setShortPaths()
 	_shortPaths = true;
 	string path_ = "../../media/terrain/_2048.dds";
 	_redactorTerrainManager->set2048Path(path_);
+}
+void RedactorEngine::setCameraSpeed(float speed)
+{
+	_redactorCameraManager->setSpeed(speed);
+	_redactorFreeCameraManager->setSpeed(speed);
+}
+void RedactorEngine::setTerrainGenerationSettings(int numVerts, float cellSpace)
+{
+	_terrainNumVerts = numVerts;
+	_terrainCellSpace = cellSpace;
 }

@@ -12,26 +12,33 @@ namespace AwaKinG_Redactor.src.engine
         const String _dllPath = "../../../../dll/AwaKinG_Engine.dll";
         #region dll import
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+           EntryPoint = "EngineTerrainSetSettings")]
+        private static extern void _setTerrainSettings(IntPtr pointer, int numVerts, float cellSpace);
+        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+           EntryPoint = "EngineCameraManagerSetSpeed")]
+        private static extern void _setCameraSpeed(IntPtr pointer, float speed);
+
+
+        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
            EntryPoint = "EngineTerrainSetWorkType")]
         private static extern void _setTerrainWorkType(IntPtr pointer, int type);
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
            EntryPoint = "EngineTerrainPick")]
         private static extern int _pickTerrain(IntPtr pointer, int posX, int posY);
-
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
            EntryPoint = "EngineTerrainLoad")]
         private static extern void _loadTerrain(IntPtr pointer, String fileName, int len);
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
            EntryPoint = "EngineTerrainSave")]
-        private static extern IntPtr _saveTerrain(IntPtr pointer, String fileName, int len);
+        private static extern void _saveTerrain(IntPtr pointer, String fileName, int len);
 
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineTerrainRandomize")]
-        private static extern bool _randomizeTerrain(IntPtr pointer, int diapazon);
+        private static extern void _randomizeTerrain(IntPtr pointer, int diapazon);
       
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineTerrainBlur")]
-        private static extern bool _blurTerrain(IntPtr pointer, int value);
+        private static extern void _blurTerrain(IntPtr pointer, int value);
       
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineTerrainGenerate")]
@@ -42,7 +49,7 @@ namespace AwaKinG_Redactor.src.engine
         private static extern bool _resizeBuffers(IntPtr pointer, int sizeX, int sizeY);
 
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
-            EntryPoint = "EngineSetCameraManagerType")]
+            EntryPoint = "EngineCameraManagerSetType")]
         private static extern void _setCameraManagerType(IntPtr pointer, int type);
 
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
@@ -51,7 +58,7 @@ namespace AwaKinG_Redactor.src.engine
 
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineSetActive")]
-        private static extern int _setActive(IntPtr pointer, int value);
+        private static extern void _setActive(IntPtr pointer, int value);
         
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineCreateMapFromFile")]
@@ -78,6 +85,24 @@ namespace AwaKinG_Redactor.src.engine
         bool _initialized;
         IntPtr _engine;
         bool _active;
+        public void SetConfig()
+        {
+            float camSpeed = Camera.GetInstance().Speed;
+            CameraType camType = Camera.GetInstance().Type;
+            int numVerts = Terrain.GetInstance().NumVerts;
+            float cellSpace = Terrain.GetInstance().CellSpace;
+
+            int type = 0;
+            switch(camType)
+            {
+                case CameraType.Redactor: type = 0; break;
+                case CameraType.RedactorFree: type = 1; break;
+            }
+            SetCameraManagerType(type);
+
+            _setTerrainSettings(_engine, numVerts, cellSpace);
+            _setCameraSpeed(_engine, camSpeed);
+        }
         public EngineWrap(IntPtr mainWindow, IntPtr window, System.Drawing.Size size) 
         {
             _engine = _getPointer();
@@ -135,9 +160,7 @@ namespace AwaKinG_Redactor.src.engine
         }
         public void SaveTerrain(String fileName)
         {
-            IntPtr str = _saveTerrain(_engine, fileName, fileName.Length);
-
-            string sttt =Marshal.PtrToStringAnsi(str);
+            _saveTerrain(_engine, fileName, fileName.Length);
         }
         public int PickTerrain(System.Drawing.Point pt)
         {

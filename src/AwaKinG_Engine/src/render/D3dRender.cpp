@@ -321,7 +321,7 @@ void D3dRender::_beginScene()
 }
 void D3dRender::_endScene()
 {
-	_swapChain->Present(0, 0);
+	_swapChain->Present(1, 0);
 }
 #pragma endregion
 
