@@ -1,4 +1,5 @@
 #include "D3dRender.h"
+#define ReadPixelFromMappedSubResource(x, y)       ( *( (RGBQUAD *)((BYTE *)MappedSubResource.pData + (y)*MappedSubResource.RowPitch + (x)*sizeof(DWORD)) ) )
 
 #pragma region mainFunctions
 D3dRender::D3dRender()
@@ -6,7 +7,8 @@ D3dRender::D3dRender()
 	ErrorMessage = "D3dRender";
 	_mayInitialized = false;
 	_sceneColor = new float[4] { 0.0f, 0.125f, 0.3f, 1.0f };
-	
+	_pickColor = new float[4] { 1.0f, 1.0f, 1.0f, 1.0f };
+
 	_device = 0;
 	_immediateContext = 0;
 	_swapChain = 0;
@@ -27,8 +29,7 @@ D3dRender::D3dRender()
 	_terrainTech.VS = 0;
 	_terrainTech.PS = 0;
 	_terrainTech.IL = 0;
-	_terrainTech.Buffer = 0;
-
+	
 	_rs.NonCull = 0;
 	_rs.Solid = 0;
 	_rs.Wireframe = 0;
@@ -69,16 +70,17 @@ void D3dRender::shutdown()
 		delete _terrainTiles[j];
 	}
 	_terrainTiles.clear();
-	
+
 	safeRelease(_textureMap.VS);		safeRelease(_textureMap.PS);		safeRelease(_textureMap.IL);		safeRelease(_textureMap.Buffer);
-	safeRelease(_terrainTech.VS);		safeRelease(_terrainTech.PS);		safeRelease(_terrainTech.IL);		safeRelease(_terrainTech.Buffer);
+	safeRelease(_terrainTech.VS);		safeRelease(_terrainTech.PS);		safeRelease(_terrainTech.IL);	
 	safeRelease(_rs.NonCull);				safeRelease(_rs.Solid);					safeRelease(_rs.Wireframe);
 	safeRelease(_depthStencilView);	safeRelease(_depthStencil);
 	safeRelease(_backBuffer);				safeRelease(_renderTargetView);
 	safeRelease(_immediateContext);	safeRelease(_swapChain);				safeRelease(_device);
 }
-void D3dRender::setInitialize(HWND hwnd, int sizeX, int sizeY)
+void D3dRender::setInitialize(HWND hwnd, int sizeX, int sizeY, string shaderPath)
 {
+	_shaderPath = shaderPath;
 	_hwnd = hwnd;
 	_sizeX = sizeX;
 	_sizeY = sizeY;
@@ -127,22 +129,11 @@ bool D3dRender::initialize()
 		_driverType = driverTypes[driverTypeIndex];
 		hr = D3D11CreateDeviceAndSwapChain(NULL, _driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
 			D3D11_SDK_VERSION, &sd, &_swapChain, &_device, &_featureLevel, &_immediateContext);
-		if(SUCCEEDED(hr))
-			break;
+		if(SUCCEEDED(hr))			break;
 	}
-
-
 	checkResult(hr, "Creation of device & swapChain failed");
 	checkResult(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer),"Getting backbuffer of swapChain failed");
 	checkResult(_device->CreateRenderTargetView(_backBuffer, NULL, &_renderTargetView),"Creation of RenderTargetView failed");
-
-	_backBuffer->GetDesc(&_tex2DDescPICK);
-	_tex2DDescPICK.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-	_tex2DDescPICK.Usage = D3D11_USAGE_STAGING;
-	_tex2DDescPICK.BindFlags = 0;
-	_tex2DDescPICK.Width = 1;
-	_tex2DDescPICK.Height = 1;
-	checkResult(_device->CreateTexture2D(&_tex2DDescPICK, NULL, &_backReadFromPICK),"Creation of texture for picking failed");
 
 	D3D11_TEXTURE2D_DESC descDepth;
 	ZeroMemory(&descDepth, sizeof(descDepth));
@@ -177,8 +168,8 @@ bool D3dRender::initialize()
 	vp.TopLeftY = 0;
 	_immediateContext->RSSetViewports(1, &vp);
 
-
 	_PerspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)_sizeX / (FLOAT)_sizeY, _config.Znear, _config.Zfar);
+	XMStoreFloat4x4(&_perspectiveMatrix, _PerspectiveMatrix);
 	_OrthograficMatrix = XMMatrixOrthographicLH((FLOAT)_sizeX, (FLOAT)_sizeY, -_config.Zfar, _config.Zfar);
 
 	if(!_initializeShaders()) return false;
@@ -205,7 +196,8 @@ bool D3dRender::initialize()
 	RasterDesc.FillMode = D3D11_FILL_WIREFRAME;
 	checkResult(_device->CreateRasterizerState(&RasterDesc, &_rs.Wireframe),
 		"Creation of Wireframe RS failed");
-		
+	_immediateContext->RSSetState(_rs.Solid);
+
 	D3D11_SAMPLER_DESC samplDesc_;
 	samplDesc_.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplDesc_.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -225,17 +217,19 @@ bool D3dRender::initialize()
 }
 bool D3dRender::_initializeShaders()
 {
+	_shaderPath;
 	ID3DBlob* BlobVS_ = nullptr;	ID3DBlob* BlobPS_ = nullptr;
 	UINT flags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_PACK_MATRIX_ROW_MAJOR;
 
-	if(!_compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "VS", "vs_5_0", flags, 0, &BlobVS_)) return false;
-	if(!_compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "PS", "ps_5_0", flags, 0, &BlobPS_)) return false;
+	string currentShaderPath_ = _shaderPath + "TextureMap.hlsl";
+	if(!_compileShaderFromFile(currentShaderPath_.c_str(), nullptr, "VS", "vs_5_0", flags, 0, &BlobVS_)) return false;
+	if(!_compileShaderFromFile(currentShaderPath_.c_str(), nullptr, "PS", "ps_5_0", flags, 0, &BlobPS_)) return false;
 	
 	checkResult(_device->CreateVertexShader(BlobVS_->GetBufferPointer(), BlobVS_->GetBufferSize(), nullptr, &_textureMap.VS),
 		"Creation of Texture_Mapping vertex shader failed");
 	checkResult(_device->CreatePixelShader(BlobPS_->GetBufferPointer(), BlobPS_->GetBufferSize(), nullptr, &_textureMap.PS),
 		"Creation of Texture_Mapping pixel shader failed");
-	
+
 	const D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -245,16 +239,17 @@ bool D3dRender::_initializeShaders()
 	checkResult(_device->CreateInputLayout(layout, ARRAYSIZE(layout), BlobVS_->GetBufferPointer(), BlobVS_->GetBufferSize(), &_textureMap.IL),
 		"Creation of Texture_Mapping input layout failed");
 
-	if(!_compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "VSTerrain", "vs_5_0", flags, 0, &BlobVS_)) return false;
-	if(!_compileShaderFromFile(L"fx/TextureMap.hlsl", nullptr, "PSTerrain", "ps_5_0", flags, 0, &BlobPS_)) return false;
+	if(!_compileShaderFromFile(currentShaderPath_.c_str(), nullptr, "VSTerrain", "vs_5_0", flags, 0, &BlobVS_)) return false;
+	if(!_compileShaderFromFile(currentShaderPath_.c_str(), nullptr, "PSTerrain", "ps_5_0", flags, 0, &BlobPS_)) return false;
 
 	checkResult(_device->CreateVertexShader(BlobVS_->GetBufferPointer(), BlobVS_->GetBufferSize(), nullptr, &_terrainTech.VS),
 		"Creation of Texture_Mapping vertex shader failed");
 	checkResult(_device->CreatePixelShader(BlobPS_->GetBufferPointer(), BlobPS_->GetBufferSize(), nullptr, &_terrainTech.PS),
 		"Creation of Texture_Mapping pixel shader failed");
+
 	_terrainTech.IL = _textureMap.IL;
 
-	_textureMap.VertexStride = 32;_terrainTech.VertexStride = 32;
+	_textureMap.VertexStride = 32; _terrainTech.VertexStride = 32;
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
@@ -264,7 +259,8 @@ bool D3dRender::_initializeShaders()
 	bd.ByteWidth = sizeof(ConstantBuffer);
 	bd.MiscFlags = 0;
 	checkResult(_device->CreateBuffer(&bd, NULL, &_textureMap.Buffer), "Creation of constant buffer for ViewProj failed");
-	_textureMap.IndexOfBuffer = 1; _terrainTech.IndexOfBuffer = 1;
+	bd.ByteWidth = sizeof(XMFLOAT4);
+	_textureMap.IndexOfBuffer = 1; 
 
 	safeRelease(BlobVS_);
 	safeRelease(BlobPS_);
@@ -277,8 +273,6 @@ bool D3dRender::_initializeShaders()
 void D3dRender::render()
 {
 	_beginScene();
-	_mapViewProjectionBufferResource();
-	_immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	_prepareToRenderTechnique(_textureMap);
 	for(unsigned int i = 0; i < _models[AMT_TEXTUREMAP].size(); i++)
@@ -322,14 +316,35 @@ void D3dRender::_beginScene()
 {
 	_immediateContext->ClearRenderTargetView(_renderTargetView, _sceneColor);
 	_immediateContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	_immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	_mapViewProjectionBufferResource();
 }
 void D3dRender::_endScene()
 {
-	_swapChain->Present(1, 0);
+	_swapChain->Present(0, 0);
 }
 #pragma endregion
 
 #pragma region additionalFunctions
+XMFLOAT3 D3dRender::getPickingRay(int x, int y)
+{
+	XMFLOAT3 ret_;
+	XMFLOAT3 v_;
+	v_.x = (((2.0f * x) / _sizeX) - 1) / _perspectiveMatrix._11;
+	v_.y = -(((2.0f * y) / _sizeY) - 1) / _perspectiveMatrix._22;
+	v_.z = 1.0f;
+
+	XMFLOAT4X4 mInv_;
+	
+	XMVECTOR nullVec_;
+	XMStoreFloat4x4(&mInv_, XMMatrixInverse(&nullVec_, XMLoadFloat4x4(ViewMatrix)));
+
+	ret_.x = v_.x * mInv_._11 + v_.y * mInv_._21 + v_.z * mInv_._31;
+	ret_.y = v_.x * mInv_._12 + v_.y * mInv_._22 + v_.z * mInv_._32;
+	ret_.z = v_.x * mInv_._13 + v_.y * mInv_._23 + v_.z * mInv_._33;
+
+	return ret_;
+}
 void D3dRender::setRasterizerState(int stateType)
 {
 	switch(stateType)
@@ -351,8 +366,8 @@ bool D3dRender::resizeBuffer(int sizeX, int sizeY)
 
 	_depthStencil->Release();
 	_depthStencilView->Release();
-	_backBuffer->Release();
 	_renderTargetView->Release();
+	_backBuffer->Release();
 
 	checkResult(_swapChain->ResizeBuffers(1, sizeX, sizeY, DXGI_FORMAT_UNKNOWN, 0),"ResizeBuffersError");
 	checkResult(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer), "Getting backbuffer of swapChain failed");
@@ -367,7 +382,6 @@ bool D3dRender::resizeBuffer(int sizeX, int sizeY)
 	descDepth.Usage = D3D11_USAGE_DEFAULT;	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	descDepth.CPUAccessFlags = 0;	descDepth.MiscFlags = 0;
 	checkResult(_device->CreateTexture2D(&descDepth, NULL, &_depthStencil), "Creation of depth stencil texture failed");
-
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
 	ZeroMemory(&descDSV, sizeof(descDSV));	descDSV.Format = descDepth.Format;
 	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;	descDSV.Texture2D.MipSlice = 0;
@@ -380,6 +394,7 @@ bool D3dRender::resizeBuffer(int sizeX, int sizeY)
 
 	_PerspectiveMatrix = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)_sizeX / (FLOAT)_sizeY, _config.Znear, _config.Zfar);
 	_OrthograficMatrix = XMMatrixOrthographicLH((FLOAT)_sizeX, (FLOAT)_sizeY, -_config.Zfar, _config.Zfar);
+	XMStoreFloat4x4(&_perspectiveMatrix, _PerspectiveMatrix);
 
 	return true;
 }
@@ -418,6 +433,14 @@ void D3dRender::_mapViewProjectionBufferResource()
 //	_immediateContext->HSSetConstantBuffers(0, 1, &_bViewProj);
 //	_immediateContext->DSSetConstantBuffers(0, 1, &_bViewProj);
 }
+void D3dRender::_mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4* vector)
+{
+	D3D11_MAPPED_SUBRESOURCE MappedResource;
+	HRESULT hr = _immediateContext->Map(buffer[0], 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
+	auto pData = reinterpret_cast<XMFLOAT4*>(MappedResource.pData);
+	XMStoreFloat4(&pData[0], XMLoadFloat4(vector));
+	_immediateContext->Unmap(buffer[0], 0);
+}
 void D3dRender::_mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* matrix)
 {
 	D3D11_MAPPED_SUBRESOURCE MappedResource;
@@ -434,6 +457,26 @@ void D3dRender::unmapResource(ID3D11Buffer* buf)
 {
 	_immediateContext->Unmap(buf, 0);
 }
+bool D3dRender::_compileShaderFromFile(LPCSTR szFileName, const D3D_SHADER_MACRO* pDefines,
+	LPCSTR szEntryPoint, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppBlobOut)
+{
+	HRESULT hr; ID3DBlob* pErrorBlob;
+	hr = D3DX11CompileFromFile(szFileName, pDefines, NULL, szEntryPoint, 
+		pTarget, Flags1, Flags2, NULL, ppBlobOut, &pErrorBlob, NULL);
+	if(FAILED(hr))
+	{
+		if(pErrorBlob != NULL)
+			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
+		ErrorMessage = reinterpret_cast<const char*>(pErrorBlob->GetBufferPointer());
+		if(pErrorBlob) pErrorBlob->Release();
+		return false;
+	}
+	if(pErrorBlob) pErrorBlob->Release();
+
+	return true;
+}
+/*
+	!!! Compiling not using D3DX!!! 
 bool D3dRender::_compileShaderFromFile(LPCWSTR pFileName, const D3D_SHADER_MACRO* pDefines,
 	LPCSTR pEntrypoint, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppCode)
 {
@@ -447,7 +490,8 @@ bool D3dRender::_compileShaderFromFile(LPCWSTR pFileName, const D3D_SHADER_MACRO
 
 #if D3D_COMPILER_VERSION >= 46
 
-	hr = D3DCompileFromFile(pFileName, pDefines, D3D_COMPILE_STANDARD_FILE_INCLUDE, pEntrypoint, pTarget, Flags1, Flags2, ppCode, &pErrorBlob);
+	hr = D3DCompileFromFile(pFileName, pDefines, D3D_COMPILE_STANDARD_FILE_INCLUDE, pEntrypoint, pTarget, 
+		Flags1, Flags2, ppCode, &pErrorBlob);
 
 #else
 
@@ -521,6 +565,7 @@ bool D3dRender::_compileShaderFromFile(LPCWSTR pFileName, const D3D_SHADER_MACRO
 	}
 	return true;
 }
+*/
 bool D3dRender::createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff)
 {
 	ID3D11Buffer* buf_;

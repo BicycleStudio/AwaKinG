@@ -8,7 +8,7 @@
 
 HWND gHwnd;
 Window* gWindow = 0;
-RedactorEngine* gEngine = 0;
+Engine* gEngine = 0;
 bool gMinimized = false;
 
 void messageLoop();
@@ -19,7 +19,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 	gWindow = &Window::getInstance(); 
 	tryInit(gWindow);
 
-	gEngine = new RedactorEngine();//&Engine::getInstance();
+	gEngine = new Engine();//&Engine::getInstance();
+	//gEngine->setShortPaths();
 	if(!gEngine->initialize(gHwnd, gHwnd, gWindow->getWidth(), gWindow->getHeight()))
 	{ 
 		MessageBox(NULL, gEngine->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR);
@@ -28,7 +29,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 	}
 
 	gEngine->loadTerrain("../../resources/map/terrain/myterrain.ter");
-	//gEngine->saveTerrain("../../resources/map/terrain/myterrain.ter");
+
+	//gEngine->createMapFromFile("../../resources/map/winterfell.map");
+	//gEngine->createTerrain(1, 1);
+
 	gEngine->setActive(true);
 	messageLoop();
 

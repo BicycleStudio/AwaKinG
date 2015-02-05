@@ -25,4 +25,6 @@ DLL_SPEC void EngineTerrainBlur(RedactorEngine* pointer, int value);
 DLL_SPEC char* EngineTerrainSave(RedactorEngine* pointer, const char* fileName, int len);
 DLL_SPEC void EngineTerrainLoad(RedactorEngine* pointer, const char* fileName, int len);
 
+DLL_SPEC void EngineTerrainSetWorkType(RedactorEngine* pointer, int type);
+DLL_SPEC int EngineTerrainPick(RedactorEngine* pointer, int posX, int posY);
 #endif // __AWAKING_ENGINE_H setCameraManagerType

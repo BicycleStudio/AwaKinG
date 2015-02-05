@@ -17,28 +17,7 @@ public:
 	enum CameraManagerType { CMT_REDACTOR, CMT_REDACTORFREE };
 	std::string ErrorMessage;
 	Engine();
-	/*
-#pragma region singleton
-public:
-	std::string ErrorMessage;
-	static Engine* getInstance(EngineRunType type)
-	{
-		switch(type)
-		{
-		case ERT_REDACTOR:
-			return _redactorEngine;
-		case ERT_GAME:
-			return _engine;
-		}
-	};
 
-private:
-	static RedactorEngine* _redactorEngine;
-	static Engine* _engine;
-	Engine();
-	Engine(const Engine&);
-#pragma endregion
-	*/
 #pragma region public functions
 public:
 	bool initialize(HWND mainHwnd, HWND renderHwnd, int sizeX, int sizeY);
@@ -52,7 +31,6 @@ public:
 	virtual void loadTerrain(string fileName);
 #pragma endregion
 
-
 #pragma region private functions
 protected:
 	void _cameraManagerSwitch();
@@ -63,6 +41,7 @@ protected:
 private:
 	TerrainManager*								_terrainManager;
 protected:
+	bool													_shortPaths;
 	InputManager*									_inputManager;
 	CameraManagerType							_cameraMangerType;
 	CameraManager*								_cameraManager;
@@ -80,6 +59,10 @@ class RedactorEngine : public Engine
 {
 public:
 	RedactorEngine();
+
+	// FOR C++ REDACTOR
+	void setShortPaths();
+
 #pragma region redactor functions
 	void saveTerrain(string fileName);
 	void randomizeTerrain(int diapazon);
@@ -87,6 +70,9 @@ public:
 	bool createTerrain(int gridX, int gridY);
 	bool createMapFromFile(string fileName);
 	void loadTerrain(string fileName);
+
+	void setTerrainWorkType(int type);
+	int pickTerrain(int posX, int posY);
 #pragma endregion
 private: 
 	RedactorTerrainManager*								_redactorTerrainManager;

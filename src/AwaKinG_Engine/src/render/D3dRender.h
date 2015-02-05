@@ -1,6 +1,7 @@
 #pragma once
 #include "IRTerrain.h"
 
+
 class D3dRender : public IRTerrain
 {
 public:
@@ -8,6 +9,7 @@ public:
 #pragma region structs
 	struct SystemConfiguration
 	{
+		SystemConfiguration(){}
 		const float Zfar = 100000.0f;
 		const float Znear = 0.01f;
 	}; SystemConfiguration _config;
@@ -26,9 +28,12 @@ public:
 		ID3D11VertexShader* VS;
 		ID3D11PixelShader* PS;
 		ID3D11InputLayout* IL;
+		unsigned int VertexStride;
+	};
+	struct TechniqueVP_Buf : TechniqueVP
+	{
 		ID3D11Buffer*	Buffer;
 		int	IndexOfBuffer;
-		unsigned int VertexStride;
 	};
 #pragma endregion
 #pragma region singleton
@@ -48,10 +53,12 @@ private:
 public:
 	//Before initialize() call setInitialize(HWND hwnd, int sizeX, int sizeY)
 	bool initialize();
-	void setInitialize(HWND hwnd, int sizeX, int sizeY);
+	void setInitialize(HWND hwnd, int sizeX, int sizeY, string shaderPath);
 	void render();
 	void shutdown();
 	bool resizeBuffer(int sizeX, int sizeY);
+
+	XMFLOAT3 getPickingRay(int x, int y);
 
 	bool needToInitializeModel(string fileName, int* indexTechnique, int* index);
 	XMFLOAT4X4* addModelMatrix(int indexTechnique, int index);
@@ -76,9 +83,9 @@ private:
 	void _renderTextureMapModel(ModelEx* model, vector<XMFLOAT4X4>* matrixs);
 	void _endScene();
 	bool _initializeShaders();
-	bool _compileShaderFromFile(LPCWSTR pFileName,	const D3D_SHADER_MACRO* pDefines,
-		LPCSTR pEntrypoint, LPCSTR pTarget,	UINT Flags1, UINT Flags2,	ID3DBlob** ppCode);
+	bool _compileShaderFromFile(LPCSTR file, const D3D_SHADER_MACRO* pDefs,	LPCSTR szEntry, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppBlobOut);
 	void _mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* matrix);
+	void _mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4* vector);
 	void _mapViewProjectionBufferResource();
 #pragma endregion
 
@@ -92,16 +99,11 @@ public:
 	vector<Model*>												_terrainTiles;
 	ID3D11Buffer*													_terrainTileIndexBuffer;
 	 
-	#pragma region vars for picking 
-	private:
-		D3D11_BOX								_dboxPICK;
-		D3D11_TEXTURE2D_DESC		_tex2DDescPICK;
-		ID3D11Texture2D*        _backReadFromPICK;
-	#pragma endregion
 	#pragma region shader vars 
+		string									_shaderPath;
+		TechniqueVP_Buf					_textureMap;
 		TechniqueVP							_terrainTech;
-		TechniqueVP							_textureMap;
-	
+
 		ID3D11Buffer*           _bViewProj;
 		ConstantBuffer					_cbViewProj;
 		ID3D11SamplerState*     _ssLinear;
@@ -122,6 +124,7 @@ public:
 		D3D_FEATURE_LEVEL       _featureLevel;
 		D3D_DRIVER_TYPE         _driverType;
 
+		XMFLOAT4X4							_perspectiveMatrix;
 		XMMATRIX								_PerspectiveMatrix;
 		XMMATRIX								_OrthograficMatrix;
 	#pragma endregion
@@ -132,6 +135,7 @@ public:
 		int											_sizeX;
 		int											_sizeY;
 		float*									_sceneColor;
+		float*									_pickColor;
 	#pragma endregion
 #pragma endregion
 };

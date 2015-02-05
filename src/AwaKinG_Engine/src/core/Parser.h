@@ -2,7 +2,6 @@
 #include "../render/D3dRender.h"
 
 using namespace std;
-using namespace DirectX;
 
 #define tryOpenStream(fileName, spec)if(!Parser::getInstance().openFile(fileName, spec)){ ErrorMessage = "openStream error. Parser"; return false; }
 #define tryCloseStream()if(!Parser::getInstance().closeFile(fileName)){ ErrorMessage = "closeStream error. Parser"; return false; }

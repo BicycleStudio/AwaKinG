@@ -146,5 +146,22 @@ namespace AwaKinG_Redactor
                     _engine.SaveTerrain(_terrainSFD.FileName);
             }
         }
+        private void awA_Button5_Click(object sender, EventArgs e)
+        {
+            _engine.SetTerrainWorkType(2);
+        }
+        private void awA_Button6_Click(object sender, EventArgs e)
+        {
+            _engine.SetTerrainWorkType(0);
+        }
+        private void awA_Button4_Click(object sender, EventArgs e)
+        {
+            _engine.SetTerrainWorkType(1);
+        }
+        private void pnlRender_MouseDown(object sender, MouseEventArgs e)
+        {
+            int id = _engine.PickTerrain(e.Location);
+            label1.Text = "Log: " + id.ToString();
+        }
     }
 }

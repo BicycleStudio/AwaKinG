@@ -15,8 +15,8 @@ public:
 private:
 	virtual bool _generateGeometry();
 #pragma endregion
-
 protected:
+	string											_2048Path;
 	ID3D11Buffer*								_indexBuffer;
 	ID3D11Buffer**							_vertexBuffers;
 	ID3D11ShaderResourceView**	_textures;
@@ -24,6 +24,7 @@ protected:
 class RedactorTerrainManager : public TerrainManager
 {
 public:
+	enum TerainWorkType { TWT_NONE = 0, TWT_HEIGHT = 1, TWT_TEXTURE = 2 };
 	RedactorTerrainManager();
 	void shutdown();
 	bool generate(int gridX, int gridY, int numVerts, float cellSpace);
@@ -32,17 +33,24 @@ public:
 	void randomize(int diapazon);
 	void normalizeNormals();
 	void blurHeightmap(int blurHard);
+	int pick(XMFLOAT3 pickRay);
+	void setWorkType(int type);
+	void set2048Path(string path);
 
 private:
 	void smoothVert(int id);
 	void _updateVertexBuffer(int idTerrain);
 	bool _generateGeometry();
+	void _heightmapWork(int terrainId, int vertId);
+	void _textureWork(int terrainId, int vertId, XMFLOAT2 texcoord);
 private:
+	TerainWorkType			_workType;
 	struct Properties
 	{
 		Properties(){}
 		Properties(int x, int y, int numV, float cellSpace)
 		{
+			Initialized = true;
 			CellSpace = cellSpace;
 			NumVerts = numV;
 			NumQuad = (NumVerts - 1);
@@ -162,10 +170,13 @@ private:
 		}
 		void Release()
 		{
-			HeightMap.clear(); NormalMap.clear();
-			delete[] PickToHeightMapMAP;
-			delete[] HeightMapToTerrainMAP;
-			delete QuadVertConnect;
+			if(Initialized)
+			{
+				HeightMap.clear(); NormalMap.clear();
+				delete[] PickToHeightMapMAP;
+				delete[] HeightMapToTerrainMAP;
+				delete QuadVertConnect;
+			}
 		}
 		vector<XMFLOAT3> HeightMap;
 		vector<XMFLOAT3> NormalMap;
@@ -179,6 +190,7 @@ private:
 		int MaxId;			int NumQuad;				int NumIndex;
 
 		float CellSpace;
+		bool Initialized = false;
 		//int* AllIndexes;
 	};
 	Properties									_props;

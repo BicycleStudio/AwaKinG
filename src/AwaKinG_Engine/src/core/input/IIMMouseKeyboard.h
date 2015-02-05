@@ -2,6 +2,7 @@
 #include "../../../../../Include/dinput.h"		
 #include "../../render/D3dRender.h"
 #pragma comment(lib, "../../lib/x86/dinput8.lib")
+#pragma comment(lib, "../../lib/x86/dxguid.lib")
 
 class IIMMouseKeyboard
 {

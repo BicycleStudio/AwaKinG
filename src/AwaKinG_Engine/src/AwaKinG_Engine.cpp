@@ -80,3 +80,11 @@ void EngineTerrainLoad(RedactorEngine* pointer, const char* fileName, int len)
 		str[i] = fileName[i * 2];
 	pointer->loadTerrain(str);
 }
+void EngineTerrainSetWorkType(RedactorEngine* pointer, int type)
+{
+	pointer->setTerrainWorkType(type);
+}
+int EngineTerrainPick(RedactorEngine* pointer, int posX, int posY)
+{
+	return pointer->pickTerrain(posX, posY);
+}

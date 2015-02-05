@@ -2,7 +2,7 @@
 
 Engine::Engine()
 {
-
+	_shortPaths = true;
 	_cameraMangerType = CMT_REDACTORFREE;
 	ErrorMessage = "Engine";
 	_active = true;
@@ -14,6 +14,7 @@ Engine::Engine()
 }
 RedactorEngine::RedactorEngine()
 {
+	_shortPaths = false;
 	_cameraMangerType = CMT_REDACTOR;
 	ErrorMessage = "RedactorEngine";
 	_active = true;
@@ -38,7 +39,9 @@ void Engine::_cameraManagerSwitch()
 bool Engine::initialize(HWND mainHwnd, HWND renderHwnd, int sizeX, int sizeY)
 {
 	_d3dRender = &D3dRender::getInstance();
-	_d3dRender->setInitialize(renderHwnd, sizeX, sizeY);
+	string path_ = "../../fx/";
+	if(!_shortPaths) path_ = "../../" + path_;
+	_d3dRender->setInitialize(renderHwnd, sizeX, sizeY, path_);
 	
 	safeSystemInit(_d3dRender);
 	_scene = &Scene::getInstance();
@@ -66,8 +69,7 @@ bool Engine::initialize(HWND mainHwnd, HWND renderHwnd, int sizeX, int sizeY)
 
 	_d3dRender->ViewMatrix = _camera->getViewMatrixPointer();
 
-	//createMapFromFile("resources/map/winterfell.map");
-
+	
 	return true;
 }
 void Engine::shutdown()
@@ -89,6 +91,17 @@ bool Engine::update()
 	_d3dRender->render();
 	return false;
 }
+void RedactorEngine::setTerrainWorkType(int type)
+{
+	_redactorTerrainManager->setWorkType(type);
+}
+int RedactorEngine::pickTerrain(int posX, int posY)
+{
+	XMFLOAT3 pickRay_ = _d3dRender->getPickingRay(posX, posY);
+	int id_ = _redactorTerrainManager->pick(pickRay_);
+
+	return id_;
+}
 void Engine::setCameraManagerType(CameraManagerType cameraType)
 {
 	_cameraMangerType = cameraType;
@@ -108,7 +121,7 @@ bool Engine::_createEntity(Entity** entity, string fileName)
 	int numV_ = 0;  int numF_ = 0; int numTV_ = 0;
 	tryReadInt(&numV_); tryReadInt(&numF_); tryReadInt(&numTV_);
 	vector<XMFLOAT3> verts_;		vector<XMFLOAT2> tVerts_;		vector<XMFLOAT3> norms_;
-	vector<XMINT3> vertFaces;		vector<XMINT3> tVertFaces;
+	vector<int3> vertFaces;		vector<int3> tVertFaces;
 
 	for(int i = 0; i < numV_; i++)
 	{
@@ -126,7 +139,7 @@ bool Engine::_createEntity(Entity** entity, string fileName)
 	}
 	for(int i = 0; i < numF_; i++)
 	{
-		XMINT3 int3_;
+		int3 int3_;
 		tryReadInt(&int3_.x);	tryReadInt(&int3_.z);	tryReadInt(&int3_.y);
 		vertFaces.push_back(int3_);
 		tryReadInt(&int3_.x); tryReadInt(&int3_.z); tryReadInt(&int3_.y);
@@ -219,10 +232,9 @@ bool Engine::resizeRenderBuffer(int sizeX, int sizeY)
 {
 	return _d3dRender->resizeBuffer(sizeX, sizeY);
 }
-
 bool RedactorEngine::createTerrain(int gridX, int gridY)
 {
-	return _redactorTerrainManager->generate(gridX, gridY, 32, 10.0f);
+	return _redactorTerrainManager->generate(gridX, gridY, 3, 10.0f);
 }
 void RedactorEngine::randomizeTerrain(int diapazon)
 {
@@ -274,4 +286,10 @@ bool RedactorEngine::createMapFromFile(string fileName)
 		MessageBox(NULL, errorsOpening_.c_str(), "openMapError error", MB_OK | MB_ICONERROR);
 	tryCloseStream();
 	return true;
+}
+void RedactorEngine::setShortPaths()
+{
+	_shortPaths = true;
+	string path_ = "../../media/terrain/_2048.dds";
+	_redactorTerrainManager->set2048Path(path_);
 }

@@ -1,27 +1,25 @@
-
 cbuffer PerFrame : register(b0)	{ matrix ViewProj; };
 cbuffer PerObj : register(b1)		{ matrix World; };
+cbuffer PerObj : register(b2)		{ float4 PickColor; };
 Texture2D texDiffuse : register(t0);
 SamplerState samLinear : register(s0);
-struct VS_IN
+
+struct VS_Input
 {
 	float3 Pos		: POSITION;
 	float2 Tex		: TEXCOORD0;
 	float3 Normal	: Normal;
 };
-struct PS_IN
+struct PS_Input
 {
 	float4 Pos		: SV_POSITION;
 	float2 Tex		: TEXCOORD0;
 	float3 Normal	: Normal;
 };
-struct VS_OUTPUT_PICK
+
+PS_Input VS(VS_Input input)
 {
-	float4 Pos : SV_POSITION;
-};
-PS_IN VS(VS_IN input)
-{
-	PS_IN output = (PS_IN)0;
+	PS_Input output = (PS_Input)0;
 	output.Pos = mul(float4(input.Pos, 1.0f), World);
 	output.Pos = mul(output.Pos, ViewProj);
 	output.Tex = input.Tex;
@@ -29,31 +27,33 @@ PS_IN VS(VS_IN input)
 
 	return output;
 }
-PS_IN VSTerrain(VS_IN input)
+float4 PS(PS_Input input) : SV_Target
 {
-	PS_IN output = (PS_IN)0;
+	return texDiffuse.Sample(samLinear, input.Tex);
+}
+PS_Input VSTerrain(VS_Input input)
+{
+	PS_Input output = (PS_Input)0;
 	output.Pos = mul(float4(input.Pos, 1.0f), ViewProj);
 	output.Tex = input.Tex;
 	output.Normal = input.Normal;
 
 	return output;
 }
-float4 PS(PS_IN input) : SV_Target
+float4 PSTerrain(PS_Input input) : SV_Target
 {
 	return texDiffuse.Sample(samLinear, input.Tex);
 }
-float4 PSTerrain(PS_IN input) : SV_Target
+PS_Input VSTerrainPick(VS_Input input)
 {
-	return texDiffuse.Sample(samLinear, input.Tex);
-}
-VS_OUTPUT_PICK VS_PICK(VS_IN input)
-{
-	VS_OUTPUT_PICK output = (VS_OUTPUT_PICK)0;
-	output.Pos = mul(float4(input.Pos, 1.0f), World);
-	output.Pos = mul(output.Pos, ViewProj);
+	PS_Input output = (PS_Input)0;
+	output.Pos = mul(float4(input.Pos, 1.0f), ViewProj);
+	output.Tex = input.Tex;
+	output.Normal = input.Normal;
+
 	return output;
 }
-float4 PS_PICK(VS_OUTPUT_PICK input) : SV_Target
+float4 PSTerrainPick(PS_Input input) : SV_Target
 {
-	return float4(1.0f,0.0f,0.0f,1.0f);//texDiffuse.Sample(samLinear, input.Tex);//Pick_Color;
+	return PickColor;
 }

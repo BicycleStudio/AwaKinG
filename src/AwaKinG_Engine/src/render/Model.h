@@ -1,10 +1,13 @@
 #pragma once
-#include <DirectXMath.h>
-#include <d3d11.h>
+
+#include "../../../../include/d3d11.h"
+#include "../../../../include/xnamath.h"
+
+//#include <DirectXMath.h>
+//#include <d3d11.h>
 #include <string>
 #define safeRelease(d3dpointer) if(d3dpointer){d3dpointer->Release(); d3dpointer = 0;}
 
-using namespace DirectX;
 using namespace std;
 
 namespace Vertex 
@@ -35,8 +38,6 @@ public:
 	ID3D11ShaderResourceView** getTexture();
 	ID3D11Buffer* getVertexBuffer();
 	int	getIndexCount();
-
-
 	ID3D11Buffer*								vertexBuffer;
 protected:
 	ID3D11ShaderResourceView*		_texture;

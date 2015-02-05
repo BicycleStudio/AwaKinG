@@ -18,7 +18,6 @@ ID3D11Buffer* Model::getVertexBuffer()
 {
 	return vertexBuffer;
 }
-
 int Model::getIndexCount()
 {
 	return _countIndexs;
