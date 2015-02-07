@@ -2,13 +2,15 @@
 #include "../../AwaKinG_Engine/src/AwaKing_Engine.h"
 #pragma comment(lib, "../../Lib/AwaKinG_Engine.lib")
 
+#define _ITERATOR_DEBUG_LEVEL 0
+
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 #define tryInit(obj) if(!obj->initialize(&gHwnd,SCREEN_WIDTH,SCREEN_HEIGHT)){MessageBox(NULL, obj->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR);shutdown();return 1;}
 
 HWND gHwnd;
 Window* gWindow = 0;
-Engine* gEngine = 0;
+RedactorEngine* gEngine = 0;
 bool gMinimized = false;
 
 void messageLoop();
@@ -19,8 +21,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 	gWindow = &Window::getInstance(); 
 	tryInit(gWindow);
 
-	gEngine = new Engine();//&Engine::getInstance();
-	//gEngine->setShortPaths();
+	gEngine = new RedactorEngine();//&Engine::getInstance();
+	gEngine->setShortPaths();
 	if(!gEngine->initialize(gHwnd, gHwnd, gWindow->getWidth(), gWindow->getHeight()))
 	{ 
 		MessageBox(NULL, gEngine->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR);
@@ -28,8 +30,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 		return 1; 
 	}
 
-	gEngine->loadTerrain("../../resources/map/terrain/myterrain.ter");
 
+	gEngine->loadTerrain("../../resources/map/terrain/123.ter");
+
+	gEngine->pickTerrain(100,100);
 	//gEngine->createMapFromFile("../../resources/map/winterfell.map");
 	//gEngine->createTerrain(1, 1);
 
@@ -41,8 +45,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 }
 void shutdown()
 {
-	safeShutdown(gEngine);
-	safeShutdown(gWindow);
+	//gEngine->shutdown();
+	//gWindow->shutdown();
 }
 LRESULT CALLBACK WndProc(HWND	hWnd, UINT	uMsg, WPARAM	wParam, LPARAM	lParam)			// Additional Message Information
 {

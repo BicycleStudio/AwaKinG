@@ -23,11 +23,9 @@ namespace AwaKinG_Redactor.src
         }
         private void SettingsForm_Activated(object sender, EventArgs e)
         {
-            rbtnSlow.Checked = false;rbtnFast.Checked = false;rbtnNormal.Checked = false;
+            rbtnSlow.Checked = false;   rbtnFast.Checked = false;  rbtnNormal.Checked = false;
             rbtnRedactor.Checked = false; rbtnRedactorFree.Checked = false;
 
-            vbtnCellSpace.Value = src.engine.Terrain.GetInstance().CellSpace;
-            vbtnCountVerts.Value = src.engine.Terrain.GetInstance().NumVerts;
             switch(src.engine.Camera.GetInstance().Type)
             {
                 case engine.CameraType.Redactor: rbtnRedactor.Checked = true; break;

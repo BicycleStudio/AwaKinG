@@ -193,9 +193,6 @@ namespace AwaKinG_Redactor
                 if (_settings.rbtnRedactor.Checked) Camera.GetInstance().setType(Camera.SystemStrings.CameraTypeRedactor);
                 if (_settings.rbtnRedactorFree.Checked) Camera.GetInstance().setType(Camera.SystemStrings.CameraTypeRedactorFree);
 
-                Terrain.GetInstance().NumVerts = (int)_settings.vbtnCountVerts.Value;
-                Terrain.GetInstance().CellSpace = _settings.vbtnCellSpace.Value;
-
                 _engine.SetConfig();
                 setFileCameraType();
             }

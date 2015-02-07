@@ -42,19 +42,10 @@
             this.rbtnSlow = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.pnlCellSpace = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.vbtnCellSpace = new GUI_elements.AWA_Value_Button();
-            this.pnlNumVerts = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.vbtnCountVerts = new GUI_elements.AWA_Value_Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.pnlCellSpace.SuspendLayout();
-            this.pnlNumVerts.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOk
@@ -224,8 +215,6 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.pnlCellSpace);
-            this.tabPage2.Controls.Add(this.pnlNumVerts);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(10, 3, 3, 3);
@@ -233,92 +222,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Terrain";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // pnlCellSpace
-            // 
-            this.pnlCellSpace.Controls.Add(this.label2);
-            this.pnlCellSpace.Controls.Add(this.vbtnCellSpace);
-            this.pnlCellSpace.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlCellSpace.Location = new System.Drawing.Point(10, 31);
-            this.pnlCellSpace.Name = "pnlCellSpace";
-            this.pnlCellSpace.Size = new System.Drawing.Size(165, 28);
-            this.pnlCellSpace.TabIndex = 1;
-            // 
-            // label2
-            // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 8);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Cell space:";
-            // 
-            // vbtnCellSpace
-            // 
-            this.vbtnCellSpace.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.vbtnCellSpace.ARROWHEIGHT = 1;
-            this.vbtnCellSpace.ARROWTOOLSH = 1;
-            this.vbtnCellSpace.ARRWIDTH = 20;
-            this.vbtnCellSpace.BackColor = System.Drawing.Color.Transparent;
-            this.vbtnCellSpace.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.vbtnCellSpace.BORDERCOLOR = System.Drawing.Color.Black;
-            this.vbtnCellSpace.BORDERRADIUS = 5;
-            this.vbtnCellSpace.BORDERWIDTH = 1;
-            this.vbtnCellSpace.Image = null;
-            this.vbtnCellSpace.Location = new System.Drawing.Point(79, 2);
-            this.vbtnCellSpace.MaxValue = 100F;
-            this.vbtnCellSpace.MinValue = 10F;
-            this.vbtnCellSpace.Name = "vbtnCellSpace";
-            this.vbtnCellSpace.Size = new System.Drawing.Size(78, 24);
-            this.vbtnCellSpace.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Slow;
-            this.vbtnCellSpace.TabIndex = 0;
-            this.vbtnCellSpace.Text = "awA_Value_Button2";
-            this.vbtnCellSpace.UseVisualStyleBackColor = false;
-            this.vbtnCellSpace.VALUEV = 10F;
-            // 
-            // pnlNumVerts
-            // 
-            this.pnlNumVerts.Controls.Add(this.label1);
-            this.pnlNumVerts.Controls.Add(this.vbtnCountVerts);
-            this.pnlNumVerts.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlNumVerts.Location = new System.Drawing.Point(10, 3);
-            this.pnlNumVerts.Name = "pnlNumVerts";
-            this.pnlNumVerts.Size = new System.Drawing.Size(165, 28);
-            this.pnlNumVerts.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 8);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(64, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Count verts:";
-            // 
-            // vbtnCountVerts
-            // 
-            this.vbtnCountVerts.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.vbtnCountVerts.ARROWHEIGHT = 1;
-            this.vbtnCountVerts.ARROWTOOLSH = 1;
-            this.vbtnCountVerts.ARRWIDTH = 20;
-            this.vbtnCountVerts.BackColor = System.Drawing.Color.Transparent;
-            this.vbtnCountVerts.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.vbtnCountVerts.BORDERCOLOR = System.Drawing.Color.Black;
-            this.vbtnCountVerts.BORDERRADIUS = 5;
-            this.vbtnCountVerts.BORDERWIDTH = 1;
-            this.vbtnCountVerts.Image = null;
-            this.vbtnCountVerts.Location = new System.Drawing.Point(79, 2);
-            this.vbtnCountVerts.MaxValue = 64F;
-            this.vbtnCountVerts.MinValue = 10F;
-            this.vbtnCountVerts.Name = "vbtnCountVerts";
-            this.vbtnCountVerts.Size = new System.Drawing.Size(78, 24);
-            this.vbtnCountVerts.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
-            this.vbtnCountVerts.TabIndex = 0;
-            this.vbtnCountVerts.Text = "awA_Value_Button1";
-            this.vbtnCountVerts.UseVisualStyleBackColor = false;
-            this.vbtnCountVerts.VALUEV = 10F;
             // 
             // SettingsForm
             // 
@@ -339,11 +242,6 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.pnlCellSpace.ResumeLayout(false);
-            this.pnlCellSpace.PerformLayout();
-            this.pnlNumVerts.ResumeLayout(false);
-            this.pnlNumVerts.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -355,11 +253,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Panel pnlCellSpace;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Panel pnlNumVerts;
-        private System.Windows.Forms.Label label1;
-        public GUI_elements.AWA_Value_Button vbtnCountVerts;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel2;
@@ -369,6 +262,5 @@
         public System.Windows.Forms.RadioButton rbtnFast;
         public System.Windows.Forms.RadioButton rbtnNormal;
         public System.Windows.Forms.RadioButton rbtnSlow;
-        public GUI_elements.AWA_Value_Button vbtnCellSpace;
     }
 }

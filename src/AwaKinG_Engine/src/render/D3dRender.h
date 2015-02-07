@@ -1,5 +1,6 @@
 #pragma once
 #include "IRTerrain.h"
+#include "../core/camera/Camera.h"
 
 
 class D3dRender : public IRTerrain
@@ -58,7 +59,7 @@ public:
 	void shutdown();
 	bool resizeBuffer(int sizeX, int sizeY);
 
-	XMFLOAT3 getPickingRay(int x, int y);
+	precomputeRay* getPickingRay(int x, int y);
 
 	bool needToInitializeModel(string fileName, int* indexTechnique, int* index);
 	XMFLOAT4X4* addModelMatrix(int indexTechnique, int index);
@@ -66,9 +67,9 @@ public:
 	bool createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff);
 	bool createTexture(string fileName, ID3D11ShaderResourceView** texture);
 	bool createTexture(string fileName, D3DX11_IMAGE_LOAD_INFO* ili, ID3D11ShaderResourceView** texture);
-
 	void setRasterizerState(int stateType);
-	#pragma region interface for terrain
+
+	#pragma region for terrain
 	void saveResourceToFile(string fileName, ID3D11Resource* resource);
 	void unmapResource(ID3D11Buffer* buf);
 	void mapResource(ID3D11Buffer* buf, D3D11_MAPPED_SUBRESOURCE* mappedSubResource, D3D11_MAP mapType);
@@ -89,10 +90,6 @@ private:
 	void _mapViewProjectionBufferResource();
 #pragma endregion
 
-#pragma region public vars
-public:
-	XMFLOAT4X4*								ViewMatrix;
-#pragma endregion
 #pragma region private vars
 	vector<vector<vector<XMFLOAT4X4>>>		_worldMatrixs;
 	vector<vector<ModelEx*>>							_models;
@@ -110,7 +107,6 @@ public:
 		RasterizerState					_rs;
 		ID3D11SamplerState*			_ssDefault;
 	#pragma endregion
-
 	#pragma region d3d main vars
 	private:
 		ID3D11Device*           _device;

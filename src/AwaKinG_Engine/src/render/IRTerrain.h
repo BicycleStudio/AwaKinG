@@ -2,14 +2,8 @@
 #include <vector>
 #include <map>
 #include <string>
-//#include <d3d11.h>
 #include "../../../../include/D3DX11.h"
 #include "../../../../include/d3dcompiler.h"
-//#include <d3dcompiler.h>
-//#include <DirectXMath.h>
-//d3d11.lib
-//d3dcompiler.lib
-//dxguid.lib
 #include "Model.h"
 
 //using namespace DirectX;
@@ -33,6 +27,48 @@ struct int3 : int2
 	int3(int x_, int y_, int z_){ x = x_; y = y_; z = z_; }
 
 	int z;
+};
+struct precomputeRay
+{
+	float3 origin;
+	float3 direction;
+	float3 invDirection;
+	int sign[3];
+
+	bool intersect(float3** ps, float t0, float t1)
+	{
+		float tmin, tmax, tymin, tymax, tzmin, tzmax;
+
+		tmin = (ps[sign[0]]->x - origin.x) * invDirection.x;
+		tmax = (ps[1 - sign[0]]->x - origin.x) * invDirection.x;
+		tymin = (ps[sign[1]]->y - origin.y) * invDirection.y;
+		tymax = (ps[1 - sign[1]]->y - origin.y) * invDirection.y;
+		if((tmin > tymax) || (tymin > tmax))
+			return false;
+		if(tymin > tmin)
+			tmin = tymin;
+		if(tymax < tmax)
+			tmax = tymax;
+		tzmin = (ps[sign[2]]->z - origin.z) * invDirection.z;
+		tzmax = (ps[1 - sign[2]]->z - origin.z) * invDirection.z;
+		if((tmin > tzmax) || (tzmin > tmax))
+			return false;
+		if(tzmin > tmin)
+			tmin = tzmin;
+		if(tzmax < tmax)
+			tmax = tzmax;
+		return ((tmin < t1) && (tmax > t0));
+		return false;
+	}
+	void makeRay(float3 pickOrig, float3 pickDir)
+	{
+		origin = pickOrig;
+		direction = pickDir;
+		invDirection = float3(1.0f / direction.x, 1.0f / direction.y, 1.0f / direction.z);
+		sign[0] = (invDirection.x < 0);
+		sign[1] = (invDirection.y < 0);
+		sign[2] = (invDirection.z < 0);
+	}
 };
 class IRTerrain
 {

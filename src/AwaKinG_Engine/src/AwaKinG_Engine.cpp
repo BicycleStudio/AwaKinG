@@ -85,10 +85,6 @@ int EngineTerrainPick(RedactorEngine* pointer, int posX, int posY)
 {
 	return pointer->pickTerrain(posX, posY);
 }
-void EngineTerrainSetSettings(RedactorEngine* pointer, int numVerts, float cellSpace)
-{
-	pointer->setTerrainGenerationSettings(numVerts, cellSpace);
-}
 void EngineCameraManagerSetSpeed(RedactorEngine* pointer, float speed)
 {
 	pointer->setCameraSpeed(speed);

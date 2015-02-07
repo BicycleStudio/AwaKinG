@@ -10,17 +10,21 @@
 
 using namespace std;
 
+typedef XMFLOAT3 float3;
+typedef XMFLOAT2 float2;
+typedef XMFLOAT4X4 float4x4;
+
 namespace Vertex 
 {
 	struct Simple
 	{
 		Simple() {}
-		Simple(XMFLOAT3 pos, XMFLOAT2 tex) { position = pos; texCoord = tex; normal = XMFLOAT3(0.0f,1.0f,0.0f); }
-		Simple(XMFLOAT3 pos, XMFLOAT2 tex, XMFLOAT3 nor) { position = pos; texCoord = tex; normal = nor; }
+		Simple(float3 pos, float2 tex) { position = pos; texCoord = tex; normal = float3(0.0f, 1.0f, 0.0f); }
+		Simple(float3 pos, float2 tex, float3 nor) { position = pos; texCoord = tex; normal = nor; }
 
-		XMFLOAT3	position;
-		XMFLOAT2	texCoord;
-		XMFLOAT3	normal;
+		float3	position;
+		float2	texCoord;
+		float3	normal;
 	};
 }
 class Model

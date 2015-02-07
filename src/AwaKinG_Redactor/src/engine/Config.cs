@@ -14,7 +14,7 @@ namespace AwaKinG_Redactor.src.engine
         {   
             Undefined, OpenBlock, CloseBlock,
             Camera, CameraSpeed, CameraType, 
-            Terrain, TerrainNumVerts, TerrainCellSpace
+            Terrain
         }
         private struct SystemStrings
         {
@@ -24,8 +24,6 @@ namespace AwaKinG_Redactor.src.engine
             public const string CameraSpeed = "speed";
             public const string CameraType = "type";
             public const string Terrain = "terrain";
-            public const string TerrainNumVerts = "numVerts";
-            public const string TerrainCellSpace = "cellSpace";
         }
         static Config _config = new Config();
         public static Config GetInstance()
@@ -44,8 +42,6 @@ namespace AwaKinG_Redactor.src.engine
             if (dirtyString.Contains(SystemStrings.CameraType)) return SystemStringType.CameraType;
             if (dirtyString.Contains(SystemStrings.CameraSpeed)) return SystemStringType.CameraSpeed;
             if (dirtyString.Contains(SystemStrings.Terrain)) return SystemStringType.Terrain;
-            if (dirtyString.Contains(SystemStrings.TerrainNumVerts)) return SystemStringType.TerrainNumVerts;
-            if (dirtyString.Contains(SystemStrings.TerrainCellSpace)) return SystemStringType.TerrainCellSpace;
             return SystemStringType.Undefined;
         }
         private int GetInt(String dirtyString, int defaulValue)
@@ -124,8 +120,6 @@ namespace AwaKinG_Redactor.src.engine
 
             sw.Write(SystemStrings.Terrain + Environment.NewLine);
             sw.Write(SystemStrings.OpenBlock + Environment.NewLine);
-            sw.Write("\t" + SystemStrings.TerrainNumVerts + " = " + Terrain.GetInstance().NumVerts.ToString() + Environment.NewLine);
-            sw.Write("\t" + SystemStrings.TerrainCellSpace + " = " + Terrain.GetInstance().CellSpace.ToString() + Environment.NewLine);
             sw.Write(SystemStrings.CloseBlock);
             sw.Close();
         }
@@ -157,8 +151,6 @@ namespace AwaKinG_Redactor.src.engine
                         switch(type_)
                         {
                             case SystemStringType.OpenBlock: break;
-                            case SystemStringType.TerrainNumVerts:Terrain.GetInstance().NumVerts = GetInt(str_, Terrain.GetInstance().NumVerts);break;
-                            case SystemStringType.TerrainCellSpace: Terrain.GetInstance().CellSpace = GetFloat(str_, Terrain.GetInstance().CellSpace); break;
                         }
                         try { str_ = sr.ReadLine(); } catch (Exception ex) { return; }
                         type_ = GetSystemStringType(str_);
@@ -170,11 +162,6 @@ namespace AwaKinG_Redactor.src.engine
     }
     public class Terrain
     {
-        public int NumVerts { get { return _numVerts; } set { _numVerts = value; } }
-        private int _numVerts = 32;
-        public float CellSpace { get { return _cellSpace; } set { _cellSpace = value; } }
-        private float _cellSpace = 10.0f;
-
         public static Terrain GetInstance()
         {
             return _terrain;

@@ -2,24 +2,23 @@
 #include "terrain/TerrainManager.h"
 #include "input/InputManager.h"
 #include "map/Scene.h"
-#include "camera/Camera.h"
 #include "camera/CameraManager.h"
 #include <Windows.h>
 
-#define safeSystemInit(obj) if(!obj->initialize()) {MessageBox(NULL, obj->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR); shutdown(); return false;}
-#define safeUpdate(obj) if(!obj->update()) {MessageBox(NULL, obj->ErrorMessage.c_str(), "update error", MB_OK | MB_ICONERROR); PostQuitMessage(0); shutdown(); return true; }
-#define safeShutdown(obj) if(obj) {obj->shutdown(); obj = 0;}
-#define checkRenderResult(boolean) if(!boolean) {MessageBox(NULL, _d3dRender->ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR);  return false;}
+#pragma region Macros
+#define safeSystemInit(obj) if(!obj.initialize()) {MessageBox(NULL, obj.ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR); shutdown(); return false;}
+#define safeUpdate(obj) if(!obj.update()) {MessageBox(NULL, obj.ErrorMessage.c_str(), "update error", MB_OK | MB_ICONERROR); PostQuitMessage(0); shutdown(); return true; }
+#define checkRenderResult(boolean) if(!boolean) {MessageBox(NULL, D3dRender::getInstance().ErrorMessage.c_str(), "initialize error", MB_OK | MB_ICONERROR);  return false;}
+#pragma endregion
 
 class Engine
 {  
 public:
 	enum CameraManagerType { CMT_REDACTOR, CMT_REDACTORFREE };
 	std::string ErrorMessage;
-	Engine();
-
 #pragma region public functions
 public:
+	Engine();
 	bool initialize(HWND mainHwnd, HWND renderHwnd, int sizeX, int sizeY);
 	void shutdown();
 	bool active();
@@ -42,30 +41,27 @@ private:
 	TerrainManager*								_terrainManager;
 protected:
 	bool													_shortPaths;
-	InputManager*									_inputManager;
+	bool													_systemInitialized;
 	CameraManagerType							_cameraMangerType;
 	CameraManager*								_cameraManager;
 	RedactorCameraManager*				_redactorCameraManager;
 	RedactorFreeCameraManager*		_redactorFreeCameraManager;
-	Camera*												_camera;
-	D3dRender*										_d3dRender;
-	Scene*												_scene;
-	Parser*												_parser;
 	bool													_active;
 #pragma endregion
 };
 
 class RedactorEngine : public Engine
 {
+#pragma region public functions
 public:
 	RedactorEngine();
 
 	// FOR C++ REDACTOR
 	void setShortPaths();
+#pragma endregion
 
 #pragma region redactor functions
 	void setCameraSpeed(float speed);
-	void setTerrainGenerationSettings(int numVerts, float cellSpace);
 
 	void saveTerrain(string fileName);
 	void randomizeTerrain(int diapazon);
@@ -77,8 +73,9 @@ public:
 	void setTerrainWorkType(int type);
 	int pickTerrain(int posX, int posY);
 #pragma endregion
-private: 
+
+#pragma region private vars
+private:
 	RedactorTerrainManager*					_redactorTerrainManager;
-	int															_terrainNumVerts;
-	float														_terrainCellSpace;
+#pragma endregion
 };

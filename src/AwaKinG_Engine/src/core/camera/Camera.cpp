@@ -8,13 +8,17 @@ Camera::Camera()
 	_up = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	_right = XMFLOAT3(1.0f, 0.0f, 0.0f);
 }
-Camera::~Camera()
-{
-
-}
 XMFLOAT4X4* Camera::getViewMatrixPointer()
 {
 	return &_viewMatrixRender;
+}
+XMFLOAT3* Camera::getPositionPointer()
+{
+	return &_position;
+}
+XMFLOAT3* Camera::getLookPointer()
+{
+	return &_look;
 }
 void Camera::shutdown()
 {
