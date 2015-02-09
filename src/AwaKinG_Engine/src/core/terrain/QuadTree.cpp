@@ -23,7 +23,7 @@ QuadTree::~QuadTree()
 }
 bool QuadTree::intersect(precomputeRay *r)
 {
-	return r->intersect(ps, -1000.0f,1000.0f);
+	return r->intersect(ps, -1000.0f,100000.0f);
 }
 void QuadTree::findMaxMinFromChilds()
 {

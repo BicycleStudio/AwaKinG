@@ -29,11 +29,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 		shutdown(); 
 		return 1; 
 	}
-	gEngine->createTerrain(1, 1);
+	gEngine->createTerrain(2, 1);
 	gEngine->setCameraManagerType(Engine::CameraManagerType::CMT_REDACTORFREE);
-	gEngine->loadTerrain("../../resources/map/terrain/DK2.ter");
+	//gEngine->loadTerrain("../../resources/map/terrain/DK2.ter");
 
-//	gEngine->pickTerrain(100,100);
+	gEngine->setTerrainWorkType(1);
+	gEngine->pickTerrain(50, 50);
+	gEngine->pickTerrain(100, 100);
+	gEngine->pickTerrain(150, 150);
 	//gEngine->createMapFromFile("../../resources/map/winterfell.map");
 
 	gEngine->setActive(true);

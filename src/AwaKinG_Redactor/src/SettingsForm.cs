@@ -59,5 +59,10 @@ namespace AwaKinG_Redactor.src
         {
 
         }
+
+        private void rbtnWireframe_Click(object sender, EventArgs e)
+        {
+            ((RadioButton)sender).Checked = !((RadioButton)sender).Checked;
+        }
     }
 }

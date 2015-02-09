@@ -151,7 +151,6 @@ namespace AwaKinG_Redactor.src.engine
         }
         public int PickTerrain(System.Drawing.Point pt)
         {
-
             return _pickTerrain(_engine, pt.X, pt.Y);
         }
         public void SetTerrainWorkType(int type)

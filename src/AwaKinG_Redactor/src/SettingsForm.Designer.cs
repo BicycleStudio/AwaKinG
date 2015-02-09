@@ -42,17 +42,17 @@
             this.rbtnSlow = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.rbtnQuadTreeVisible = new System.Windows.Forms.RadioButton();
             this.panel4 = new System.Windows.Forms.Panel();
             this.rbtnWireframe = new System.Windows.Forms.RadioButton();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.rbtnQuadTreeVisible = new System.Windows.Forms.RadioButton();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOk
@@ -232,26 +232,6 @@
             this.tabPage2.Text = "Terrain";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.rbtnQuadTreeVisible);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(10, 3);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(165, 26);
-            this.panel3.TabIndex = 4;
-            // 
-            // rbtnQuadTreeVisible
-            // 
-            this.rbtnQuadTreeVisible.AutoSize = true;
-            this.rbtnQuadTreeVisible.Location = new System.Drawing.Point(13, 5);
-            this.rbtnQuadTreeVisible.Name = "rbtnQuadTreeVisible";
-            this.rbtnQuadTreeVisible.Size = new System.Drawing.Size(105, 17);
-            this.rbtnQuadTreeVisible.TabIndex = 2;
-            this.rbtnQuadTreeVisible.Text = "QuadTree visible";
-            this.rbtnQuadTreeVisible.UseVisualStyleBackColor = true;
-            this.rbtnQuadTreeVisible.CheckedChanged += new System.EventHandler(this.rbtnQuadTreeVisible_CheckedChanged);
-            // 
             // panel4
             // 
             this.panel4.Controls.Add(this.rbtnWireframe);
@@ -263,6 +243,7 @@
             // 
             // rbtnWireframe
             // 
+            this.rbtnWireframe.AutoCheck = false;
             this.rbtnWireframe.AutoSize = true;
             this.rbtnWireframe.Location = new System.Drawing.Point(13, 6);
             this.rbtnWireframe.Name = "rbtnWireframe";
@@ -270,6 +251,29 @@
             this.rbtnWireframe.TabIndex = 2;
             this.rbtnWireframe.Text = "Wireframe";
             this.rbtnWireframe.UseVisualStyleBackColor = true;
+            this.rbtnWireframe.Click += new System.EventHandler(this.rbtnWireframe_Click);
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.rbtnQuadTreeVisible);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(10, 3);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(165, 26);
+            this.panel3.TabIndex = 4;
+            // 
+            // rbtnQuadTreeVisible
+            // 
+            this.rbtnQuadTreeVisible.AutoCheck = false;
+            this.rbtnQuadTreeVisible.AutoSize = true;
+            this.rbtnQuadTreeVisible.Location = new System.Drawing.Point(13, 5);
+            this.rbtnQuadTreeVisible.Name = "rbtnQuadTreeVisible";
+            this.rbtnQuadTreeVisible.Size = new System.Drawing.Size(105, 17);
+            this.rbtnQuadTreeVisible.TabIndex = 2;
+            this.rbtnQuadTreeVisible.Text = "QuadTree visible";
+            this.rbtnQuadTreeVisible.UseVisualStyleBackColor = true;
+            this.rbtnQuadTreeVisible.CheckedChanged += new System.EventHandler(this.rbtnQuadTreeVisible_CheckedChanged);
+            this.rbtnQuadTreeVisible.Click += new System.EventHandler(this.rbtnWireframe_Click);
             // 
             // SettingsForm
             // 
@@ -291,10 +295,10 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
 
         }

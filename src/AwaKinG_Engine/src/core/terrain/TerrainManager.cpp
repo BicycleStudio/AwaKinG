@@ -78,72 +78,68 @@
 		for(int i = 0; i < _props.numSectors; i++)
 		{
 			_props.sectors.push_back(new TerrainSector());
-			int dispRawLocal_ = 0;
-			int dispTileStart = i % _props.sizeSectorX;
-			if(dispTileStart == 0 && i != 0)
-				dispRawGlob_ += _props.numVertsInRaw * _props.numSQuads;
-			else
-				dispTileStart *= _props.numSQuads;
+			int startVert_ = _props.numSQuads*((i / _props.sizeSectorX)*_props.numVertsInRaw+  (i % _props.sizeSectorX));
 
 			int savedI_ = 0; int savedJ_ = 0; int savedK_ = 0; int savedL_ = 0; int savedM_ = 0; int savedN_ = 0;
 			for(int j = 0; j < _props.numSectorVerts; j++)
 			{
-				if(j % _props.numSVerts == 0 && j != 0) dispRawLocal_ += _props.numVertsInRaw - _props.numSVerts;
+				int dispVert_ = (j / _props.numSVerts)*_props.numVertsInRaw + j % _props.numSVerts;
+				int check_ = startVert_ + dispVert_;
 
-				_props.sectorsToHeightMap[i][j] = dispRawGlob_ + dispTileStart + j + dispRawLocal_;
+				_props.sectorsToHeightMap[i][j] = check_;
 
-				switch(_props.heightMapToSectors[dispRawGlob_ + dispTileStart + dispRawLocal_ + j][0])
+				switch(_props.heightMapToSectors[check_][0])
 				{
 				case 0:
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_] = new int[3];
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][0] = 1;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][1] = i;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][2] = j;
+					_props.heightMapToSectors[check_] = new int[3];
+					_props.heightMapToSectors[check_][0] = 1;
+					_props.heightMapToSectors[check_][1] = i;
+					_props.heightMapToSectors[check_][2] = j;
 					break;
 				case 1:
-					savedI_ = _props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][1];
-					savedJ_ = _props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][2];
+					savedI_ = _props.heightMapToSectors[check_][1];
+					savedJ_ = _props.heightMapToSectors[check_][2];
 
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_] = new int[5];
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][0] = 2;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][1] = savedI_;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][2] = savedJ_;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][3] = i;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][4] = j;
+					_props.heightMapToSectors[check_] = new int[5];
+					_props.heightMapToSectors[check_][0] = 2;
+					_props.heightMapToSectors[check_][1] = savedI_;
+					_props.heightMapToSectors[check_][2] = savedJ_;
+					_props.heightMapToSectors[check_][3] = i;
+					_props.heightMapToSectors[check_][4] = j;
 					break;
 				case 2:
-					savedI_ = _props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][1];
-					savedJ_ = _props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][2];
-					savedK_ = _props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][3];
-					savedL_ = _props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][4];
+					savedI_ = _props.heightMapToSectors[check_][1];
+					savedJ_ = _props.heightMapToSectors[check_][2];
+					savedK_ = _props.heightMapToSectors[check_][3];
+					savedL_ = _props.heightMapToSectors[check_][4];
 
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_] = new int[7];
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][0] = 3;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][1] = savedI_;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][2] = savedJ_;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][3] = savedK_;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][4] = savedL_;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][5] = i;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][6] = j;
+					_props.heightMapToSectors[check_] = new int[7];
+					_props.heightMapToSectors[check_][0] = 3;
+					_props.heightMapToSectors[check_][1] = savedI_;
+					_props.heightMapToSectors[check_][2] = savedJ_;
+					_props.heightMapToSectors[check_][3] = savedK_;
+					_props.heightMapToSectors[check_][4] = savedL_;
+					_props.heightMapToSectors[check_][5] = i;
+					_props.heightMapToSectors[check_][6] = j;
 					break;
 				case 3:
-					savedI_ = _props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][1];
-					savedJ_ = _props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][2];
-					savedK_ = _props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][3];
-					savedL_ = _props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][4];
-					savedM_ = _props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][5];
-					savedN_ = _props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][6];
+					savedI_ = _props.heightMapToSectors[check_][1];
+					savedJ_ = _props.heightMapToSectors[check_][2];
+					savedK_ = _props.heightMapToSectors[check_][3];
+					savedL_ = _props.heightMapToSectors[check_][4];
+					savedM_ = _props.heightMapToSectors[check_][5];
+					savedN_ = _props.heightMapToSectors[check_][6];
 
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_] = new int[9];
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][0] = 4;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][1] = savedI_;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][2] = savedJ_;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][3] = savedK_;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][4] = savedL_;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][5] = savedM_;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][6] = savedN_;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][7] = i;
-					_props.heightMapToSectors[dispRawGlob_ + dispTileStart + j + dispRawLocal_][8] = j;
+					_props.heightMapToSectors[check_] = new int[9];
+					_props.heightMapToSectors[check_][0] = 4;
+					_props.heightMapToSectors[check_][1] = savedI_;
+					_props.heightMapToSectors[check_][2] = savedJ_;
+					_props.heightMapToSectors[check_][3] = savedK_;
+					_props.heightMapToSectors[check_][4] = savedL_;
+					_props.heightMapToSectors[check_][5] = savedM_;
+					_props.heightMapToSectors[check_][6] = savedN_;
+					_props.heightMapToSectors[check_][7] = i;
+					_props.heightMapToSectors[check_][8] = j;
 					break;
 				}
 			}
@@ -200,6 +196,7 @@
 			_props.sectors[i]->id = i;
 			grandChilds_->push_back(new QuadTree(_props.sectors[i]));
 		}
+
 		vector<QuadTree*>* childs_ = grandChilds_;
 		int rawSize_ = _props.sizeSectorX;
 		do
@@ -402,7 +399,7 @@
 					}
 				}
 				if(retValue_ == -1) return retValue_;
-				_heightmapWork(terrainId_, retValue_);  return terrainId_;
+				_heightmapWork(terrainId_, retValue_);  return retValue_;
 			}
 			case 2:
 			{
@@ -656,49 +653,57 @@
 			int* tempID = NULL;	float* temp = NULL;
 
 			XMFLOAT3** vs = new XMFLOAT3*[3];
-			for(int i = 0; i < _props.numSectorQuads; i++)
+
+			int dispForQuadVert_ = -1;
+			for(int i = 0; i < _props.numSQuads; i++)
 			{
-				vs[0] = &_props.heightMap[_props.pickToHeightMap[sector->terrainId][_props.indexes[6 * _props.sectorsToHeightMap[sector->id][i] + 0]]];
-				vs[1] = &_props.heightMap[_props.pickToHeightMap[sector->terrainId][_props.indexes[6 * _props.sectorsToHeightMap[sector->id][i] + 1]]];
-				vs[2] = &_props.heightMap[_props.pickToHeightMap[sector->terrainId][_props.indexes[6 * _props.sectorsToHeightMap[sector->id][i] + 2]]];
-				if(_intersectTriangle(pickOrig, pickDir, vs))
+				dispForQuadVert_++;
+				for(int j = 0; j < _props.numSQuads; j++)
 				{
-					tempID = connectionsID;
-					connectionsID = new int[countIntersections + 1];
-					for(int i = 0; i<countIntersections; i++)
-						connectionsID[i] = tempID[i];
-					connectionsID[countIntersections] = i;
+				//for(int i = 0; i < _props.numSectorVerts; i++)
+				//{
+					vs[1] = &_props.heightMap[_props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] + 0];
+					vs[2] = &_props.heightMap[_props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] + 1];
+					vs[0] = &_props.heightMap[_props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] + _props.numVertsInRaw];
+					if(_intersectTriangle(pickOrig, pickDir, vs))
+					{
+						tempID = connectionsID;
+						connectionsID = new int[countIntersections + 1];
+						for(int i = 0; i<countIntersections; i++)
+							connectionsID[i] = tempID[i];
+						connectionsID[countIntersections] = _props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_];
 
-					temp = connections;
-					connections = new float[countIntersections + 1];
-					for(int i = 0; i<countIntersections; i++)
-						connections[i] = temp[i];
-					connections[countIntersections] =
-						sqrt((pickOrig->x - vs[0]->x)*(pickOrig->x - vs[0]->x)
-						+ (pickOrig->y - vs[0]->y)*(pickOrig->y - vs[0]->y)
-						+ (pickOrig->z - vs[0]->z)*(pickOrig->z - vs[0]->z));
-					countIntersections++;
-				}
-				vs[1] = &_props.heightMap[_props.pickToHeightMap[sector->terrainId][_props.indexes[6 * _props.sectorsToHeightMap[sector->id][i] + 1]]];
-				vs[2] = &_props.heightMap[_props.pickToHeightMap[sector->terrainId][_props.indexes[6 * _props.sectorsToHeightMap[sector->id][i] + 2]]];
-				vs[0] = &_props.heightMap[_props.pickToHeightMap[sector->terrainId][_props.indexes[6 * _props.sectorsToHeightMap[sector->id][i] + 4]]];
-				if(_intersectTriangle(pickOrig, pickDir, vs))
-				{
-					tempID = connectionsID;
-					connectionsID = new int[countIntersections + 1];
-					for(int i = 0; i<countIntersections; i++)
-						connectionsID[i] = tempID[i];
-					connectionsID[countIntersections] = i;
+						temp = connections;
+						connections = new float[countIntersections + 1];
+						for(int i = 0; i<countIntersections; i++)
+							connections[i] = temp[i];
+						connections[countIntersections] =
+							sqrt((pickOrig->x - vs[0]->x)*(pickOrig->x - vs[0]->x)
+							+ (pickOrig->y - vs[0]->y)*(pickOrig->y - vs[0]->y)
+							+ (pickOrig->z - vs[0]->z)*(pickOrig->z - vs[0]->z));
+						countIntersections++;
+					}
+					vs[0] = &_props.heightMap[_props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] + 1];//Verts[id][indices[6 * i + 0]];
+					vs[1] = &_props.heightMap[_props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] + _props.numVertsInRaw + 1];
+					vs[2] = &_props.heightMap[_props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] + _props.numVertsInRaw];
+					if(_intersectTriangle(pickOrig, pickDir, vs))
+					{
+						tempID = connectionsID;
+						connectionsID = new int[countIntersections + 1];
+						for(int i = 0; i<countIntersections; i++)
+							connectionsID[i] = tempID[i];
+						connectionsID[countIntersections] = _props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_];
 
-					temp = connections;
-					connections = new float[countIntersections + 1];
-					for(int i = 0; i<countIntersections; i++)
-						connections[i] = temp[i];
-					connections[countIntersections] = 
-						sqrt((pickOrig->x - vs[0]->x)*(pickOrig->x - vs[0]->x)
-						+ (pickOrig->y - vs[0]->y)*(pickOrig->y - vs[0]->y)
-						+ (pickOrig->z - vs[0]->z)*(pickOrig->z - vs[0]->z));
-					countIntersections++;
+						temp = connections;
+						connections = new float[countIntersections + 1];
+						for(int i = 0; i<countIntersections; i++)
+							connections[i] = temp[i];
+						connections[countIntersections] = 
+							sqrt((pickOrig->x - vs[0]->x)*(pickOrig->x - vs[0]->x)
+							+ (pickOrig->y - vs[0]->y)*(pickOrig->y - vs[0]->y)
+							+ (pickOrig->z - vs[0]->z)*(pickOrig->z - vs[0]->z));
+						countIntersections++;
+					}
 				}
 			}
 			delete vs;
@@ -717,7 +722,7 @@
 			delete temp; temp = NULL;
 			delete connections; connections = NULL;
 			delete connectionsID; connectionsID = NULL;
-			returnedID[0] = _props.quadVertConnect[idd];
+			returnedID[0] = idd;// _props.quadVertConnect[idd];
 			return	true;
 		}
 		bool RedactorTerrainManager::getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, float* tu, float* tv)
@@ -727,60 +732,64 @@
 			float2* all_tutv = NULL;	float2* temp_tutv = NULL;
 			float* connections = NULL;	float* temp = NULL;
 			float3** vs = new float3*[3];
-
-			for(int i = 0; i < _props.numSectorQuads; i++)
+			int dispForQuadVert_ = -1;
+			for(int i = 0; i < _props.numSQuads; i++)
 			{
-				vs[0] = &_props.heightMap[_props.pickToHeightMap[sector->terrainId][_props.indexes[6 * _props.sectorsToHeightMap[sector->id][i] + 0]]];//Verts[id][indices[6 * i + 0]];
-				vs[1] = &_props.heightMap[_props.pickToHeightMap[sector->terrainId][_props.indexes[6 * _props.sectorsToHeightMap[sector->id][i] + 1]]];
-				vs[2] = &_props.heightMap[_props.pickToHeightMap[sector->terrainId][_props.indexes[6 * _props.sectorsToHeightMap[sector->id][i] + 2]]];
-				if(_intersectTriangle(pickOrig, pickDir, vs, &v, &u))
+				dispForQuadVert_++;
+				for(int j = 0; j < _props.numSQuads; j++)
 				{
-					float raw = i / _props.numQuad;
-					float col = i % _props.numQuad;
-					u = u / (float)_props.numQuad + raw / (float)_props.numQuad;
-					v = v / (float)_props.numQuad + col / (float)_props.numQuad;
+					vs[1] = &_props.heightMap[_props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] + 0];
+					vs[2] = &_props.heightMap[_props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] + 1];
+					vs[0] = &_props.heightMap[_props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] + _props.numVertsInRaw];
+					if(_intersectTriangle(pickOrig, pickDir, vs, &v, &u))
+					{
+						float raw = _props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] / _props.numQuad;
+						float col = _props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] % _props.numQuad;
+						u = u / (float)_props.numQuad + raw / (float)_props.numQuad;
+						v = v / (float)_props.numQuad + col / (float)_props.numQuad;
 
-					temp_tutv = all_tutv;
-					all_tutv = new XMFLOAT2[countIntersections + 1];
-					for(int i = 0; i<countIntersections; i++)
-						all_tutv[i] = temp_tutv[i];
-					all_tutv[countIntersections] = XMFLOAT2(u, v);
+						temp_tutv = all_tutv;
+						all_tutv = new XMFLOAT2[countIntersections + 1];
+						for(int i = 0; i < countIntersections; i++)
+							all_tutv[i] = temp_tutv[i];
+						all_tutv[countIntersections] = XMFLOAT2(u, v);
 
-					temp = connections;
-					connections = new float[countIntersections + 1];
-					for(int i = 0; i<countIntersections; i++)
-						connections[i] = temp[i];
-					connections[countIntersections] =
-						sqrt((pickOrig->x - vs[0]->x)*(pickOrig->x - vs[0]->x)
-						+ (pickOrig->y - vs[0]->y)*(pickOrig->y - vs[0]->y)
-						+ (pickOrig->z - vs[0]->z)*(pickOrig->z - vs[0]->z));
-					countIntersections++;
-				}
-				vs[1] = &_props.heightMap[_props.pickToHeightMap[sector->terrainId][_props.indexes[6 * _props.sectorsToHeightMap[sector->id][i] + 1]]];
-				vs[2] = &_props.heightMap[_props.pickToHeightMap[sector->terrainId][_props.indexes[6 * _props.sectorsToHeightMap[sector->id][i] + 2]]];
-				vs[0] = &_props.heightMap[_props.pickToHeightMap[sector->terrainId][_props.indexes[6 * _props.sectorsToHeightMap[sector->id][i] + 4]]];
-				if(_intersectTriangle(pickOrig, pickDir, vs, &v, &u))
-				{
-					float raw = i / _props.numQuad;
-					float col = i % _props.numQuad;
-					u = (1.0f - u) / (float)_props.numQuad + raw / (float)_props.numQuad;
-					v = (1.0f - v) / (float)_props.numQuad + col / (float)_props.numQuad;
+						temp = connections;
+						connections = new float[countIntersections + 1];
+						for(int i = 0; i < countIntersections; i++)
+							connections[i] = temp[i];
+						connections[countIntersections] =
+							sqrt((pickOrig->x - vs[0]->x)*(pickOrig->x - vs[0]->x)
+							+ (pickOrig->y - vs[0]->y)*(pickOrig->y - vs[0]->y)
+							+ (pickOrig->z - vs[0]->z)*(pickOrig->z - vs[0]->z));
+						countIntersections++;
+					}
+					vs[0] = &_props.heightMap[_props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] + 1];//Verts[id][indices[6 * i + 0]];
+					vs[1] = &_props.heightMap[_props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] + _props.numVertsInRaw + 1];
+					vs[2] = &_props.heightMap[_props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] + _props.numVertsInRaw];
+					if(_intersectTriangle(pickOrig, pickDir, vs, &v, &u))
+					{
+						float raw = _props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] / _props.numQuad;
+						float col = _props.sectorsToHeightMap[sector->id][i*_props.numSQuads + j + dispForQuadVert_] % _props.numQuad;
+						u = (1.0f - u) / (float)_props.numQuad + raw / (float)_props.numQuad;
+						v = (1.0f - v) / (float)_props.numQuad + col / (float)_props.numQuad;
 
-					temp_tutv = all_tutv;
-					all_tutv = new XMFLOAT2[countIntersections + 1];
-					for(int i = 0; i<countIntersections; i++)
-						all_tutv[i] = temp_tutv[i];
-					all_tutv[countIntersections] = XMFLOAT2(u, v);
+						temp_tutv = all_tutv;
+						all_tutv = new XMFLOAT2[countIntersections + 1];
+						for(int i = 0; i < countIntersections; i++)
+							all_tutv[i] = temp_tutv[i];
+						all_tutv[countIntersections] = XMFLOAT2(u, v);
 
-					temp = connections;
-					connections = new float[countIntersections + 1];
-					for(int i = 0; i<countIntersections; i++)
-						connections[i] = temp[i];
-					connections[countIntersections] = 
-						sqrt((pickOrig->x - vs[0]->x)*(pickOrig->x - vs[0]->x)
-						+ (pickOrig->y - vs[0]->y)*(pickOrig->y - vs[0]->y)
-						+ (pickOrig->z - vs[0]->z)*(pickOrig->z - vs[0]->z));
-					countIntersections++;
+						temp = connections;
+						connections = new float[countIntersections + 1];
+						for(int i = 0; i < countIntersections; i++)
+							connections[i] = temp[i];
+						connections[countIntersections] =
+							sqrt((pickOrig->x - vs[0]->x)*(pickOrig->x - vs[0]->x)
+							+ (pickOrig->y - vs[0]->y)*(pickOrig->y - vs[0]->y)
+							+ (pickOrig->z - vs[0]->z)*(pickOrig->z - vs[0]->z));
+						countIntersections++;
+					}
 				}
 			}
 			delete vs;	vs = NULL;
