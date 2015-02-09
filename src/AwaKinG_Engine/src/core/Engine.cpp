@@ -246,6 +246,14 @@
 			int id_ = _redactorTerrainManager->pick(precomputeRay_);
 			return id_;
 		}
+		void RedactorEngine::setTerrainQuadTreeVisible(bool set)
+		{
+			D3dRender::getInstance().setVisibleTerrainQuadTree(set);
+		}
+		void RedactorEngine::setTerrainWireframe(bool set)
+		{
+			D3dRender::getInstance().setTerrainWireframe(set);
+		}
 	#pragma endregion
 
 	bool RedactorEngine::createMapFromFile(string fileName)

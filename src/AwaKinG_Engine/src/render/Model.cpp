@@ -4,8 +4,27 @@ Model::Model()
 {
 	ErrorMessage = "Model";
 	_countIndexs = 0;
-	vertexBuffer = 0;
+	_vertexBuffer = 0;
 	_texture = 0;
+}
+Object::Object()
+{
+	ErrorMessage = "ColorObject";
+	_countIndexs = 0;
+	_vertexBuffer = 0;
+}
+void Object::shutdown()
+{
+	safeRelease(_vertexBuffer);
+}
+void Object::setBuffers(ID3D11Buffer* vbuf, ID3D11Buffer* ibuf, int indCount)
+{
+	_vertexBuffer = vbuf;
+	_countIndexs = indCount;
+}
+float4* SystemModel::getColor()
+{
+	return &_color;
 }
 Model::~Model()
 {
@@ -14,23 +33,18 @@ ID3D11ShaderResourceView** Model::getTexture()
 {
 	return &_texture;
 }
-ID3D11Buffer* Model::getVertexBuffer()
+ID3D11Buffer** Object::getVertexBuffer()
 {
-	return vertexBuffer;
+	return &_vertexBuffer;
 }
-int Model::getIndexCount()
+int Object::getIndexCount()
 {
 	return _countIndexs;
 }
 void Model::shutdown()
 {
-	safeRelease(vertexBuffer);
+	safeRelease(_vertexBuffer);
 	safeRelease(_texture);
-}
-void Model::setBuffers(ID3D11Buffer* vbuf, ID3D11Buffer* ibuf, int indCount)
-{
-	vertexBuffer = vbuf;
-	_countIndexs = indCount;
 }
 void Model::setTexture(ID3D11ShaderResourceView* texture)
 {
@@ -39,7 +53,7 @@ void Model::setTexture(ID3D11ShaderResourceView* texture)
 void ModelEx::shutdown()
 {
 	safeRelease(_indexBuffer);
-	safeRelease(vertexBuffer);
+	safeRelease(_vertexBuffer);
 	safeRelease(_texture);
 }
 const char*	ModelEx::getFileName()
@@ -56,7 +70,7 @@ ID3D11Buffer*	ModelEx::getIndexBuffer()
 }
 void ModelEx::setBuffers(ID3D11Buffer* vbuf, ID3D11Buffer* ibuf, int indCount)
 {
-	vertexBuffer = vbuf;
+	_vertexBuffer = vbuf;
 	_indexBuffer = ibuf;
 	_countIndexs = indCount;
 }

@@ -2,6 +2,18 @@
 #include "../Parser.h"
 #include "QuadTree.h"
 
+struct Biom
+{
+	Biom(float height_, float range_)
+	{
+		height = height_;
+		range = range_;
+		halfRange = range_ / 2.0f;
+	}
+	float height;
+	float range;
+	float halfRange;
+};
 class TerrainManager
 {
 public:
@@ -185,7 +197,7 @@ protected:
 		int numTiles;		int numSectors;
 		int maxId;
 
-		float cellSpace = 10.0f;
+		float cellSpace = 20.0f;
 		int		numVerts = 65;
 		int		numTileVerts = numVerts * numVerts;
 		int		numQuad = numVerts - 1;
@@ -233,5 +245,5 @@ private:
 	void _textureWork(int terrainId, XMFLOAT2 texcoord);
 private:
 	TerainWorkType			_workType;
-
+	vector<Biom>				_bioms;
 };

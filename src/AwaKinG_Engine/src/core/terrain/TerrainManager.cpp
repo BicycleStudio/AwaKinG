@@ -10,6 +10,13 @@
 	}
 	RedactorTerrainManager::RedactorTerrainManager()
 	{
+		_bioms.push_back(Biom(1000.0f, 250.0f));
+		_bioms.push_back(Biom(500.0f, 100.0f));
+		_bioms.push_back(Biom(100.0f, 50.0f));
+		_bioms.push_back(Biom(10.0f, 100.0f));
+		_bioms.push_back(Biom(10.0f, 10.0f));
+		_bioms.push_back(Biom(-100.0f, 30.0f));
+		_bioms.push_back(Biom(-250.0f, 75.0f));
 		_indexBuffer = NULL; _workType = TWT_NONE;
 		_2048Path = "../../../../media/terrain/_2048.dds";
 		_quadTree = NULL;
@@ -141,6 +148,39 @@
 				}
 			}
 		}
+		if(_quadTree)
+		{
+			vector<QuadTree*>* fathers__ = new vector<QuadTree*>;
+			vector<QuadTree*>* fathers2__ = new vector<QuadTree*>;
+			fathers__->push_back(_quadTree);
+			vector<QuadTree*> childs__;
+			childs__.push_back(_quadTree);
+			while(!childs__[childs__.size() - 1]->land)
+			{
+				for(int i = 0; i < fathers__->size(); i++)
+				{
+					for(int j = 0; j < fathers__[0][i]->childs.size(); j++)
+					{
+						childs__.push_back(fathers__[0][i]->childs[j]);
+						fathers2__->push_back(fathers__[0][i]->childs[j]);
+					}
+				}
+				fathers__ = fathers2__;
+				fathers2__ = new vector<QuadTree*>;
+			}
+			for(int i = childs__.size() - 1; i >=0; i--)
+				delete childs__[i];
+
+			fathers__->clear();
+			fathers2__->clear();
+			childs__.clear();
+			delete fathers__;
+			delete fathers2__;
+		}
+
+		D3dRender::getInstance().clearQuadTreeMatrixVector();
+		_quadTree = new QuadTree();
+
 		vector<QuadTree*>* grandChilds_ = new vector<QuadTree*>;
 		for(int i = 0; i < _props.numSectors; i++)
 		{
@@ -162,7 +202,6 @@
 		}
 		vector<QuadTree*>* childs_ = grandChilds_;
 		int rawSize_ = _props.sizeSectorX;
-
 		do
 		{
 			grandChilds_ = childs_;
@@ -170,6 +209,8 @@
 			int counter_ = 0;
 			for(int i = 0; i < grandChilds_->size(); i+=2)
 			{
+
+				bool right_ = true;
 				if(i / rawSize_ != counter_)
 				{
 					counter_ += 2; i += rawSize_;
@@ -177,25 +218,34 @@
 				}
 				QuadTree* childTree = new QuadTree();
 				childTree->childs.push_back(grandChilds_[0][i]);
-				if((i + 1) % (rawSize_)) childTree->childs.push_back(grandChilds_[0][i + 1]);
-				else i--;
+				if((i + 1) % (rawSize_))	
+					childTree->childs.push_back(grandChilds_[0][i + 1]);	
+				else  
+					right_ = false; 
 				if((i + rawSize_) < grandChilds_->size())
 				{
 					childTree->childs.push_back(grandChilds_[0][i + rawSize_]);
-					childTree->childs.push_back(grandChilds_[0][i + rawSize_ + 1]);
+					if(right_) 
+						childTree->childs.push_back(grandChilds_[0][i + rawSize_ + 1]);
+					else i--;
 				}
 				childTree->findMaxMinFromChilds();
+				for(int k = 0; k < childTree->childs.size();k++)
+					D3dRender::getInstance().addQuadTreeModel(&childTree->childs[k]->max, &childTree->childs[k]->center);
 
 				childs_->push_back(childTree);
 			}
-			rawSize_ /= 2;
+			if(rawSize_ % 2)rawSize_ = rawSize_ / 2 + 1;
+			else rawSize_ /= 2;
 		} while(childs_->size() > 4);
 
-		_quadTree = new QuadTree();
 		for(int i = 0; i < childs_->size(); i++)
+		{
+			D3dRender::getInstance().addQuadTreeModel(&childs_[0][i]->max, &childs_[0][i]->center);
 			_quadTree->childs.push_back(childs_[0][i]);
-
+		}
 		_quadTree->findMaxMinFromChilds();
+		D3dRender::getInstance().addQuadTreeModel(&_quadTree->max, &_quadTree->center);
 		// assemble quadTree!
 		return true;
 	}
@@ -479,6 +529,18 @@
 	void RedactorTerrainManager::randomize(int diapazon)
 	{
 		int diapazon_half = diapazon / 2;
+
+		for(int i = 0; i < _props.numTiles; i++)
+		{
+			for(int j = 0; j < _props.numTileVerts; j++)
+			{
+				int randBiomIndex_ = rand() % _bioms.size();
+				float height_ = (float)((rand() % ((int)_bioms[randBiomIndex_].range*diapazon)) - _bioms[randBiomIndex_].halfRange*diapazon);
+				_props.heightMap[_props.pickToHeightMap[i][j]].y += _bioms[randBiomIndex_].height + height_;
+			}
+		}
+		_quadTree->update();
+		/*
 		for(int i = 0; i < _props.numVertsInCol; i++)
 		{
 			for(int j = 0; j < _props.numVertsInRaw; j++)
@@ -486,7 +548,7 @@
 				float height = (float)((rand() % (diapazon + 1)) - diapazon_half);
 				_props.heightMap[i * _props.numVertsInRaw + j].y += height;
 			}
-		}
+		}*/
 		normalizeNormals();
 		for(int i = 0; i < _props.numTiles; i++)
 			_updateVertexBuffer(i);
@@ -520,6 +582,7 @@
 					smoothVert(i*_props.numVertsInRaw + j);
 			}
 		}
+		_quadTree->update();
 		normalizeNormals();
 		for(int i = 0; i < _props.numTiles; i++)
 			_updateVertexBuffer(i);

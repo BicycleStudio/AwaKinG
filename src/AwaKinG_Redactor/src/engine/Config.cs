@@ -12,18 +12,22 @@ namespace AwaKinG_Redactor.src.engine
     {
         public enum SystemStringType 
         {   
-            Undefined, OpenBlock, CloseBlock,
+            Undefined, OpenBlock, CloseBlock, True, False,
             Camera, CameraSpeed, CameraType, 
-            Terrain
+            Terrain, TerrainWireframe, TerrainQuadTreeVisible
         }
         private struct SystemStrings
         {
             public const string OpenBlock = "{";
             public const string CloseBlock = "}";
+            public const string True = "true";
+            public const string False = "false";
             public const string Camera = "camera";
             public const string CameraSpeed = "speed";
             public const string CameraType = "type";
             public const string Terrain = "terrain";
+            public const string TerrainWireframe = "wireframe";
+            public const string TerrainQuadTreeVisible = "quadTreeVisible";
         }
         static Config _config = new Config();
         public static Config GetInstance()
@@ -42,7 +46,16 @@ namespace AwaKinG_Redactor.src.engine
             if (dirtyString.Contains(SystemStrings.CameraType)) return SystemStringType.CameraType;
             if (dirtyString.Contains(SystemStrings.CameraSpeed)) return SystemStringType.CameraSpeed;
             if (dirtyString.Contains(SystemStrings.Terrain)) return SystemStringType.Terrain;
+            if (dirtyString.Contains(SystemStrings.TerrainWireframe)) return SystemStringType.TerrainWireframe;
+            if (dirtyString.Contains(SystemStrings.TerrainQuadTreeVisible)) return SystemStringType.TerrainQuadTreeVisible;
             return SystemStringType.Undefined;
+        }
+        private bool GetBool(String dirtyString, bool defaulValue)
+        {
+            bool ret_ = defaulValue;
+            if (dirtyString.Contains(SystemStrings.True)) return true;
+            if (dirtyString.Contains(SystemStrings.False)) return false;
+            return ret_;
         }
         private int GetInt(String dirtyString, int defaulValue)
         {
@@ -120,6 +133,12 @@ namespace AwaKinG_Redactor.src.engine
 
             sw.Write(SystemStrings.Terrain + Environment.NewLine);
             sw.Write(SystemStrings.OpenBlock + Environment.NewLine);
+
+            string st = "true";if(!Terrain.GetInstance().Wireframe)st = "false";
+            sw.Write("\t" + SystemStrings.TerrainWireframe + " = " + st + Environment.NewLine);
+            st = "true"; if (!Terrain.GetInstance().QuadTreeVisible) st = "false";
+            sw.Write("\t" + SystemStrings.TerrainQuadTreeVisible + " = " + st + Environment.NewLine);
+
             sw.Write(SystemStrings.CloseBlock);
             sw.Close();
         }
@@ -151,6 +170,12 @@ namespace AwaKinG_Redactor.src.engine
                         switch(type_)
                         {
                             case SystemStringType.OpenBlock: break;
+                            case SystemStringType.TerrainQuadTreeVisible:
+                                Terrain.GetInstance().QuadTreeVisible = GetBool(str_, Terrain.GetInstance().QuadTreeVisible);
+                                break;
+                            case SystemStringType.TerrainWireframe:
+                                Terrain.GetInstance().Wireframe = GetBool(str_, Terrain.GetInstance().Wireframe);
+                                break;
                         }
                         try { str_ = sr.ReadLine(); } catch (Exception ex) { return; }
                         type_ = GetSystemStringType(str_);
@@ -162,6 +187,11 @@ namespace AwaKinG_Redactor.src.engine
     }
     public class Terrain
     {
+        public bool QuadTreeVisible { get { return _quadTreeVisible; } set { _quadTreeVisible = value; } }
+        private bool _quadTreeVisible = false;
+        public bool Wireframe { get { return _wireframe; } set { _wireframe = value; } }
+        private bool _wireframe = false;
+
         public static Terrain GetInstance()
         {
             return _terrain;

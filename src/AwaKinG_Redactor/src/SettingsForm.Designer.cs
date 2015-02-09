@@ -42,10 +42,17 @@
             this.rbtnSlow = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.rbtnQuadTreeVisible = new System.Windows.Forms.RadioButton();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.rbtnWireframe = new System.Windows.Forms.RadioButton();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOk
@@ -215,6 +222,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.panel4);
+            this.tabPage2.Controls.Add(this.panel3);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(10, 3, 3, 3);
@@ -222,6 +231,45 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Terrain";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.rbtnQuadTreeVisible);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(10, 3);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(165, 26);
+            this.panel3.TabIndex = 4;
+            // 
+            // rbtnQuadTreeVisible
+            // 
+            this.rbtnQuadTreeVisible.AutoSize = true;
+            this.rbtnQuadTreeVisible.Location = new System.Drawing.Point(13, 5);
+            this.rbtnQuadTreeVisible.Name = "rbtnQuadTreeVisible";
+            this.rbtnQuadTreeVisible.Size = new System.Drawing.Size(105, 17);
+            this.rbtnQuadTreeVisible.TabIndex = 2;
+            this.rbtnQuadTreeVisible.Text = "QuadTree visible";
+            this.rbtnQuadTreeVisible.UseVisualStyleBackColor = true;
+            this.rbtnQuadTreeVisible.CheckedChanged += new System.EventHandler(this.rbtnQuadTreeVisible_CheckedChanged);
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.rbtnWireframe);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel4.Location = new System.Drawing.Point(10, 29);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(165, 28);
+            this.panel4.TabIndex = 5;
+            // 
+            // rbtnWireframe
+            // 
+            this.rbtnWireframe.AutoSize = true;
+            this.rbtnWireframe.Location = new System.Drawing.Point(13, 6);
+            this.rbtnWireframe.Name = "rbtnWireframe";
+            this.rbtnWireframe.Size = new System.Drawing.Size(73, 17);
+            this.rbtnWireframe.TabIndex = 2;
+            this.rbtnWireframe.Text = "Wireframe";
+            this.rbtnWireframe.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -242,6 +290,11 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -262,5 +315,9 @@
         public System.Windows.Forms.RadioButton rbtnFast;
         public System.Windows.Forms.RadioButton rbtnNormal;
         public System.Windows.Forms.RadioButton rbtnSlow;
+        private System.Windows.Forms.Panel panel3;
+        public System.Windows.Forms.RadioButton rbtnQuadTreeVisible;
+        private System.Windows.Forms.Panel panel4;
+        public System.Windows.Forms.RadioButton rbtnWireframe;
     }
 }

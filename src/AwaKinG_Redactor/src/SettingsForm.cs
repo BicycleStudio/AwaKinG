@@ -36,6 +36,9 @@ namespace AwaKinG_Redactor.src
             if (src.engine.Camera.GetInstance().Speed == 1.0f) { rbtnSlow.Checked = true; return; }
             if (src.engine.Camera.GetInstance().Speed <= 5.0f) { rbtnNormal.Checked = true; return; }
             rbtnFast.Checked = true;
+
+            rbtnWireframe.Checked = src.engine.Terrain.GetInstance().Wireframe;
+            rbtnQuadTreeVisible.Checked = src.engine.Terrain.GetInstance().QuadTreeVisible;
         }
         private void rbtnCameraSpeed_Click(object sender, EventArgs e)
         {
@@ -50,6 +53,11 @@ namespace AwaKinG_Redactor.src
             ((RadioButton)sender).Checked = true;
             if (sender != rbtnRedactor) rbtnRedactor.Checked = false;
             if (sender != rbtnRedactorFree) rbtnRedactorFree.Checked = false;
+        }
+
+        private void rbtnQuadTreeVisible_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

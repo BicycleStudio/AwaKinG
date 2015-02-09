@@ -193,6 +193,9 @@ namespace AwaKinG_Redactor
                 if (_settings.rbtnRedactor.Checked) Camera.GetInstance().setType(Camera.SystemStrings.CameraTypeRedactor);
                 if (_settings.rbtnRedactorFree.Checked) Camera.GetInstance().setType(Camera.SystemStrings.CameraTypeRedactorFree);
 
+                Terrain.GetInstance().Wireframe = _settings.rbtnWireframe.Checked;
+                Terrain.GetInstance().QuadTreeVisible = _settings.rbtnQuadTreeVisible.Checked;
+
                 _engine.SetConfig();
                 setFileCameraType();
             }

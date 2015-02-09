@@ -89,3 +89,11 @@ void EngineCameraManagerSetSpeed(RedactorEngine* pointer, float speed)
 {
 	pointer->setCameraSpeed(speed);
 }
+void EngineTerrainQuadTreeSetVisible(RedactorEngine* pointer, bool set)
+{
+	pointer->setTerrainQuadTreeVisible(set);
+}
+void EngineTerrainSetWireframe(RedactorEngine* pointer, bool set)
+{
+	pointer->setTerrainWireframe(set);
+}

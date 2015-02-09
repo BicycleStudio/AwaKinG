@@ -12,6 +12,12 @@ namespace AwaKinG_Redactor.src.engine
         const String _dllPath = "../../../../dll/AwaKinG_Engine.dll";
         #region dll import
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+           EntryPoint = "EngineTerrainQuadTreeSetVisible")]
+        private static extern void _setTerrainQuadTreeVisible(IntPtr pointer, bool set);
+        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+           EntryPoint = "EngineTerrainSetWireframe")]
+        private static extern void _setTerrainWireframe(IntPtr pointer, bool set);
+        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
            EntryPoint = "EngineCameraManagerSetSpeed")]
         private static extern void _setCameraSpeed(IntPtr pointer, float speed);
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
@@ -81,6 +87,8 @@ namespace AwaKinG_Redactor.src.engine
             }
             SetCameraManagerType(type);
             _setCameraSpeed(_engine, camSpeed);
+            SetTerrainQuadTreeVisible(Terrain.GetInstance().QuadTreeVisible);
+            SetTerrainWireframe(Terrain.GetInstance().Wireframe);
         }
         public EngineWrap(IntPtr mainWindow, IntPtr window, System.Drawing.Size size) 
         {
@@ -149,6 +157,14 @@ namespace AwaKinG_Redactor.src.engine
         public void SetTerrainWorkType(int type)
         {
             _setTerrainWorkType(_engine, type);
+        }
+        public void SetTerrainWireframe(bool set)
+        {
+            _setTerrainWireframe(_engine, set);
+        }
+        public void SetTerrainQuadTreeVisible(bool set)
+        {
+            _setTerrainQuadTreeVisible(_engine, set);
         }
     }
 }

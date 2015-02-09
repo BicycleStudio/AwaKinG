@@ -63,13 +63,14 @@ public:
 #pragma region redactor functions
 	void setCameraSpeed(float speed);
 
+	void setTerrainQuadTreeVisible(bool set);
+	void setTerrainWireframe(bool set);
 	void saveTerrain(string fileName);
 	void randomizeTerrain(int diapazon);
 	void blurTerrain(int value);
 	bool createTerrain(int gridX, int gridY);
 	bool createMapFromFile(string fileName);
 	void loadTerrain(string fileName);
-
 	void setTerrainWorkType(int type);
 	int pickTerrain(int posX, int posY);
 #pragma endregion

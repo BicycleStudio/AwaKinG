@@ -6,7 +6,8 @@
 class D3dRender : public IRTerrain
 {
 public:
-	enum AwaKinGModelTechnique { AMT_TEXTUREMAP = 0, AMT_BUMPMAP = 1 };
+	enum AwaKinGModelTechnique { AMT_COLORMAP = 0, AMT_TEXTUREMAP = 1, AMT_BUMPMAP = 2 };
+	enum SystemModelType { SMT_QUADTREE = 0, SMT_TERRAINPEN = 1 };
 #pragma region structs
 	struct SystemConfiguration
 	{
@@ -20,7 +21,7 @@ public:
 		ID3D11RasterizerState* NonCull;
 		ID3D11RasterizerState* Wireframe;
 	};
-	struct ConstantBuffer
+	struct ConstantBufferMatrix
 	{
 		XMFLOAT4X4 matr;
 	};
@@ -33,8 +34,8 @@ public:
 	};
 	struct TechniqueVP_Buf : TechniqueVP
 	{
-		ID3D11Buffer*	Buffer;
-		int	IndexOfBuffer;
+		vector<ID3D11Buffer*>	Buffer;
+		vector<int>	IndexOfBuffer;
 	};
 #pragma endregion
 #pragma region singleton
@@ -70,6 +71,10 @@ public:
 	void setRasterizerState(int stateType);
 
 	#pragma region for terrain
+	void setVisibleTerrainQuadTree(bool set);
+	void setTerrainWireframe(bool set);
+	void clearQuadTreeMatrixVector();
+	void addQuadTreeModel(float3* max, float3* center);
 	void saveResourceToFile(string fileName, ID3D11Resource* resource);
 	void unmapResource(ID3D11Buffer* buf);
 	void mapResource(ID3D11Buffer* buf, D3D11_MAPPED_SUBRESOURCE* mappedSubResource, D3D11_MAP mapType);
@@ -81,28 +86,33 @@ private:
 	void _beginScene();
 	void _prepareToRenderTechnique(TechniqueVP tech);
 	void _renderTerrainTile(Model* model);
-	void _renderTextureMapModel(ModelEx* model, vector<XMFLOAT4X4>* matrixs);
+	void _renderTextureMapModel(ModelEx* model, vector<XMFLOAT4X4*>* matrixs);
+	void _renderColorMapModel(ModelEx* model, vector<XMFLOAT4X4*>* matrixs);
 	void _endScene();
 	bool _initializeShaders();
 	bool _compileShaderFromFile(LPCSTR file, const D3D_SHADER_MACRO* pDefs,	LPCSTR szEntry, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppBlobOut);
 	void _mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* matrix);
 	void _mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4* vector);
 	void _mapViewProjectionBufferResource();
+	void _createSystemBox();
 #pragma endregion
 
 #pragma region private vars
-	vector<vector<vector<XMFLOAT4X4>>>		_worldMatrixs;
+	vector<vector<vector<XMFLOAT4X4*>>>		_worldMatrixs;
 	vector<vector<ModelEx*>>							_models;
 	vector<Model*>												_terrainTiles;
 	ID3D11Buffer*													_terrainTileIndexBuffer;
+	bool																	_renderTerrainQuadTree;
+	bool																	_renderTerrainWireframe;
 	 
 	#pragma region shader vars 
 		string									_shaderPath;
 		TechniqueVP_Buf					_textureMap;
+		TechniqueVP_Buf					_colorMap;
 		TechniqueVP							_terrainTech;
 
 		ID3D11Buffer*           _bViewProj;
-		ConstantBuffer					_cbViewProj;
+		ConstantBufferMatrix		_cbViewProj;
 		ID3D11SamplerState*     _ssLinear;
 		RasterizerState					_rs;
 		ID3D11SamplerState*			_ssDefault;

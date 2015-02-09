@@ -1,8 +1,17 @@
 cbuffer PerFrame : register(b0)	{ matrix ViewProj; };
 cbuffer PerObj : register(b1)		{ matrix World; };
-cbuffer PerObj : register(b2)		{ float4 PickColor; };
+cbuffer PerObj : register(b2)		{ float4 PerObjColor; };
 Texture2D texDiffuse : register(t0);
 SamplerState samLinear : register(s0);
+
+struct VS_SystemModelInput
+{
+	float3 Pos		: POSITION;
+};
+struct PS_SystemModelInput
+{
+	float4 Pos		: SV_POSITION;
+};
 
 struct VS_Input
 {
@@ -44,16 +53,15 @@ float4 PSTerrain(PS_Input input) : SV_Target
 {
 	return texDiffuse.Sample(samLinear, input.Tex);
 }
-PS_Input VSTerrainPick(VS_Input input)
+PS_SystemModelInput VSSystemModel(VS_SystemModelInput input)
 {
-	PS_Input output = (PS_Input)0;
-	output.Pos = mul(float4(input.Pos, 1.0f), ViewProj);
-	output.Tex = input.Tex;
-	output.Normal = input.Normal;
+	PS_SystemModelInput output = (PS_SystemModelInput)0;
+	output.Pos = mul(float4(input.Pos, 1.0f), World);
+	output.Pos = mul(output.Pos, ViewProj);
 
 	return output;
 }
-float4 PSTerrainPick(PS_Input input) : SV_Target
+float4 PSSystemModel(PS_SystemModelInput input) : SV_Target
 {
-	return PickColor;
+	return PerObjColor;
 }
