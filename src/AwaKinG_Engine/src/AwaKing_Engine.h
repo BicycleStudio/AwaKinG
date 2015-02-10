@@ -24,9 +24,11 @@ DLL_SPEC void EngineTerrainRandomize(RedactorEngine* pointer, int diapazon);
 DLL_SPEC void EngineTerrainBlur(RedactorEngine* pointer, int value);
 DLL_SPEC void EngineTerrainSave(RedactorEngine* pointer, const char* fileName, int len);
 DLL_SPEC void EngineTerrainLoad(RedactorEngine* pointer, const char* fileName, int len);
-DLL_SPEC void EngineTerrainSetWorkType(RedactorEngine* pointer, int type);
-DLL_SPEC int EngineTerrainPick(RedactorEngine* pointer, int posX, int posY);
 DLL_SPEC void EngineCameraManagerSetSpeed(RedactorEngine* pointer, float speed);
 DLL_SPEC void EngineTerrainQuadTreeSetVisible(RedactorEngine* pointer, bool set);
 DLL_SPEC void EngineTerrainSetWireframe(RedactorEngine* pointer, bool set);
+
+DLL_SPEC void EngineTerrainHeightWork(RedactorEngine* pointer, int posX, int posY);
+DLL_SPEC void EngineTerrainTextureWork(RedactorEngine* pointer, int posX, int posY);
+
 #endif // __AWAKING_ENGINE_H setCameraManagerType

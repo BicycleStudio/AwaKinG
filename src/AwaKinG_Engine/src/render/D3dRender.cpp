@@ -633,11 +633,9 @@ void D3dRender::clearQuadTreeMatrixVector()
 {
 	_worldMatrixs[AMT_COLORMAP][SMT_QUADTREE].clear();
 }
-void D3dRender::addQuadTreeModel(float3* max, float3* center)
+void D3dRender::addQuadTreeModel(XMFLOAT4X4* worldMatrix)
 {
-	XMFLOAT4X4* worldMatrix_ = new XMFLOAT4X4();
-	XMStoreFloat4x4(worldMatrix_, (XMMatrixMultiply(XMMatrixScaling(max->x, max->y, max->z), XMMatrixTranslation(center->x, center->y, center->z))));
-	_worldMatrixs[AMT_COLORMAP][SMT_QUADTREE].push_back(worldMatrix_);
+	_worldMatrixs[AMT_COLORMAP][SMT_QUADTREE].push_back(worldMatrix);
 }
 void D3dRender::saveResourceToFile(string fileName, ID3D11Resource* resource)
 {

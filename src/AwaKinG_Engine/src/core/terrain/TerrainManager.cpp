@@ -17,7 +17,7 @@
 		_bioms.push_back(Biom(10.0f, 10.0f));
 		_bioms.push_back(Biom(-100.0f, 30.0f));
 		_bioms.push_back(Biom(-250.0f, 75.0f));
-		_indexBuffer = NULL; _workType = TWT_NONE;
+		_indexBuffer = NULL;
 		_2048Path = "../../../../media/terrain/_2048.dds";
 		_quadTree = NULL;
 	}
@@ -228,7 +228,7 @@
 				}
 				childTree->findMaxMinFromChilds();
 				for(int k = 0; k < childTree->childs.size();k++)
-					D3dRender::getInstance().addQuadTreeModel(&childTree->childs[k]->max, &childTree->childs[k]->center);
+					D3dRender::getInstance().addQuadTreeModel(childTree->childs[k]->worldMatrix);
 
 				childs_->push_back(childTree);
 			}
@@ -238,11 +238,11 @@
 
 		for(int i = 0; i < childs_->size(); i++)
 		{
-			D3dRender::getInstance().addQuadTreeModel(&childs_[0][i]->max, &childs_[0][i]->center);
+			D3dRender::getInstance().addQuadTreeModel(childs_[0][i]->worldMatrix);
 			_quadTree->childs.push_back(childs_[0][i]);
 		}
 		_quadTree->findMaxMinFromChilds();
-		D3dRender::getInstance().addQuadTreeModel(&_quadTree->max, &_quadTree->center);
+		D3dRender::getInstance().addQuadTreeModel(_quadTree->worldMatrix);
 		// assemble quadTree!
 		return true;
 	}
@@ -354,83 +354,76 @@
 	}
 #pragma endregion
 #pragma region redactor functions
-	int RedactorTerrainManager::pick(precomputeRay* pickRay)
+	#pragma region picking
+	void RedactorTerrainManager::textureWork(precomputeRay* pickRay)
 	{
-		vector<QuadTree*> intersected_;
-		intersected_.push_back(_quadTree);
-
 		vector<QuadTree*> realIntersected_;
-		QuadTree** trees_ = new QuadTree*[4];
-		int count_ = 0; bool done_ = false; 
+		_pick(pickRay, &realIntersected_);
 
-		while(intersected_.size() != 0)
+		int terrainId_ = -1;
+		float tu; float tv;
+		for(int i = 0; i < realIntersected_.size(); i++)
 		{
-			if(hitTerrainSector(intersected_[0], pickRay, trees_, &count_, &done_))
+			if(_getQuadIntersectID(realIntersected_[i]->terrainSector, &pickRay->direction, &pickRay->origin, &tu, &tv))
 			{
-				if(!done_)
+				terrainId_ = realIntersected_[i]->terrainSector->terrainId;
+				break;
+			}
+		}
+		if(terrainId_ != -1) _textureWork(terrainId_, float2(tu, tv));
+	}
+	void RedactorTerrainManager::heightWork(precomputeRay* pickRay)
+		{
+			vector<QuadTree*> realIntersected_;
+			_pick(pickRay, &realIntersected_);
+
+			int quadID = -1; int terrainId_ = -1;
+			for(int i = 0; i < realIntersected_.size(); i++)
+			{
+				if(_getQuadIntersectID(realIntersected_[i]->terrainSector, &pickRay->direction, &pickRay->origin, &quadID))
 				{
-					for(int i = 0; i < count_; i++) intersected_.push_back(trees_[i]);
-					intersected_.erase(intersected_.begin());
+					terrainId_ = realIntersected_[i]->terrainSector->terrainId;
+					break;
+				}
+			}
+			if(quadID != -1) _heightmapWork(terrainId_, quadID);
+
+		}
+		void RedactorTerrainManager::_pick(precomputeRay* pickRay, vector<QuadTree*>* rayAabbIntersected)
+		{
+			vector<QuadTree*> intersected_;
+			intersected_.push_back(_quadTree);
+
+			QuadTree** trees_ = new QuadTree*[4];
+			int count_ = 0; bool done_ = false;
+
+			while(intersected_.size() != 0)
+			{
+				if(hitTerrainSector(intersected_[0], pickRay, trees_, &count_, &done_))
+				{
+					if(!done_)
+					{
+						for(int i = 0; i < count_; i++) intersected_.push_back(trees_[i]);
+						intersected_.erase(intersected_.begin());
+					}
+					else
+					{
+						rayAabbIntersected->push_back(intersected_[0]);
+						intersected_.erase(intersected_.begin());
+					}
 				}
 				else
-				{
-					realIntersected_.push_back(intersected_[0]);
 					intersected_.erase(intersected_.begin());
-				}
 			}
-			else 
-				intersected_.erase(intersected_.begin());
+
+			// по расстоянию до камеры! сортировать
+			//quick_sort(&realIntersected_, 0, realIntersected_.size() - 1);
 		}
 
-		// по расстоянию до камеры! сортировать
-		//quick_sort(&realIntersected_, 0, realIntersected_.size() - 1);
-
-		switch(_workType)
-		{
-			case 1:
-			{
-				int retValue_ = -1; int terrainId_ = -1;
-				for(int i = 0; i < realIntersected_.size(); i++)
-				{
-					if(getQuadIntersectID(realIntersected_[i]->terrainSector, &pickRay->direction, &pickRay->origin, &retValue_))
-					{
-						terrainId_ = realIntersected_[i]->terrainSector->terrainId;
-						break;
-					}
-				}
-				if(retValue_ == -1) return retValue_;
-				_heightmapWork(terrainId_, retValue_);  return retValue_;
-			}
-			case 2:
-			{
-				int terrainId_ = -1;
-				float tu; float tv;
-				for(int i = 0; i < realIntersected_.size(); i++)
-				{
-					if(getQuadIntersectID(realIntersected_[i]->terrainSector, &pickRay->direction, &pickRay->origin, &tu, &tv))
-					{
-						terrainId_ = realIntersected_[i]->terrainSector->terrainId;
-						break;
-					}
-				}
-				if(terrainId_ == -1) return terrainId_;
-				_textureWork(terrainId_, float2(tu, tv));  return terrainId_;
-			}
-			default: return -2;
-		}
-	}
-	void RedactorTerrainManager::setWorkType(int type)
-	{
-		switch(type)
-		{ 
-		case 0:_workType = TWT_NONE; break;
-		case 1:_workType = TWT_HEIGHT; break;
-		case 2:_workType = TWT_TEXTURE; break;
-		default: _workType = TWT_NONE; break;
-		}
-	}
+	#pragma endregion
 	void RedactorTerrainManager::_heightmapWork(int terrainId, int vertId)
 	{
+
 
 	}
 	void RedactorTerrainManager::_textureWork(int terrainId, float2 texcoord)
@@ -461,7 +454,7 @@
 		D3dRender::getInstance().setTerrainModels(_vertexBuffers, _textures, _props.numTiles, _indexBuffer, _props.numIndex);
 		return true;
 	}
-	void RedactorTerrainManager::smoothVert(int id)
+	void RedactorTerrainManager::_smoothVert(int id)
 	{
 		int count = 0;
 		float Main_height = _props.heightMap[id].y;
@@ -527,25 +520,22 @@
 	{
 		int diapazon_half = diapazon / 2;
 
-		for(int i = 0; i < _props.numTiles; i++)
+		for(int i = 0; i < _props.numSectors; i++)
 		{
-			for(int j = 0; j < _props.numTileVerts; j++)
+			int randBiomIndex_ = rand() % _bioms.size();
+			float height_ = (float)((rand() % ((int)_bioms[randBiomIndex_].range*diapazon)) - _bioms[randBiomIndex_].halfRange*diapazon);
+			
+			_props.heightMap[_props.sectorsToHeightMap[i][0]].y = _bioms[randBiomIndex_].height + height_;
+			_props.sectors[i]->setMaxMinHeight(_bioms[randBiomIndex_].height + height_);
+
+			for(int j = 1; j < _props.numSectorVerts; j++)
 			{
-				int randBiomIndex_ = rand() % _bioms.size();
-				float height_ = (float)((rand() % ((int)_bioms[randBiomIndex_].range*diapazon)) - _bioms[randBiomIndex_].halfRange*diapazon);
-				_props.heightMap[_props.pickToHeightMap[i][j]].y += _bioms[randBiomIndex_].height + height_;
+				height_ = (float)((rand() % ((int)_bioms[randBiomIndex_].range*diapazon)) - _bioms[randBiomIndex_].halfRange*diapazon);
+				_props.heightMap[_props.sectorsToHeightMap[i][j]].y = _bioms[randBiomIndex_].height + height_;
+				_props.sectors[i]->checkMaxMinHeight(_bioms[randBiomIndex_].height + height_);
 			}
 		}
 		_quadTree->update();
-		/*
-		for(int i = 0; i < _props.numVertsInCol; i++)
-		{
-			for(int j = 0; j < _props.numVertsInRaw; j++)
-			{
-				float height = (float)((rand() % (diapazon + 1)) - diapazon_half);
-				_props.heightMap[i * _props.numVertsInRaw + j].y += height;
-			}
-		}*/
 		normalizeNormals();
 		for(int i = 0; i < _props.numTiles; i++)
 			_updateVertexBuffer(i);
@@ -570,14 +560,25 @@
 	}
 	void RedactorTerrainManager::blurHeightmap(int blurHard)
 	{
-		int nvir = _props.numVertsInRaw;
 		for(int rep = 0; rep < blurHard; rep++)
 		{
+			for(int i = 0; i < _props.numSectors; i++)
+			{
+				_smoothVert(_props.sectorsToHeightMap[i][0]);
+				_props.sectors[i]->setMaxMinHeight(_props.heightMap[_props.sectorsToHeightMap[i][0]].y);
+
+				for(int j = 1; j < _props.numSectorVerts; j++)
+				{
+					_smoothVert(_props.sectorsToHeightMap[i][j]);
+					_props.sectors[i]->checkMaxMinHeight(_props.heightMap[_props.sectorsToHeightMap[i][j]].y);
+				}
+			}
+			/*
 			for(int i = 0; i < _props.numVertsInCol; i++)
 			{
 				for(int j = 0; j < _props.numVertsInRaw; j++)
 					smoothVert(i*_props.numVertsInRaw + j);
-			}
+			}*/
 		}
 		_quadTree->update();
 		normalizeNormals();
@@ -646,7 +647,7 @@
 				return false;
 			}
 		}
-		bool RedactorTerrainManager::getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, int* returnedID)
+		bool RedactorTerrainManager::_getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, int* returnedID)
 		{
 			int countIntersections = 0;
 			float* connections = NULL;	int* connectionsID = NULL;
@@ -725,7 +726,7 @@
 			returnedID[0] = idd;// _props.quadVertConnect[idd];
 			return	true;
 		}
-		bool RedactorTerrainManager::getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, float* tu, float* tv)
+		bool RedactorTerrainManager::_getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, float* tu, float* tv)
 		{
 			float u; float v;
 			int countIntersections = 0;

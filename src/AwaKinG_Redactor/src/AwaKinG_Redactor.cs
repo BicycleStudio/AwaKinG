@@ -167,8 +167,7 @@ namespace AwaKinG_Redactor
         }
         private void pnlRender_MouseDown(object sender, MouseEventArgs e)
         {
-            int id = _engine.PickTerrain(e.Location);
-            label1.Text = "Log: " + id.ToString();
+            _engine.PickTerrain(e.Location);
         }
         private void setFileCameraType()
         {
@@ -201,6 +200,11 @@ namespace AwaKinG_Redactor
             }
             _engine.SetActive(true);
             Application.Idle += Application_Idle;
+        }
+
+        private void pnlRender_MouseMove(object sender, MouseEventArgs e)
+        {
+            _engine.PickTerrain(e.Location);
         }
     }
 }

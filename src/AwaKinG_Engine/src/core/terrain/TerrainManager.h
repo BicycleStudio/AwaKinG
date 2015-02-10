@@ -220,7 +220,6 @@ protected:
 class RedactorTerrainManager : public TerrainManager
 {
 public:
-	enum TerainWorkType { TWT_NONE = 0, TWT_HEIGHT = 1, TWT_TEXTURE = 2 };
 	RedactorTerrainManager();
 	bool generate(int gridX, int gridY);
 	bool loadFromFile(string fileName);
@@ -228,22 +227,24 @@ public:
 	void randomize(int diapazon);
 	void normalizeNormals();
 	void blurHeightmap(int blurHard);
-	int pick(precomputeRay* pickRay);
-	void setWorkType(int type);
+
+	void heightWork(precomputeRay* pickRay);
+	void textureWork(precomputeRay* pickRay);
+
 	void set2048Path(string path);
 	bool hitTerrainSector(QuadTree* tree, precomputeRay* pickRay, QuadTree** hits, int* count, bool* done);
 
 private:
-	bool getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, int* returnedID);
-	bool getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, float* tu, float* tv);
+	void _pick(precomputeRay* pickRay, vector<QuadTree*>* rayAabbIntersected);
+	bool _getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, int* returnedID);
+	bool _getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, float* tu, float* tv);
 	bool _intersectTriangle(float3* pickOrig, float3* pickDir, XMFLOAT3** vs);
 	bool _intersectTriangle(float3* pickOrig, float3* pickDir, XMFLOAT3** vs, float* tu, float* tv);
 
-	void smoothVert(int id);
+	void _smoothVert(int id);
 	void _updateVertexBuffer(int idTerrain);
 	void _heightmapWork(int terrainId, int vertId);
 	void _textureWork(int terrainId, XMFLOAT2 texcoord);
 private:
-	TerainWorkType			_workType;
 	vector<Biom>				_bioms;
 };

@@ -77,14 +77,6 @@ void EngineTerrainLoad(RedactorEngine* pointer, const char* fileName, int len)
 		str[i] = fileName[i * 2];
 	pointer->loadTerrain(str);
 }
-void EngineTerrainSetWorkType(RedactorEngine* pointer, int type)
-{
-	pointer->setTerrainWorkType(type);
-}
-int EngineTerrainPick(RedactorEngine* pointer, int posX, int posY)
-{
-	return pointer->pickTerrain(posX, posY);
-}
 void EngineCameraManagerSetSpeed(RedactorEngine* pointer, float speed)
 {
 	pointer->setCameraSpeed(speed);
@@ -96,4 +88,12 @@ void EngineTerrainQuadTreeSetVisible(RedactorEngine* pointer, bool set)
 void EngineTerrainSetWireframe(RedactorEngine* pointer, bool set)
 {
 	pointer->setTerrainWireframe(set);
+}
+void EngineTerrainHeightWork(RedactorEngine* pointer, int posX, int posY)
+{
+	pointer->heightWorkTerrain(posX, posY);
+}
+void EngineTerrainTextureWork(RedactorEngine* pointer, int posX, int posY)
+{
+	pointer->textureWorkTerrain(posX, posY);
 }

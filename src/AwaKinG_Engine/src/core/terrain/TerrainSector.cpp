@@ -8,3 +8,13 @@ TerrainSector::TerrainSector()
 void TerrainSector::release()
 {
 }
+void TerrainSector::setMaxMinHeight(float value)
+{
+	max.y = value; min.y = value;
+
+}
+void TerrainSector::checkMaxMinHeight(float value)
+{
+	if(max.y < value) max.y = value;
+	if(min.y > value) min.y = value;
+}

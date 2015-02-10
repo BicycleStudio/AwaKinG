@@ -236,16 +236,6 @@
 		{
 			_redactorTerrainManager->saveToFile(fileName);
 		}
-		void RedactorEngine::setTerrainWorkType(int type)
-		{
-			_redactorTerrainManager->setWorkType(type);
-		}
-		int RedactorEngine::pickTerrain(int posX, int posY)
-		{
-			precomputeRay* precomputeRay_ = D3dRender::getInstance().getPickingRay(posX, posY);
-			int id_ = _redactorTerrainManager->pick(precomputeRay_);
-			return id_;
-		}
 		void RedactorEngine::setTerrainQuadTreeVisible(bool set)
 		{
 			D3dRender::getInstance().setVisibleTerrainQuadTree(set);
@@ -254,6 +244,18 @@
 		{
 			D3dRender::getInstance().setTerrainWireframe(set);
 		}
+
+		void RedactorEngine::heightWorkTerrain(int posX, int posY)
+		{
+			precomputeRay* precomputeRay_ = D3dRender::getInstance().getPickingRay(posX, posY);
+			_redactorTerrainManager->heightWork(precomputeRay_);
+		}
+		void RedactorEngine::textureWorkTerrain(int posX, int posY)
+		{
+			precomputeRay* precomputeRay_ = D3dRender::getInstance().getPickingRay(posX, posY);
+			_redactorTerrainManager->textureWork(precomputeRay_);
+		}
+
 	#pragma endregion
 
 	bool RedactorEngine::createMapFromFile(string fileName)

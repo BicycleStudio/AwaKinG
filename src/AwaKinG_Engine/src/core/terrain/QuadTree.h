@@ -17,6 +17,7 @@ struct QuadTree
 	bool									land;
 	float3*								ps[2];
 	float3								max;
-	float3								center;
+
+	XMFLOAT4X4*						worldMatrix;
 };
 

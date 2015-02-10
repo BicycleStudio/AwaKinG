@@ -5,6 +5,8 @@ struct TerrainSector
 {
 	TerrainSector();
 	void release();
+	void setMaxMinHeight(float value);
+	void checkMaxMinHeight(float value);
 	int										terrainId;
 	int										id;
 

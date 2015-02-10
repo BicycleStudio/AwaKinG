@@ -29,7 +29,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 		shutdown(); 
 		return 1; 
 	}
-	gEngine->createTerrain(2, 1);
+	gEngine->createTerrain(1, 1);
+	gEngine->randomizeTerrain(1);
+
+
 	gEngine->setCameraManagerType(Engine::CameraManagerType::CMT_REDACTORFREE);
 	//gEngine->loadTerrain("../../resources/map/terrain/DK2.ter");
 

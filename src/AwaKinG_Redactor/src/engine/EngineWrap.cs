@@ -9,8 +9,9 @@ namespace AwaKinG_Redactor.src.engine
 {
     public class EngineWrap
     {
-        const String _dllPath = "../../../../dll/AwaKinG_Engine.dll";
         #region dll import
+        const String _dllPath = "../../../../dll/AwaKinG_Engine.dll";
+
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
            EntryPoint = "EngineTerrainQuadTreeSetVisible")]
         private static extern void _setTerrainQuadTreeVisible(IntPtr pointer, bool set);
@@ -20,12 +21,6 @@ namespace AwaKinG_Redactor.src.engine
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
            EntryPoint = "EngineCameraManagerSetSpeed")]
         private static extern void _setCameraSpeed(IntPtr pointer, float speed);
-        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
-           EntryPoint = "EngineTerrainSetWorkType")]
-        private static extern void _setTerrainWorkType(IntPtr pointer, int type);
-        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
-           EntryPoint = "EngineTerrainPick")]
-        private static extern int _pickTerrain(IntPtr pointer, int posX, int posY);
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
            EntryPoint = "EngineTerrainLoad")]
         private static extern void _loadTerrain(IntPtr pointer, String fileName, int len);
@@ -71,9 +66,15 @@ namespace AwaKinG_Redactor.src.engine
         #endregion
         public bool Done { get { return _done; } set { _done = value; } }
         bool _done = false;
-        bool _initialized;
-        IntPtr _engine;
         bool _active;
+        bool _initialized;
+        bool _haveTerrain = false;
+
+        IntPtr _engine;
+        PickWorker _pickTerrainWorker = new PickWorker();
+        PickWorker _defaultTerrainWorker = new PickWorker();
+        HeightPickWorker _heightTerrainWorker = new HeightPickWorker();
+        TexturePickWorker _textureTerrainWorker = new TexturePickWorker();
         public void SetConfig()
         {
             float camSpeed = Camera.GetInstance().Speed;
@@ -132,6 +133,7 @@ namespace AwaKinG_Redactor.src.engine
         public void GenerateTerrain(int gridX, int gridY)
         {
             _generateTerrain(_engine, gridX, gridY);
+            _haveTerrain = true;
         }
         public void RandomizeTerrain(int diapazon)
         {
@@ -144,18 +146,25 @@ namespace AwaKinG_Redactor.src.engine
         public void LoadTerrain(String fileName)
         {
             _loadTerrain(_engine, fileName, fileName.Length);
+            _haveTerrain = true;
         }
         public void SaveTerrain(String fileName)
         {
             _saveTerrain(_engine, fileName, fileName.Length);
         }
-        public int PickTerrain(System.Drawing.Point pt)
+        public void PickTerrain(System.Drawing.Point pt)
         {
-            return _pickTerrain(_engine, pt.X, pt.Y);
+            if (_initialized & _active & _haveTerrain)
+                _pickTerrainWorker.Pick(_engine, pt);
         }
         public void SetTerrainWorkType(int type)
         {
-            _setTerrainWorkType(_engine, type);
+            switch(type)
+            {
+                case 0: _pickTerrainWorker = _defaultTerrainWorker; break;
+                case 1: _pickTerrainWorker = _heightTerrainWorker; break;
+                case 2: _pickTerrainWorker = _textureTerrainWorker; break;
+            }
         }
         public void SetTerrainWireframe(bool set)
         {
@@ -164,6 +173,33 @@ namespace AwaKinG_Redactor.src.engine
         public void SetTerrainQuadTreeVisible(bool set)
         {
             _setTerrainQuadTreeVisible(_engine, set);
+        }
+    }
+    public class PickWorker
+    {
+        virtual public void Pick(IntPtr engine, System.Drawing.Point mouse)
+        {
+
+        }
+    }
+    public class HeightPickWorker: PickWorker
+    {
+        [DllImport("../../../../dll/AwaKinG_Engine.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+            EntryPoint = "EngineTerrainHeightWork")]
+        private static extern int _heightWorkTerrain(IntPtr pointer, int posX, int posY);
+        public override void Pick(IntPtr engine, System.Drawing.Point mouse)
+        {
+            _heightWorkTerrain(engine, mouse.X, mouse.Y);
+        }
+    }
+    public class TexturePickWorker: PickWorker
+    {
+        [DllImport("../../../../dll/AwaKinG_Engine.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+            EntryPoint = "EngineTerrainTextureWork")]
+        private static extern int _textureWorkTerrain(IntPtr pointer, int posX, int posY);
+        public override void Pick(IntPtr engine, System.Drawing.Point mouse)
+        {
+            _textureWorkTerrain(engine, mouse.X, mouse.Y);
         }
     }
 }

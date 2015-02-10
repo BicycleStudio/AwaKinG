@@ -71,8 +71,9 @@ public:
 	bool createTerrain(int gridX, int gridY);
 	bool createMapFromFile(string fileName);
 	void loadTerrain(string fileName);
-	void setTerrainWorkType(int type);
-	int pickTerrain(int posX, int posY);
+
+	void heightWorkTerrain(int posX, int posY);
+	void textureWorkTerrain(int posX, int posY);
 #pragma endregion
 
 #pragma region private vars

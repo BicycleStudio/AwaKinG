@@ -74,7 +74,7 @@ public:
 	void setVisibleTerrainQuadTree(bool set);
 	void setTerrainWireframe(bool set);
 	void clearQuadTreeMatrixVector();
-	void addQuadTreeModel(float3* max, float3* center);
+	void addQuadTreeModel(XMFLOAT4X4* worldMatrix);
 	void saveResourceToFile(string fileName, ID3D11Resource* resource);
 	void unmapResource(ID3D11Buffer* buf);
 	void mapResource(ID3D11Buffer* buf, D3D11_MAPPED_SUBRESOURCE* mappedSubResource, D3D11_MAP mapType);

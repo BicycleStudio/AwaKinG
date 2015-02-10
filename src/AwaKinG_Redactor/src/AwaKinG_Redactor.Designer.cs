@@ -118,7 +118,7 @@
             this.mtsiCameraRedactor,
             this.mtsiCameraFree});
             this.cameraToolStripMenuItem.Name = "cameraToolStripMenuItem";
-            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cameraToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.cameraToolStripMenuItem.Text = "Camera ";
             // 
             // mtsiCameraRedactor
@@ -144,12 +144,12 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(122, 6);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.settingsToolStripMenuItem.Text = "Settings...";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -325,14 +325,14 @@
             this.awA_Value_Button3.Image = null;
             this.awA_Value_Button3.Location = new System.Drawing.Point(13, 119);
             this.awA_Value_Button3.MaxValue = 100F;
-            this.awA_Value_Button3.MinValue = 0F;
+            this.awA_Value_Button3.MinValue = 1F;
             this.awA_Value_Button3.Name = "awA_Value_Button3";
             this.awA_Value_Button3.Size = new System.Drawing.Size(60, 46);
             this.awA_Value_Button3.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
             this.awA_Value_Button3.TabIndex = 3;
             this.awA_Value_Button3.Text = "awA_Value_Button3";
             this.awA_Value_Button3.UseVisualStyleBackColor = false;
-            this.awA_Value_Button3.VALUEV = 0F;
+            this.awA_Value_Button3.VALUEV = 1F;
             // 
             // awA_Button1
             // 
@@ -405,6 +405,7 @@
             this.pnlRender.TabIndex = 4;
             this.pnlRender.SizeChanged += new System.EventHandler(this.pnlRender_SizeChanged);
             this.pnlRender.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlRender_MouseDown);
+            this.pnlRender.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlRender_MouseMove);
             // 
             // AwaKinG_Redactor
             // 
