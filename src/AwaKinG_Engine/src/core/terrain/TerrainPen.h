@@ -74,6 +74,7 @@ public:
 		}
 		countDrawSizeOut = countDrawSizeIn = 0; 
 		shiftHeight = altHard = hard = 10.0f; 
+		smoothKoeff = 1.0f;
 		_sizeIn = _sizeOut = 1; 
 		D3dRender::getInstance().setTerrainPenProps(&countDrawSizeIn, &countDrawSizeOut);
 	}
@@ -97,8 +98,10 @@ public:
 	}
 
 public:
-	int altHard;
-	int shiftHeight;
+	float altHard;
+	float shiftHeight;
+	float smoothKoeff;
+
 	int countDrawSizeOut;
 	float**	vertsOut_x;
 	float**	vertsOut_y;

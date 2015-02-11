@@ -243,12 +243,14 @@ public:
 	void blurHeightmap(int blurHard);
 	void setTerraPenSize(int in, int out);
 	void setTerraPenHard(float hard);
+	void setTerraPenSmoothKoeff(float smoothKoeff);
 
 	void terraformShow(precomputeRay* pickRay);
 	void terraformApply(precomputeRay* pickRay);
 	void terraformApplyPosLock(precomputeRay* pickRay);
 	void terraformApplyShiftHeight(precomputeRay* pickRay);
 	void terraformApplyAltHard(precomputeRay* pickRay);
+
 	void terraformApplySmIn(precomputeRay* pickRay);
 	void terraformApplySmOut(precomputeRay* pickRay);
 	void terraformApplySmInOut(precomputeRay* pickRay);
@@ -283,7 +285,8 @@ private:
 	void _terraformApplySmIn(int terrainId, int vertId);
 	void _terraformApplySmOut(int terrainId, int vertId);
 	void _terraformApplySmInOut(int terrainId, int vertId);
-	
+
+	void _renormal(vector<int>* ids, int sizeX);
 	void _textureWork(int terrainId, XMFLOAT2 texcoord);
 
 	int4 _getLRUD(int vId, int currentRaw, int size);

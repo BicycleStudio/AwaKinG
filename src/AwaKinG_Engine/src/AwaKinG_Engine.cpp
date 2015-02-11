@@ -113,4 +113,19 @@ void EngineTerrainDiamondSquare(RedactorEngine* pointer)
 {
 	pointer->diamondSquareTerrain();
 }
-
+void EngineTerrainTerraformApplySmIn(RedactorEngine* pointer, int posX, int posY)
+{
+	pointer->terrainTerraformApplySmIn(posX, posY);
+}
+void EngineTerrainTerraformApplySmOut(RedactorEngine* pointer, int posX, int posY)
+{
+	pointer->terrainTerraformApplySmOut(posX, posY);
+}
+void EngineTerrainTerraformApplySmInOut(RedactorEngine* pointer, int posX, int posY)
+{
+	pointer->terrainTerraformApplySmInOut(posX, posY);
+}
+void EngineTerrainSetTerraPenSmoothKoeff(RedactorEngine* pointer, float value)
+{
+	pointer->terrainSetTerraPenSmoothKoeff(value);
+}

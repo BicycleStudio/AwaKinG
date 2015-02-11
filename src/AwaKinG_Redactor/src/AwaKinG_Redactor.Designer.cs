@@ -56,6 +56,12 @@
             this.pnlTerrainPenSmoothLoeff = new System.Windows.Forms.Panel();
             this.vbtnTPSmoothKoeff = new GUI_elements.AWA_Value_Button();
             this.label5 = new System.Windows.Forms.Label();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.vbtnTPShiftHeight = new GUI_elements.AWA_Value_Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.vbtnTPAltHard = new GUI_elements.AWA_Value_Button();
+            this.label6 = new System.Windows.Forms.Label();
             this.pnlTerrainPenHard = new System.Windows.Forms.Panel();
             this.vbtnTPHardness = new GUI_elements.AWA_Value_Button();
             this.label4 = new System.Windows.Forms.Label();
@@ -76,12 +82,6 @@
             this.awA_Button3 = new GUI_elements.AWA_Button();
             this.awA_Value_Button3 = new GUI_elements.AWA_Value_Button();
             this.pnlRender = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.vbtnTPAltHard = new GUI_elements.AWA_Value_Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.vbtnTPShiftHeight = new GUI_elements.AWA_Value_Button();
-            this.label7 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.pnlLeft.SuspendLayout();
@@ -90,13 +90,13 @@
             this.pnlTerrainPenSmoothIn.SuspendLayout();
             this.pnlTerrainPenSmoothOut.SuspendLayout();
             this.pnlTerrainPenSmoothLoeff.SuspendLayout();
+            this.panel5.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.pnlTerrainPenHard.SuspendLayout();
             this.pnlTerrainPenSizeOuter.SuspendLayout();
             this.pnlTerrainPenSizeInner.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel_Ex1.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -288,6 +288,7 @@
             this.pnlPositionLock.Padding = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.pnlPositionLock.Size = new System.Drawing.Size(163, 25);
             this.pnlPositionLock.TabIndex = 7;
+            this.pnlPositionLock.Visible = false;
             // 
             // btnTPPositionLock
             // 
@@ -399,6 +400,7 @@
             this.vbtnTPSmoothKoeff.Text = "awA_Value_Button6";
             this.vbtnTPSmoothKoeff.UseVisualStyleBackColor = false;
             this.vbtnTPSmoothKoeff.VALUEV = 1F;
+            this.vbtnTPSmoothKoeff.MouseUp += new System.Windows.Forms.MouseEventHandler(this.vbtnTPSmoothKoeff_MouseUp);
             // 
             // label5
             // 
@@ -409,6 +411,89 @@
             this.label5.TabIndex = 0;
             this.label5.Text = "Smooth koeff:";
             // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.vbtnTPShiftHeight);
+            this.panel5.Controls.Add(this.label7);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel5.Location = new System.Drawing.Point(3, 176);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(163, 25);
+            this.panel5.TabIndex = 9;
+            // 
+            // vbtnTPShiftHeight
+            // 
+            this.vbtnTPShiftHeight.ARROWHEIGHT = 1;
+            this.vbtnTPShiftHeight.ARROWTOOLSH = 1;
+            this.vbtnTPShiftHeight.ARRWIDTH = 20;
+            this.vbtnTPShiftHeight.BackColor = System.Drawing.Color.Transparent;
+            this.vbtnTPShiftHeight.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.vbtnTPShiftHeight.BORDERCOLOR = System.Drawing.Color.Black;
+            this.vbtnTPShiftHeight.BORDERRADIUS = 5;
+            this.vbtnTPShiftHeight.BORDERWIDTH = 0;
+            this.vbtnTPShiftHeight.Image = null;
+            this.vbtnTPShiftHeight.Location = new System.Drawing.Point(78, 2);
+            this.vbtnTPShiftHeight.MaxValue = 10000F;
+            this.vbtnTPShiftHeight.MinValue = -10000F;
+            this.vbtnTPShiftHeight.Name = "vbtnTPShiftHeight";
+            this.vbtnTPShiftHeight.Size = new System.Drawing.Size(75, 20);
+            this.vbtnTPShiftHeight.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Slow;
+            this.vbtnTPShiftHeight.TabIndex = 1;
+            this.vbtnTPShiftHeight.Text = "awA_Value_Button6";
+            this.vbtnTPShiftHeight.UseVisualStyleBackColor = false;
+            this.vbtnTPShiftHeight.VALUEV = 0F;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(10, 6);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(63, 13);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Shift-height:";
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.vbtnTPAltHard);
+            this.panel3.Controls.Add(this.label6);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(3, 151);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(163, 25);
+            this.panel3.TabIndex = 8;
+            this.panel3.Visible = false;
+            // 
+            // vbtnTPAltHard
+            // 
+            this.vbtnTPAltHard.ARROWHEIGHT = 1;
+            this.vbtnTPAltHard.ARROWTOOLSH = 1;
+            this.vbtnTPAltHard.ARRWIDTH = 20;
+            this.vbtnTPAltHard.BackColor = System.Drawing.Color.Transparent;
+            this.vbtnTPAltHard.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.vbtnTPAltHard.BORDERCOLOR = System.Drawing.Color.Black;
+            this.vbtnTPAltHard.BORDERRADIUS = 5;
+            this.vbtnTPAltHard.BORDERWIDTH = 0;
+            this.vbtnTPAltHard.Image = null;
+            this.vbtnTPAltHard.Location = new System.Drawing.Point(78, 2);
+            this.vbtnTPAltHard.MaxValue = 1000F;
+            this.vbtnTPAltHard.MinValue = -1000F;
+            this.vbtnTPAltHard.Name = "vbtnTPAltHard";
+            this.vbtnTPAltHard.Size = new System.Drawing.Size(75, 20);
+            this.vbtnTPAltHard.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Slow;
+            this.vbtnTPAltHard.TabIndex = 1;
+            this.vbtnTPAltHard.Text = "awA_Value_Button6";
+            this.vbtnTPAltHard.UseVisualStyleBackColor = false;
+            this.vbtnTPAltHard.VALUEV = 0F;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(9, 6);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(68, 13);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "Alt-hardness:";
+            // 
             // pnlTerrainPenHard
             // 
             this.pnlTerrainPenHard.Controls.Add(this.vbtnTPHardness);
@@ -418,6 +503,7 @@
             this.pnlTerrainPenHard.Name = "pnlTerrainPenHard";
             this.pnlTerrainPenHard.Size = new System.Drawing.Size(163, 25);
             this.pnlTerrainPenHard.TabIndex = 3;
+            this.pnlTerrainPenHard.Visible = false;
             // 
             // vbtnTPHardness
             // 
@@ -474,7 +560,7 @@
             this.vbtnPenSizeOuter.BORDERWIDTH = 0;
             this.vbtnPenSizeOuter.Image = null;
             this.vbtnPenSizeOuter.Location = new System.Drawing.Point(78, 2);
-            this.vbtnPenSizeOuter.MaxValue = 10F;
+            this.vbtnPenSizeOuter.MaxValue = 9F;
             this.vbtnPenSizeOuter.MinValue = 1F;
             this.vbtnPenSizeOuter.Name = "vbtnPenSizeOuter";
             this.vbtnPenSizeOuter.Size = new System.Drawing.Size(75, 20);
@@ -517,7 +603,7 @@
             this.vbtnPenSizeInner.BORDERWIDTH = 0;
             this.vbtnPenSizeInner.Image = null;
             this.vbtnPenSizeInner.Location = new System.Drawing.Point(78, 2);
-            this.vbtnPenSizeInner.MaxValue = 10F;
+            this.vbtnPenSizeInner.MaxValue = 9F;
             this.vbtnPenSizeInner.MinValue = 1F;
             this.vbtnPenSizeInner.Name = "vbtnPenSizeInner";
             this.vbtnPenSizeInner.Size = new System.Drawing.Size(75, 20);
@@ -738,88 +824,6 @@
             this.pnlRender.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlRender_MouseMove);
             this.pnlRender.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlRender_MouseUp);
             // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.vbtnTPAltHard);
-            this.panel3.Controls.Add(this.label6);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(3, 151);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(163, 25);
-            this.panel3.TabIndex = 8;
-            // 
-            // vbtnTPAltHard
-            // 
-            this.vbtnTPAltHard.ARROWHEIGHT = 1;
-            this.vbtnTPAltHard.ARROWTOOLSH = 1;
-            this.vbtnTPAltHard.ARRWIDTH = 20;
-            this.vbtnTPAltHard.BackColor = System.Drawing.Color.Transparent;
-            this.vbtnTPAltHard.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.vbtnTPAltHard.BORDERCOLOR = System.Drawing.Color.Black;
-            this.vbtnTPAltHard.BORDERRADIUS = 5;
-            this.vbtnTPAltHard.BORDERWIDTH = 0;
-            this.vbtnTPAltHard.Image = null;
-            this.vbtnTPAltHard.Location = new System.Drawing.Point(78, 2);
-            this.vbtnTPAltHard.MaxValue = 1000F;
-            this.vbtnTPAltHard.MinValue = -1000F;
-            this.vbtnTPAltHard.Name = "vbtnTPAltHard";
-            this.vbtnTPAltHard.Size = new System.Drawing.Size(75, 20);
-            this.vbtnTPAltHard.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Slow;
-            this.vbtnTPAltHard.TabIndex = 1;
-            this.vbtnTPAltHard.Text = "awA_Value_Button6";
-            this.vbtnTPAltHard.UseVisualStyleBackColor = false;
-            this.vbtnTPAltHard.VALUEV = 0F;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(9, 6);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(68, 13);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "Alt-hardness:";
-            // 
-            // panel5
-            // 
-            this.panel5.Controls.Add(this.vbtnTPShiftHeight);
-            this.panel5.Controls.Add(this.label7);
-            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(3, 176);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(163, 25);
-            this.panel5.TabIndex = 9;
-            // 
-            // vbtnTPShiftHeight
-            // 
-            this.vbtnTPShiftHeight.ARROWHEIGHT = 1;
-            this.vbtnTPShiftHeight.ARROWTOOLSH = 1;
-            this.vbtnTPShiftHeight.ARRWIDTH = 20;
-            this.vbtnTPShiftHeight.BackColor = System.Drawing.Color.Transparent;
-            this.vbtnTPShiftHeight.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.vbtnTPShiftHeight.BORDERCOLOR = System.Drawing.Color.Black;
-            this.vbtnTPShiftHeight.BORDERRADIUS = 5;
-            this.vbtnTPShiftHeight.BORDERWIDTH = 0;
-            this.vbtnTPShiftHeight.Image = null;
-            this.vbtnTPShiftHeight.Location = new System.Drawing.Point(78, 2);
-            this.vbtnTPShiftHeight.MaxValue = 10000F;
-            this.vbtnTPShiftHeight.MinValue = -10000F;
-            this.vbtnTPShiftHeight.Name = "vbtnTPShiftHeight";
-            this.vbtnTPShiftHeight.Size = new System.Drawing.Size(75, 20);
-            this.vbtnTPShiftHeight.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Slow;
-            this.vbtnTPShiftHeight.TabIndex = 1;
-            this.vbtnTPShiftHeight.Text = "awA_Value_Button6";
-            this.vbtnTPShiftHeight.UseVisualStyleBackColor = false;
-            this.vbtnTPShiftHeight.VALUEV = 0F;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(10, 6);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(63, 13);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "Shift-height:";
-            // 
             // AwaKinG_Redactor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -851,6 +855,10 @@
             this.pnlTerrainPenSmoothOut.ResumeLayout(false);
             this.pnlTerrainPenSmoothLoeff.ResumeLayout(false);
             this.pnlTerrainPenSmoothLoeff.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.pnlTerrainPenHard.ResumeLayout(false);
             this.pnlTerrainPenHard.PerformLayout();
             this.pnlTerrainPenSizeOuter.ResumeLayout(false);
@@ -859,10 +867,6 @@
             this.pnlTerrainPenSizeInner.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel_Ex1.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

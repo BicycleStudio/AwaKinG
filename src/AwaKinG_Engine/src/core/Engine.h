@@ -79,15 +79,16 @@ public:
 
 	void terrainSetTerraPenSize(int in, int out);
 	void terrainSetTerraPenHard(float hard);
+	void terrainSetTerraPenSmoothKoeff(float smoothKoeff);
 
 	void terrainTerraformShow(int posX, int posY);
 	void terrainTerraformApply(int posX, int posY);
 //	void terrainTerraformApplyPosLock(int posX, int posY);
 //	void terrainTerraformApplyShiftHeight(int posX, int posY);
 //	void terrainTerraformApplyAltHard(int posX, int posY);
-//	void terrainTerraformApplySmIn(int posX, int posY);
-//	void terrainTerraformApplySmOut(int posX, int posY);
-//	void terrainTerraformApplySmInOut(int posX, int posY);
+	void terrainTerraformApplySmIn(int posX, int posY);
+	void terrainTerraformApplySmOut(int posX, int posY);
+	void terrainTerraformApplySmInOut(int posX, int posY);
 
 
 	void textureWorkTerrain(int posX, int posY);

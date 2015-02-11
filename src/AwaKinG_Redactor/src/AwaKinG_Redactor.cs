@@ -21,6 +21,12 @@ namespace AwaKinG_Redactor
         OpenFileDialog _terrainOFD = new OpenFileDialog();
         SaveFileDialog _terrainSFD = new SaveFileDialog();
     #endregion
+        enum TexturingWorkType { None, Texture}
+        enum TerraformingWorkType { None, Height, SInHeight, SOutHeight, SInOutHeight }
+        TexturingWorkType _texwtType = TexturingWorkType.None;
+        TexturingWorkType _texwtSaved = TexturingWorkType.Texture;
+        TerraformingWorkType _twtType = TerraformingWorkType.None;
+        TerraformingWorkType _twtTypeSaved = TerraformingWorkType.Height;
         public AwaKinG_Redactor()
         {
             InitializeComponent();
@@ -155,38 +161,72 @@ namespace AwaKinG_Redactor
         }
         private void awA_Button5_Click(object sender, EventArgs e)
         {
-            if (btnTPHeight.CHECKED)
+            if (btnTPTexture.CHECKED)
             {
-                _engine.SetTerrainWorkType(3);
                 btnTPHeight.CHECKED = false;
+                _engine.SetTerraPenHeightVisible(false);
+                _twtType = TerraformingWorkType.None;
+                _engine.SetTerrainWorkType(0);
+                _texwtType = _texwtSaved;
             }
             else
-                _engine.SetTerrainWorkType(0);
-            _engine.SetTerraPenHeightVisible(btnTPHeight.CHECKED);
+            {
+                _texwtSaved = _texwtType;
+                _texwtType = TexturingWorkType.None;
+            }
         }
         private void awA_Button6_Click(object sender, EventArgs e)
         {
             _engine.SetTerrainWorkType(0);
             _engine.SetTerraPenHeightVisible(btnTPHeight.CHECKED);
         }
+        private void SetTerrainPenWorkType()
+        {
+            switch(_twtType)
+            {
+                case TerraformingWorkType.Height: _engine.SetTerrainWorkType(1); break;
+                case TerraformingWorkType.SInHeight: _engine.SetTerrainWorkType(1); break;
+                case TerraformingWorkType.SOutHeight: _engine.SetTerrainWorkType(1); break;
+                case TerraformingWorkType.SInOutHeight: _engine.SetTerrainWorkType(1); break;
+            }
+            _engine.SetTerraPenHard(vbtnTPHardness.Value / 100.0f);
+        }
         private void awA_Button4_Click(object sender, EventArgs e)
         {
             if (btnTPHeight.CHECKED)
             {
+                _twtType = _twtTypeSaved;
                 btnTPTexture.CHECKED = false;
-                _engine.SetTerrainWorkType(1);
-                _engine.SetTerraPenHard(vbtnTPHardness.Value / 100.0f);
+                SetTerrainPenWorkType();
             }
             else
+            {
+                _twtTypeSaved = _twtType;
+                _twtType = TerraformingWorkType.None;
                 _engine.SetTerrainWorkType(0);
+            }
             _engine.SetTerraPenHeightVisible(btnTPHeight.CHECKED);
         }
         private void pnlRender_MouseDown(object sender, MouseEventArgs e)
         {
-            if (_engine.mode == EngineWrap.WORK_MODE.WM_HEIGHT)
+            switch(_twtType)
             {
-                _engine.SetTerrainWorkType(2);
-                _engine.PickTerrain(e.Location);
+                case TerraformingWorkType.Height:
+                    _engine.SetTerrainWorkType(2);
+                    _engine.PickTerrain(e.Location);
+                    break;
+                case TerraformingWorkType.SInHeight:
+                    _engine.SetTerrainWorkType(3);
+                    _engine.PickTerrain(e.Location);
+                    break;
+                case TerraformingWorkType.SOutHeight:
+                    _engine.SetTerrainWorkType(4);
+                    _engine.PickTerrain(e.Location);
+                    break;
+                case TerraformingWorkType.SInOutHeight:
+                    _engine.SetTerrainWorkType(5);
+                    _engine.PickTerrain(e.Location);
+                    break;
             }
         }
         private void setFileCameraType()
@@ -229,8 +269,21 @@ namespace AwaKinG_Redactor
 
         private void pnlRender_MouseUp(object sender, MouseEventArgs e)
         {
-            if(_engine.mode == EngineWrap.WORK_MODE.WM_HEIGHT)
-                _engine.SetTerrainWorkType(1);
+            switch (_twtType)
+            {
+                case TerraformingWorkType.Height:
+                    _engine.SetTerrainWorkType(1);
+                    break;
+                case TerraformingWorkType.SInHeight:
+                    _engine.SetTerrainWorkType(1);
+                    break;
+                case TerraformingWorkType.SOutHeight:
+                    _engine.SetTerrainWorkType(1);
+                    break;
+                case TerraformingWorkType.SInOutHeight:
+                    _engine.SetTerrainWorkType(1);
+                    break;
+            }
         }
         private void avbPenHardness_MouseUp(object sender, MouseEventArgs e)
         {
@@ -255,7 +308,30 @@ namespace AwaKinG_Redactor
         }
         private void btnTPSmoothInOut_Click(object sender, EventArgs e)
         {
-
+            if (!btnTPSmoothIn.CHECKED && !btnTPSmoothOut.CHECKED)
+            {
+                _twtType = TerraformingWorkType.Height;
+                return;
+            }
+            if (btnTPSmoothIn.CHECKED && btnTPSmoothOut.CHECKED)
+            {
+                _twtType = TerraformingWorkType.SInOutHeight;
+                return;
+            }
+            if (btnTPSmoothIn.CHECKED && !btnTPSmoothOut.CHECKED)
+            {
+                _twtType = TerraformingWorkType.SInHeight;
+                return;
+            }
+            if (!btnTPSmoothIn.CHECKED && btnTPSmoothOut.CHECKED)
+            {
+                _twtType = TerraformingWorkType.SOutHeight;
+                return;
+            }
+        }
+        private void vbtnTPSmoothKoeff_MouseUp(object sender, MouseEventArgs e)
+        {
+            _engine.SetTerraPenSmoothKoeff(vbtnTPSmoothKoeff.Value);
         }
     }
 }

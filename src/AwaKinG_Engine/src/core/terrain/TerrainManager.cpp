@@ -425,6 +425,39 @@
 				_heightPen->countDrawSizeOut = 0;
 			}
 		}
+		void RedactorTerrainManager::terraformApplySmInOut(precomputeRay* pickRay)
+		{
+			int terrainId_ = -1;
+			int quadID = _terraPick(pickRay, &terrainId_);
+			if(quadID != -1) _terraformApplySmInOut(terrainId_, quadID);
+			else
+			{
+				_heightPen->countDrawSizeIn = 0;
+				_heightPen->countDrawSizeOut = 0;
+			}
+		}
+		void RedactorTerrainManager::terraformApplySmOut(precomputeRay* pickRay)
+		{
+			int terrainId_ = -1;
+			int quadID = _terraPick(pickRay, &terrainId_);
+			if(quadID != -1) _terraformApplySmOut(terrainId_, quadID);
+			else
+			{
+				_heightPen->countDrawSizeIn = 0;
+				_heightPen->countDrawSizeOut = 0;
+			}
+		}
+		void RedactorTerrainManager::terraformApplySmIn(precomputeRay* pickRay)
+		{
+			int terrainId_ = -1;
+			int quadID = _terraPick(pickRay, &terrainId_);
+			if(quadID != -1) _terraformApplySmIn(terrainId_, quadID);
+			else
+			{
+				_heightPen->countDrawSizeIn = 0;
+				_heightPen->countDrawSizeOut = 0;
+			}
+		}
 		int RedactorTerrainManager::_terraPick(precomputeRay* pickRay, int* terrainId)
 		{
 			vector<QuadTree*> realIntersected_;
@@ -481,6 +514,10 @@
 	void RedactorTerrainManager::setTerraPenHard(float hard)
 	{
 		_heightPen->hard = hard;
+	}
+	void RedactorTerrainManager::setTerraPenSmoothKoeff(float smoothKoeff)
+	{
+		_heightPen->smoothKoeff = smoothKoeff;
 	}
 	inline int RedactorTerrainManager::_getLeftTerrainIDValue(int vId, int currentRaw, int size)
 	{ 
@@ -562,73 +599,77 @@
 	{
 		int currentRaw_ = vertId / _props.numVertsInRaw;
 
+		int4 normalStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeOut());
 		int4 inStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeIn() - 1);
 		int4 outStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeOut() - 1);
+		int penNormal_ = (normalStruct_.z + 1) * (normalStruct_.w + 1);
 		int penOut_ = (outStruct_.z + 1) * (outStruct_.w + 1);
 		int penIn_ = (inStruct_.z + 1) * (inStruct_.w + 1);
 
 		int* temp_ = 0;		int* TerarainIDs_ = 0; int* SectorsIDs_ = 0;
 		int countTerrainsToUpdate_ = 0;	int countSectorsToUpdate_ = 0;
 		int rawDisp_ = 0;
+		vector<int> needToRenormal_;
 
+		for(int i = 0; i < penNormal_; i++)
+		{
+			if(i != 0 && i % (normalStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (normalStruct_.z + 1);
+			needToRenormal_.push_back(normalStruct_.x + i + rawDisp_);
+#pragma region TerrainIDs update
+			int counter_ = 0;
+			for(int q = 0; q < _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][0]; q++)
+			{
+				_vertsToUpdate[_props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1]][_countVertToUpdate[_props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1]]] = _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 2];
+				_countVertToUpdate[_props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1]]++;
+				bool add_ = true;
+				for(int tt = 0; tt<countTerrainsToUpdate_; tt++)
+				{
+					if(TerarainIDs_[tt] == _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1])
+					{
+						add_ = false;
+						break;
+					}
+				}
+				if(add_)
+				{
+					temp_ = TerarainIDs_;			TerarainIDs_ = new int[countTerrainsToUpdate_ + 1];
+					for(int tt = 0; tt<countTerrainsToUpdate_; tt++)			TerarainIDs_[tt] = temp_[tt];
+					TerarainIDs_[countTerrainsToUpdate_] = _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1];
+					countTerrainsToUpdate_++;
+				}
+				counter_ += 2;
+			}
+#pragma endregion
+#pragma region TerrainSectors update
+			counter_ = 0;
+			for(int q = 0; q < _props.heightMapToSectors[normalStruct_.x + i + rawDisp_][0]; q++)
+			{	bool add_ = true;
+				for(int tt = 0; tt<countSectorsToUpdate_; tt++)
+				{
+					if(SectorsIDs_[tt] == _props.heightMapToSectors[normalStruct_.x + i + rawDisp_][counter_ + 1]){add_ = false;break;}
+				}
+				if(add_)
+				{
+					temp_ = SectorsIDs_;			SectorsIDs_ = new int[countSectorsToUpdate_ + 1];
+					for(int tt = 0; tt<countSectorsToUpdate_; tt++)			SectorsIDs_[tt] = temp_[tt];
+					SectorsIDs_[countSectorsToUpdate_] = _props.heightMapToSectors[normalStruct_.x + i + rawDisp_][counter_ + 1];
+					countSectorsToUpdate_++;
+				}
+				counter_ += 2;
+			}
+#pragma endregion
+		}
+		rawDisp_ = 0;
 		for(int i = 0; i < penOut_; i++)
 		{
 			if(i != 0 && i % (outStruct_.z + 1) == 0)
 				rawDisp_ += _props.numVertsInRaw - (outStruct_.z + 1);
 			_props.heightMap[outStruct_.x + i + rawDisp_].y += _heightPen->hard;
-			#pragma region TerrainIDs update
-				int counter_ = 0;
-				for(int q = 0; q < _props.heightMapToTerrain[outStruct_.x + i + rawDisp_][0]; q++)
-				{
-					_vertsToUpdate[_props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 1]][_countVertToUpdate[_props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 1]]] = _props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 2];
-					_countVertToUpdate[_props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 1]]++;
-					bool add_ = true;
-					for(int tt = 0; tt<countTerrainsToUpdate_; tt++)
-					{
-						if(TerarainIDs_[tt] == _props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 1])
-						{
-							add_ = false;
-							break;
-						}
-					}
-					if(add_)
-					{
-						temp_ = TerarainIDs_;			TerarainIDs_ = new int[countTerrainsToUpdate_ + 1];
-						for(int tt = 0; tt<countTerrainsToUpdate_; tt++)			TerarainIDs_[tt] = temp_[tt];
-						TerarainIDs_[countTerrainsToUpdate_] = _props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 1];
-						countTerrainsToUpdate_++;
-					}
-					counter_ += 2;
-				}
-			#pragma endregion
-				
-			#pragma region TerrainSectors update
-				counter_ = 0;
-				for(int q = 0; q < _props.heightMapToSectors[outStruct_.x + i + rawDisp_][0]; q++)
-				{
-					bool add_ = true;
-					for(int tt = 0; tt<countSectorsToUpdate_; tt++)
-					{
-						if(SectorsIDs_[tt] == _props.heightMapToSectors[outStruct_.x + i + rawDisp_][counter_ + 1])
-						{
-							add_ = false;
-							break;
-						}
-					}
-					if(add_)
-					{
-						temp_ = SectorsIDs_;			SectorsIDs_ = new int[countSectorsToUpdate_ + 1];
-						for(int tt = 0; tt<countSectorsToUpdate_; tt++)			SectorsIDs_[tt] = temp_[tt];
-						SectorsIDs_[countSectorsToUpdate_] = _props.heightMapToSectors[outStruct_.x + i + rawDisp_][counter_ + 1];
-						countSectorsToUpdate_++;
-					}
-					counter_ += 2;
-				}
-			#pragma endregion
-			
-				_heightPen->vertsOut_x[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].x;
-				_heightPen->vertsOut_y[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].y;
-				_heightPen->vertsOut_z[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].z;
+
+			_heightPen->vertsOut_x[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].x;
+			_heightPen->vertsOut_y[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].y;
+			_heightPen->vertsOut_z[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].z;
 		}
 		_heightPen->countDrawSizeOut = penOut_;
 
@@ -637,7 +678,8 @@
 		{
 			if(i != 0 && i % (inStruct_.z + 1) == 0)
 				rawDisp_ += _props.numVertsInRaw - (inStruct_.z + 1);
-			_props.heightMap[inStruct_.x + i + rawDisp_].y +=_heightPen->hard;
+			_props.heightMap[inStruct_.x + i + rawDisp_].y += _heightPen->hard;
+		
 			_heightPen->vertsIn_x[i] = &_props.heightMap[inStruct_.x + i + rawDisp_].x;
 			_heightPen->vertsIn_y[i] = &_props.heightMap[inStruct_.x + i + rawDisp_].y;
 			_heightPen->vertsIn_z[i] = &_props.heightMap[inStruct_.x + i + rawDisp_].z;
@@ -646,12 +688,363 @@
 
 		_heightPen->update();
 
+		_renormal(&needToRenormal_, normalStruct_.z);
 		for(int i = 0; i < countSectorsToUpdate_; i++)			_updateSector(SectorsIDs_[i]);
 		for(int i = 0; i < countTerrainsToUpdate_; i++)			_updateSubVertexBuffer(TerarainIDs_[i]);
 
 		delete SectorsIDs_; SectorsIDs_ = 0;
 		delete TerarainIDs_; TerarainIDs_ = 0;
 		delete temp_; temp_ = 0;
+		needToRenormal_.clear();
+	}
+	void RedactorTerrainManager::_renormal(vector<int>* ids, int sizeX)
+	{	
+		for(int i = 0; i < ids->size() - sizeX; i++)
+		{
+			if((ids[0][i] / _props.numVertsInRaw == ids[0][i + 1] / _props.numVertsInRaw) && (ids[0][i + sizeX] < _props.maxId))
+			{
+				XMVECTOR AB = XMVectorSubtract(XMLoadFloat3(&_props.heightMap[ids[0][i + 1]]), XMLoadFloat3(&_props.heightMap[ids[0][i]]));
+				XMVECTOR AC = XMVectorSubtract(XMLoadFloat3(&_props.heightMap[ids[0][i + sizeX]]), XMLoadFloat3(&_props.heightMap[ids[0][i]]));
+
+				XMStoreFloat3(&_props.normalMap[ids[0][i]], XMVector3Normalize(XMVector3Cross(AB, AC)));
+			}
+		}
+	}
+	void RedactorTerrainManager::_terraformApplySmIn(int terrainId, int vertId)
+	{
+	#pragma region prepare work
+		int currentRaw_ = vertId / _props.numVertsInRaw;
+
+		int4 normalStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeOut());
+		int4 inStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeIn() - 1);
+		int4 outStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeOut() - 1);
+		int penNormal_ = (normalStruct_.z + 1) * (normalStruct_.w + 1);
+		int penOut_ = (outStruct_.z + 1) * (outStruct_.w + 1);
+		int penIn_ = (inStruct_.z + 1) * (inStruct_.w + 1);
+
+		int* temp_ = 0;		int* TerarainIDs_ = 0; int* SectorsIDs_ = 0;
+		int countTerrainsToUpdate_ = 0;	int countSectorsToUpdate_ = 0;
+		int rawDisp_ = 0;
+		vector<int> needToRenormal_;
+	#pragma endregion
+
+		for(int i = 0; i < penNormal_; i++)
+		{
+			if(i != 0 && i % (normalStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (normalStruct_.z + 1);
+			needToRenormal_.push_back(normalStruct_.x + i + rawDisp_);
+	#pragma region TerrainIDs update
+			int counter_ = 0;
+			for(int q = 0; q < _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][0]; q++)
+			{
+				_vertsToUpdate[_props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1]][_countVertToUpdate[_props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1]]] = _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 2];
+				_countVertToUpdate[_props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1]]++;
+				bool add_ = true;
+				for(int tt = 0; tt<countTerrainsToUpdate_; tt++)
+				{
+					if(TerarainIDs_[tt] == _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1])
+					{
+						add_ = false;
+						break;
+					}
+				}
+				if(add_)
+				{
+					temp_ = TerarainIDs_;			TerarainIDs_ = new int[countTerrainsToUpdate_ + 1];
+					for(int tt = 0; tt<countTerrainsToUpdate_; tt++)			TerarainIDs_[tt] = temp_[tt];
+					TerarainIDs_[countTerrainsToUpdate_] = _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1];
+					countTerrainsToUpdate_++;
+				}
+				counter_ += 2;
+			}
+	#pragma endregion
+	#pragma region TerrainSectors update
+			counter_ = 0;
+			for(int q = 0; q < _props.heightMapToSectors[normalStruct_.x + i + rawDisp_][0]; q++)
+			{
+				bool add_ = true;
+				for(int tt = 0; tt<countSectorsToUpdate_; tt++)
+				{
+					if(SectorsIDs_[tt] == _props.heightMapToSectors[normalStruct_.x + i + rawDisp_][counter_ + 1]){ add_ = false; break; }
+				}
+				if(add_)
+				{
+					temp_ = SectorsIDs_;			SectorsIDs_ = new int[countSectorsToUpdate_ + 1];
+					for(int tt = 0; tt<countSectorsToUpdate_; tt++)			SectorsIDs_[tt] = temp_[tt];
+					SectorsIDs_[countSectorsToUpdate_] = _props.heightMapToSectors[normalStruct_.x + i + rawDisp_][counter_ + 1];
+					countSectorsToUpdate_++;
+				}
+				counter_ += 2;
+			}
+	#pragma endregion
+		}	rawDisp_ = 0;
+		for(int i = 0; i < penOut_; i++)
+		{
+			if(i != 0 && i % (outStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (outStruct_.z + 1);
+			_props.heightMap[outStruct_.x + i + rawDisp_].y += _heightPen->hard;
+
+			_heightPen->vertsOut_x[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].x;
+			_heightPen->vertsOut_y[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].y;
+			_heightPen->vertsOut_z[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].z;
+		}
+		_heightPen->countDrawSizeOut = penOut_;
+
+		rawDisp_ = 0;
+		for(int i = 0; i < penIn_; i++)
+		{
+			if(i != 0 && i % (inStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (inStruct_.z + 1);
+			_props.heightMap[inStruct_.x + i + rawDisp_].y += _heightPen->hard;
+		}rawDisp_ = 0;
+		for(int i = 0; i < penIn_; i++)
+		{
+			if(i != 0 && i % (inStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (inStruct_.z + 1);
+			_smoothVert(inStruct_.x + i + rawDisp_);
+
+			_heightPen->vertsIn_x[i] = &_props.heightMap[inStruct_.x + i + rawDisp_].x;
+			_heightPen->vertsIn_y[i] = &_props.heightMap[inStruct_.x + i + rawDisp_].y;
+			_heightPen->vertsIn_z[i] = &_props.heightMap[inStruct_.x + i + rawDisp_].z;
+		}
+		_heightPen->countDrawSizeIn = penIn_;
+		_heightPen->update();
+
+		_renormal(&needToRenormal_, normalStruct_.z);
+		for(int i = 0; i < countSectorsToUpdate_; i++)			_updateSector(SectorsIDs_[i]);
+		for(int i = 0; i < countTerrainsToUpdate_; i++)			_updateSubVertexBuffer(TerarainIDs_[i]);
+
+		delete SectorsIDs_; SectorsIDs_ = 0;
+		delete TerarainIDs_; TerarainIDs_ = 0;
+		delete temp_; temp_ = 0;
+		needToRenormal_.clear();
+	}
+	void RedactorTerrainManager::_terraformApplySmOut(int terrainId, int vertId)
+	{
+#pragma region prepare work
+		int currentRaw_ = vertId / _props.numVertsInRaw;
+
+		int4 normalStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeOut());
+		int4 inStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeIn() - 1);
+		int4 outStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeOut() - 1);
+		int penNormal_ = (normalStruct_.z + 1) * (normalStruct_.w + 1);
+		int penOut_ = (outStruct_.z + 1) * (outStruct_.w + 1);
+		int penIn_ = (inStruct_.z + 1) * (inStruct_.w + 1);
+
+		int* temp_ = 0;		int* TerarainIDs_ = 0; int* SectorsIDs_ = 0;
+		int countTerrainsToUpdate_ = 0;	int countSectorsToUpdate_ = 0;
+		int rawDisp_ = 0;
+		vector<int> needToRenormal_;
+#pragma endregion
+
+		for(int i = 0; i < penNormal_; i++)
+		{
+			if(i != 0 && i % (normalStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (normalStruct_.z + 1);
+			needToRenormal_.push_back(normalStruct_.x + i + rawDisp_);
+#pragma region TerrainIDs update
+			int counter_ = 0;
+			for(int q = 0; q < _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][0]; q++)
+			{
+				_vertsToUpdate[_props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1]][_countVertToUpdate[_props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1]]] = _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 2];
+				_countVertToUpdate[_props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1]]++;
+				bool add_ = true;
+				for(int tt = 0; tt<countTerrainsToUpdate_; tt++)
+				{
+					if(TerarainIDs_[tt] == _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1])
+					{
+						add_ = false;
+						break;
+					}
+				}
+				if(add_)
+				{
+					temp_ = TerarainIDs_;			TerarainIDs_ = new int[countTerrainsToUpdate_ + 1];
+					for(int tt = 0; tt<countTerrainsToUpdate_; tt++)			TerarainIDs_[tt] = temp_[tt];
+					TerarainIDs_[countTerrainsToUpdate_] = _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1];
+					countTerrainsToUpdate_++;
+				}
+				counter_ += 2;
+			}
+#pragma endregion
+#pragma region TerrainSectors update
+			counter_ = 0;
+			for(int q = 0; q < _props.heightMapToSectors[normalStruct_.x + i + rawDisp_][0]; q++)
+			{
+				bool add_ = true;
+				for(int tt = 0; tt<countSectorsToUpdate_; tt++)
+				{
+					if(SectorsIDs_[tt] == _props.heightMapToSectors[normalStruct_.x + i + rawDisp_][counter_ + 1]){ add_ = false; break; }
+				}
+				if(add_)
+				{
+					temp_ = SectorsIDs_;			SectorsIDs_ = new int[countSectorsToUpdate_ + 1];
+					for(int tt = 0; tt<countSectorsToUpdate_; tt++)			SectorsIDs_[tt] = temp_[tt];
+					SectorsIDs_[countSectorsToUpdate_] = _props.heightMapToSectors[normalStruct_.x + i + rawDisp_][counter_ + 1];
+					countSectorsToUpdate_++;
+				}
+				counter_ += 2;
+			}
+#pragma endregion
+		}	rawDisp_ = 0;
+		vector<int> penInInds_;
+		vector<int> penOutInds_;
+		for(int i = 0; i < penIn_; i++)
+		{
+			if(i != 0 && i % (inStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (inStruct_.z + 1);
+			_props.heightMap[inStruct_.x + i + rawDisp_].y += _heightPen->hard;
+			penInInds_.push_back(inStruct_.x + i + rawDisp_);
+
+			_heightPen->vertsIn_x[i] = &_props.heightMap[inStruct_.x + i + rawDisp_].x;
+			_heightPen->vertsIn_y[i] = &_props.heightMap[inStruct_.x + i + rawDisp_].y;
+			_heightPen->vertsIn_z[i] = &_props.heightMap[inStruct_.x + i + rawDisp_].z;
+		}rawDisp_ = 0;
+
+		for(int i = 0; i < penOut_; i++)
+		{
+			if(i != 0 && i % (outStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (outStruct_.z + 1);
+			_props.heightMap[outStruct_.x + i + rawDisp_].y += _heightPen->hard;
+			if(!_vectorConains(&penInInds_, outStruct_.x + i + rawDisp_))
+				penOutInds_.push_back(outStruct_.x + i + rawDisp_);
+		}rawDisp_ = 0;
+
+		for(int i = 0; i < penOutInds_.size(); i++)
+			_smoothVert(penOutInds_[i]);
+		
+		for(int i = 0; i < penOut_; i++)
+		{
+			if(i != 0 && i % (outStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (outStruct_.z + 1);
+			_heightPen->vertsOut_x[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].x;
+			_heightPen->vertsOut_y[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].y;
+			_heightPen->vertsOut_z[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].z;
+		}rawDisp_ = 0;
+
+		_heightPen->countDrawSizeOut = penOut_;
+		_heightPen->countDrawSizeIn = penIn_;
+		_heightPen->update();
+
+		_renormal(&needToRenormal_, normalStruct_.z);
+		for(int i = 0; i < countSectorsToUpdate_; i++)			_updateSector(SectorsIDs_[i]);
+		for(int i = 0; i < countTerrainsToUpdate_; i++)			_updateSubVertexBuffer(TerarainIDs_[i]);
+
+		delete SectorsIDs_; SectorsIDs_ = 0;
+		delete TerarainIDs_; TerarainIDs_ = 0;
+		delete temp_; temp_ = 0;
+		needToRenormal_.clear();
+		penInInds_.clear();
+		penOutInds_.clear();
+	}
+	void RedactorTerrainManager::_terraformApplySmInOut(int terrainId, int vertId)
+	{
+#pragma region prepare work
+		int currentRaw_ = vertId / _props.numVertsInRaw;
+
+		int4 normalStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeOut());
+		int4 inStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeIn() - 1);
+		int4 outStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeOut() - 1);
+		int penNormal_ = (normalStruct_.z + 1) * (normalStruct_.w + 1);
+		int penOut_ = (outStruct_.z + 1) * (outStruct_.w + 1);
+		int penIn_ = (inStruct_.z + 1) * (inStruct_.w + 1);
+
+		int* temp_ = 0;		int* TerarainIDs_ = 0; int* SectorsIDs_ = 0;
+		int countTerrainsToUpdate_ = 0;	int countSectorsToUpdate_ = 0;
+		int rawDisp_ = 0;
+		vector<int> needToRenormal_;
+#pragma endregion
+
+		for(int i = 0; i < penNormal_; i++)
+		{
+			if(i != 0 && i % (normalStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (normalStruct_.z + 1);
+			needToRenormal_.push_back(normalStruct_.x + i + rawDisp_);
+#pragma region TerrainIDs update
+			int counter_ = 0;
+			for(int q = 0; q < _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][0]; q++)
+			{
+				_vertsToUpdate[_props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1]][_countVertToUpdate[_props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1]]] = _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 2];
+				_countVertToUpdate[_props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1]]++;
+				bool add_ = true;
+				for(int tt = 0; tt<countTerrainsToUpdate_; tt++)
+				{
+					if(TerarainIDs_[tt] == _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1])
+					{
+						add_ = false;
+						break;
+					}
+				}
+				if(add_)
+				{
+					temp_ = TerarainIDs_;			TerarainIDs_ = new int[countTerrainsToUpdate_ + 1];
+					for(int tt = 0; tt<countTerrainsToUpdate_; tt++)			TerarainIDs_[tt] = temp_[tt];
+					TerarainIDs_[countTerrainsToUpdate_] = _props.heightMapToTerrain[normalStruct_.x + i + rawDisp_][counter_ + 1];
+					countTerrainsToUpdate_++;
+				}
+				counter_ += 2;
+			}
+#pragma endregion
+#pragma region TerrainSectors update
+			counter_ = 0;
+			for(int q = 0; q < _props.heightMapToSectors[normalStruct_.x + i + rawDisp_][0]; q++)
+			{
+				bool add_ = true;
+				for(int tt = 0; tt<countSectorsToUpdate_; tt++)
+				{
+					if(SectorsIDs_[tt] == _props.heightMapToSectors[normalStruct_.x + i + rawDisp_][counter_ + 1]){ add_ = false; break; }
+				}
+				if(add_)
+				{
+					temp_ = SectorsIDs_;			SectorsIDs_ = new int[countSectorsToUpdate_ + 1];
+					for(int tt = 0; tt<countSectorsToUpdate_; tt++)			SectorsIDs_[tt] = temp_[tt];
+					SectorsIDs_[countSectorsToUpdate_] = _props.heightMapToSectors[normalStruct_.x + i + rawDisp_][counter_ + 1];
+					countSectorsToUpdate_++;
+				}
+				counter_ += 2;
+			}
+#pragma endregion
+		}	rawDisp_ = 0;
+		for(int i = 0; i < penOut_; i++)
+		{
+			if(i != 0 && i % (outStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (outStruct_.z + 1);
+			_props.heightMap[outStruct_.x + i + rawDisp_].y += _heightPen->hard;
+		}rawDisp_ = 0;
+		for(int i = 0; i < penOut_; i++)
+		{
+			if(i != 0 && i % (outStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (outStruct_.z + 1);
+			_smoothVert(outStruct_.x + i + rawDisp_);
+
+			_heightPen->vertsOut_x[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].x;
+			_heightPen->vertsOut_y[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].y;
+			_heightPen->vertsOut_z[i] = &_props.heightMap[outStruct_.x + i + rawDisp_].z;
+		}
+		_heightPen->countDrawSizeOut = penOut_;
+
+		rawDisp_ = 0;
+		for(int i = 0; i < penIn_; i++)
+		{
+			if(i != 0 && i % (inStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (inStruct_.z + 1);
+			_props.heightMap[inStruct_.x + i + rawDisp_].y += _heightPen->hard;
+
+			_heightPen->vertsIn_x[i] = &_props.heightMap[inStruct_.x + i + rawDisp_].x;
+			_heightPen->vertsIn_y[i] = &_props.heightMap[inStruct_.x + i + rawDisp_].y;
+			_heightPen->vertsIn_z[i] = &_props.heightMap[inStruct_.x + i + rawDisp_].z;
+		}
+		_heightPen->countDrawSizeIn = penIn_;
+		_heightPen->update();
+
+		_renormal(&needToRenormal_, normalStruct_.z);
+		for(int i = 0; i < countSectorsToUpdate_; i++)			_updateSector(SectorsIDs_[i]);
+		for(int i = 0; i < countTerrainsToUpdate_; i++)			_updateSubVertexBuffer(TerarainIDs_[i]);
+
+		delete SectorsIDs_; SectorsIDs_ = 0;
+		delete TerarainIDs_; TerarainIDs_ = 0;
+		delete temp_; temp_ = 0;
+		needToRenormal_.clear();
 	}
 	void RedactorTerrainManager::_updateSector(int idSector)
 	{
@@ -746,8 +1139,7 @@
 				all_height += _props.heightMap[id + _props.numVertsInRaw + 1].y;
 			}
 		}
-		float smoothKoeff = ((float)(rand() % 5 + 3))/10.0f;
-		_props.heightMap[id].y = (all_height / (float)count)*smoothKoeff + Main_height*(1.0f - smoothKoeff);
+		_props.heightMap[id].y = (all_height / (float)count)*_heightPen->smoothKoeff + Main_height*(1.0f - _heightPen->smoothKoeff);
 	}
 	void RedactorTerrainManager::_updateSubVertexBuffer(int idTerrain)
 	{
@@ -756,7 +1148,12 @@
 
 		auto pData = reinterpret_cast<Vertex::Simple*>(mappedResource_.pData);
 		for(int i = 0; i < _countVertToUpdate[idTerrain]; i++)
+		{
 			pData[_vertsToUpdate[idTerrain][i]].position.y = _props.heightMap[_props.pickToHeightMap[idTerrain][_vertsToUpdate[idTerrain][i]]].y;
+			pData[_vertsToUpdate[idTerrain][i]].normal.x = _props.normalMap[_props.pickToHeightMap[idTerrain][_vertsToUpdate[idTerrain][i]]].x;
+			pData[_vertsToUpdate[idTerrain][i]].normal.y = _props.normalMap[_props.pickToHeightMap[idTerrain][_vertsToUpdate[idTerrain][i]]].y;
+			pData[_vertsToUpdate[idTerrain][i]].normal.z = _props.normalMap[_props.pickToHeightMap[idTerrain][_vertsToUpdate[idTerrain][i]]].z;
+		}
 		D3dRender::getInstance().unmapResource(_vertexBuffers[idTerrain]);
 		_countVertToUpdate[idTerrain] = 0;
 	}

@@ -13,6 +13,10 @@ namespace AwaKinG_Redactor.src.engine
         const String _dllPath = "../../../../dll/AwaKinG_Engine.dll";
         
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+            EntryPoint = "EngineTerrainSetTerraPenSmoothKoeff")]
+        private static extern void _terraPenSetSmoothKoeff(IntPtr pointer, float value);
+
+        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineTerrainDiamondSquare")]
         private static extern void _terraDiamondSquare(IntPtr pointer);
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
@@ -76,8 +80,6 @@ namespace AwaKinG_Redactor.src.engine
             EntryPoint = "EngineUpdate")]
         private static extern bool _update(IntPtr pointer);
         #endregion
-        public enum WORK_MODE { WM_NONE, WM_HEIGHT, WM_TEXTURE }
-        public WORK_MODE mode = WORK_MODE.WM_NONE;
         public bool Done { get { return _done; } set { _done = value; } }
         bool _done = false;
         bool _active;
@@ -85,12 +87,15 @@ namespace AwaKinG_Redactor.src.engine
         bool _haveTerrain = false;
 
         IntPtr _engine;
-        PickWorker _pickTerrainWorker = new PickWorker();
-        PickWorker _defaultTerrainWorker = new PickWorker();
-        HeightPickWorker _heightShowWorker = new HeightPickWorker();
-        ApplyHeightPickWorker _applyHeightWorker = new ApplyHeightPickWorker();
-        TexturePickWorker _textureTerrainWorker = new TexturePickWorker();
+        public PickWorker pickTerrainWorker = new PickWorker();
+        public PickWorker defaultTerrainWorker = new PickWorker();
+        public HeightPickWorker heightShowWorker = new HeightPickWorker();
+        public ApplyHeightPickWorker applyHeightWorker = new ApplyHeightPickWorker();
+        public ApplySmoothInHeightPickWorker applySmoothInHeightWorker = new ApplySmoothInHeightPickWorker();
+        public ApplySmoothOutHeightPickWorker applySmoothOutHeightWorker = new ApplySmoothOutHeightPickWorker();
+        public ApplySmoothInOutHeightPickWorker applySmoothInOutHeightWorker = new ApplySmoothInOutHeightPickWorker();
 
+        public TexturePickWorker textureTerrainWorker = new TexturePickWorker();
         public void SetTerraPenHeightVisible(bool set)
         {
             _setTerraPenVisible(_engine, set);
@@ -177,24 +182,19 @@ namespace AwaKinG_Redactor.src.engine
         public void PickTerrain(System.Drawing.Point pt)
         {
             if (_initialized & _active & _haveTerrain)
-                _pickTerrainWorker.Pick(_engine, pt);
+                pickTerrainWorker.Pick(_engine, pt);
         }
         public void SetTerrainWorkType(int type)
         {
             switch(type)
             {
-                case 0: _pickTerrainWorker = _defaultTerrainWorker;
-                    mode = EngineWrap.WORK_MODE.WM_NONE;
-                    break;
-                case 1: _pickTerrainWorker = _heightShowWorker; 
-                    mode = EngineWrap.WORK_MODE.WM_HEIGHT;
-                    break;
-                case 2: _pickTerrainWorker = _applyHeightWorker; 
-                    mode = EngineWrap.WORK_MODE.WM_HEIGHT;
-                    break;
-                case 3: _pickTerrainWorker = _textureTerrainWorker; 
-                    mode = EngineWrap.WORK_MODE.WM_TEXTURE;
-                    break;
+                case 0: pickTerrainWorker = defaultTerrainWorker; break;
+                case 1: pickTerrainWorker = heightShowWorker; break;
+                case 2: pickTerrainWorker = applyHeightWorker; break;
+                case 3: pickTerrainWorker = applySmoothInHeightWorker; break;
+                case 4: pickTerrainWorker = applySmoothOutHeightWorker; break;
+                case 5: pickTerrainWorker = applySmoothInOutHeightWorker; break;
+                case 10: pickTerrainWorker = textureTerrainWorker; break;
             }
         }
         public void SetTerrainWireframe(bool set)
@@ -212,6 +212,10 @@ namespace AwaKinG_Redactor.src.engine
         public void SetTerraPenSize(int in_, int out_)
         {
             _setTerraPenSize(_engine, in_, out_);
+        }
+        public void SetTerraPenSmoothKoeff(float value)
+        {
+            _terraPenSetSmoothKoeff(_engine, value);
         }
     }
     public class PickWorker
@@ -231,7 +235,7 @@ namespace AwaKinG_Redactor.src.engine
             _terraformingShow(engine, mouse.X, mouse.Y);
         }
     }
-    public class ApplyHeightPickWorker : HeightPickWorker
+    public class ApplyHeightPickWorker : PickWorker
     {
         [DllImport("../../../../dll/AwaKinG_Engine.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineTerrainTerraformingApply")]
@@ -240,6 +244,36 @@ namespace AwaKinG_Redactor.src.engine
         {
             _terraformingApply(engine, mouse.X, mouse.Y);
         }
+    }
+    public class ApplySmoothInHeightPickWorker : PickWorker
+    {
+         [DllImport("../../../../dll/AwaKinG_Engine.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+             EntryPoint = "EngineTerrainTerraformApplySmIn")]
+         private static extern int _terraformingApplySmoothIn(IntPtr pointer, int posX, int posY);
+         public override void Pick(IntPtr engine, System.Drawing.Point mouse)
+         {
+             _terraformingApplySmoothIn(engine, mouse.X, mouse.Y);
+         }
+    }
+    public class ApplySmoothOutHeightPickWorker : PickWorker
+    {
+         [DllImport("../../../../dll/AwaKinG_Engine.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+             EntryPoint = "EngineTerrainTerraformApplySmOut")]
+         private static extern int _terraformingApplySmoothOut(IntPtr pointer, int posX, int posY);
+         public override void Pick(IntPtr engine, System.Drawing.Point mouse)
+         {
+             _terraformingApplySmoothOut(engine, mouse.X, mouse.Y);
+         }
+    }
+    public class ApplySmoothInOutHeightPickWorker : PickWorker
+    {
+         [DllImport("../../../../dll/AwaKinG_Engine.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+             EntryPoint = "EngineTerrainTerraformApplySmInOut")]
+         private static extern int _terraformingApplySmoothInOut(IntPtr pointer, int posX, int posY);
+         public override void Pick(IntPtr engine, System.Drawing.Point mouse)
+         {
+             _terraformingApplySmoothInOut(engine, mouse.X, mouse.Y);
+         }
     }
     public class TexturePickWorker: PickWorker
     {

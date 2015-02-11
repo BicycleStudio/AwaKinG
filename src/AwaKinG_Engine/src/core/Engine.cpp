@@ -295,6 +295,22 @@
 			precomputeRay* precomputeRay_ = D3dRender::getInstance().getPickingRay(posX, posY);
 			_redactorTerrainManager->terraformApply(precomputeRay_);
 		}
+		void RedactorEngine::terrainTerraformApplySmIn(int posX, int posY)
+		{
+			precomputeRay* precomputeRay_ = D3dRender::getInstance().getPickingRay(posX, posY);
+			_redactorTerrainManager->terraformApplySmIn(precomputeRay_);
+		}
+		void RedactorEngine::terrainTerraformApplySmInOut(int posX, int posY)
+		{
+			precomputeRay* precomputeRay_ = D3dRender::getInstance().getPickingRay(posX, posY);
+			_redactorTerrainManager->terraformApplySmInOut(precomputeRay_);
+		}
+		void RedactorEngine::terrainTerraformApplySmOut(int posX, int posY)
+		{
+			precomputeRay* precomputeRay_ = D3dRender::getInstance().getPickingRay(posX, posY);
+			_redactorTerrainManager->terraformApplySmOut(precomputeRay_);
+		}
+
 		void RedactorEngine::terrainSetTerraPenSize(int in, int out)
 		{
 			_redactorTerrainManager->setTerraPenSize(in, out);
@@ -302,6 +318,10 @@
 		void RedactorEngine::terrainSetTerraPenHard(float hard)
 		{
 			_redactorTerrainManager->setTerraPenHard(hard);
+		}
+		void RedactorEngine::terrainSetTerraPenSmoothKoeff(float smoothKoeff)
+		{
+			_redactorTerrainManager->setTerraPenSmoothKoeff(smoothKoeff);
 		}
 		void RedactorEngine::textureWorkTerrain(int posX, int posY)
 		{

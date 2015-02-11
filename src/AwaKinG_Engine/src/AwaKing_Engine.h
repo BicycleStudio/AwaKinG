@@ -33,4 +33,8 @@ DLL_SPEC void EngineTerrainSetTerraPenSize(RedactorEngine* pointer, int in, int 
 DLL_SPEC void EngineTerrainSetTerraPenHard(RedactorEngine* pointer, float hard);
 DLL_SPEC void EngineTerrainSetPenVisible(RedactorEngine* pointer, bool value);
 DLL_SPEC void EngineTerrainDiamondSquare(RedactorEngine* pointer);
+DLL_SPEC void EngineTerrainTerraformApplySmIn(RedactorEngine* pointer, int posX, int posY);
+DLL_SPEC void EngineTerrainTerraformApplySmOut(RedactorEngine* pointer, int posX, int posY);
+DLL_SPEC void EngineTerrainTerraformApplySmInOut(RedactorEngine* pointer, int posX, int posY);
+DLL_SPEC void EngineTerrainSetTerraPenSmoothKoeff(RedactorEngine* pointer, float value);
 #endif // __AWAKING_ENGINE_H setCameraManagerType
