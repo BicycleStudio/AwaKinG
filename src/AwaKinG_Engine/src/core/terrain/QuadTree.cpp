@@ -1,27 +1,30 @@
 #include "QuadTree.h"
 
-
-QuadTree::QuadTree(TerrainSector* sector)
+QuadTree::QuadTree(float3* terMax, float3* terMin, int sectorId, int terrainId)
 {
 	worldMatrix = new XMFLOAT4X4();
 	land = true;
-	terrainSector = sector;
-	ps[0] = &sector->min;
-	ps[1] = &sector->max;
+	ps[0] = terMin;
+	ps[1] = terMax;
+
+	sectorID = sectorId;
+	terrainID = terrainId;
 
 	max.x = ps[1]->x - ps[0]->x;max.y = ps[1]->y - ps[0]->y;max.z = ps[1]->z - ps[0]->z;
 	XMStoreFloat4x4(worldMatrix, (XMMatrixMultiply(XMMatrixScaling(max.x, max.y, max.z), XMMatrixTranslation(ps[0]->x, ps[0]->y, ps[0]->z))));
+	father = 0;
 }
 QuadTree::QuadTree()
 {
 	worldMatrix = new XMFLOAT4X4();
 	land = false;
-	terrainSector = 0;
 	ps[0] = new float3(0.0f, 0.0f, 0.0f);
 	ps[1] = new float3(0.0f, 0.0f, 0.0f);
+	father = 0;
 }
 QuadTree::~QuadTree()
 {
+	if(father) delete father;
 }
 bool QuadTree::intersect(precomputeRay *r)
 {
@@ -81,5 +84,13 @@ void QuadTree::update()
 	{
 		childs_[i]->findMaxMinFromChilds();
 		childs_.erase(childs_.begin() + i);
+	}
+}
+void QuadTree::updateInside()
+{
+	if(father)
+	{
+		father->findMaxMinFromChilds();
+		father->updateInside();
 	}
 }

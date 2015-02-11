@@ -1,6 +1,4 @@
 #include "TerrainManager.h"
-
-
 #pragma region main functions
 	TerrainManager::TerrainManager()
 	{
@@ -10,16 +8,13 @@
 	}
 	RedactorTerrainManager::RedactorTerrainManager()
 	{
-		_bioms.push_back(Biom(1000.0f, 250.0f));
-		_bioms.push_back(Biom(500.0f, 100.0f));
-		_bioms.push_back(Biom(100.0f, 50.0f));
-		_bioms.push_back(Biom(10.0f, 100.0f));
-		_bioms.push_back(Biom(10.0f, 10.0f));
-		_bioms.push_back(Biom(-100.0f, 30.0f));
-		_bioms.push_back(Biom(-250.0f, 75.0f));
+		_bioms.push_back(Biom(100.0f, 50.0f)); _bioms.push_back(Biom(10.0f, 100.0f));
+		_bioms.push_back(Biom(10.0f, 10.0f));		_bioms.push_back(Biom(-100.0f, 30.0f));
 		_indexBuffer = NULL;
 		_2048Path = "../../../../media/terrain/_2048.dds";
 		_quadTree = NULL;
+		_heightPen = new HeightTerrainPen();
+		_texturePen = new TextureTerrainPen();
 	}
 	void TerrainManager::shutdown()
 	{
@@ -72,7 +67,6 @@
 			}
 		}
 		_createIndexBuffer();
-		
 
 		int dispRawGlob_ = 0;
 		for(int i = 0; i < _props.numSectors; i++)
@@ -194,7 +188,9 @@
 			}
 			_props.sectors[i]->terrainId = _props.heightMapToTerrain[_props.sectorsToHeightMap[i][18]][1];
 			_props.sectors[i]->id = i;
-			grandChilds_->push_back(new QuadTree(_props.sectors[i]));
+
+			grandChilds_->push_back(new QuadTree(&_props.sectors[i]->max, &_props.sectors[i]->min, i, _props.sectors[i]->terrainId));
+			_props.sectors[i]->father = grandChilds_[0][grandChilds_->size() - 1];
 		}
 
 		vector<QuadTree*>* childs_ = grandChilds_;
@@ -227,8 +223,11 @@
 					else i--;
 				}
 				childTree->findMaxMinFromChilds();
-				for(int k = 0; k < childTree->childs.size();k++)
+				for(int k = 0; k < childTree->childs.size(); k++)
+				{
+					childTree->childs[k]->father = childTree;
 					D3dRender::getInstance().addQuadTreeModel(childTree->childs[k]->worldMatrix);
+				}
 
 				childs_->push_back(childTree);
 			}
@@ -240,10 +239,11 @@
 		{
 			D3dRender::getInstance().addQuadTreeModel(childs_[0][i]->worldMatrix);
 			_quadTree->childs.push_back(childs_[0][i]);
+			childs_[0][i]->father = _quadTree;
 		}
 		_quadTree->findMaxMinFromChilds();
 		D3dRender::getInstance().addQuadTreeModel(_quadTree->worldMatrix);
-		// assemble quadTree!
+
 		return true;
 	}
 	bool TerrainManager::_createIndexBuffer()
@@ -326,6 +326,15 @@
 	{
 		_readVertexBlock(fileName);
 
+		delete _countVertToUpdate; delete[] _vertsToUpdate;
+		_vertsToUpdate = new int*[_props.numTiles];
+		_countVertToUpdate = new int[_props.numTiles];
+		for(int i = 0; i<_props.numTiles; i++)
+		{
+			_countVertToUpdate[i] = 0;
+			_vertsToUpdate[i] = new int[_heightPen->maxSize * _heightPen->maxSize * 4];
+		}
+
 		D3DX11_IMAGE_LOAD_INFO ili_;
 		ili_.MipLevels = 1;
 		ili_.Format = DXGI_FORMAT_R8G8B8A8_UNORM;// Format.R8G8B8A8_UNorm;
@@ -355,24 +364,36 @@
 #pragma endregion
 #pragma region redactor functions
 	#pragma region picking
-	void RedactorTerrainManager::textureWork(precomputeRay* pickRay)
-	{
-		vector<QuadTree*> realIntersected_;
-		_pick(pickRay, &realIntersected_);
-
-		int terrainId_ = -1;
-		float tu; float tv;
-		for(int i = 0; i < realIntersected_.size(); i++)
+		void RedactorTerrainManager::textureWork(precomputeRay* pickRay)
 		{
-			if(_getQuadIntersectID(realIntersected_[i]->terrainSector, &pickRay->direction, &pickRay->origin, &tu, &tv))
+			vector<QuadTree*> realIntersected_;
+			_pick(pickRay, &realIntersected_);
+
+			int terrainId_ = -1;
+			float tu; float tv;
+			for(int i = 0; i < realIntersected_.size(); i++)
 			{
-				terrainId_ = realIntersected_[i]->terrainSector->terrainId;
-				break;
+				if(_getQuadIntersectID(_props.sectors[realIntersected_[i]->sectorID], &pickRay->direction, &pickRay->origin, &tu, &tv))
+				{
+					terrainId_ = realIntersected_[i]->terrainID;
+					break;
+				}
 			}
+			if(terrainId_ != -1) _textureWork(terrainId_, float2(tu, tv));
 		}
-		if(terrainId_ != -1) _textureWork(terrainId_, float2(tu, tv));
-	}
-	void RedactorTerrainManager::heightWork(precomputeRay* pickRay)
+		void RedactorTerrainManager::terraformShow(precomputeRay* pickRay)
+		{
+			int terrainId_ = -1;
+			int quadID = _terraPick(pickRay, &terrainId_);
+			if(quadID != -1) _terraformShow(terrainId_, quadID);
+		}
+		void RedactorTerrainManager::terraformApply(precomputeRay* pickRay)
+		{
+			int terrainId_ = -1;
+			int quadID = _terraPick(pickRay, &terrainId_);
+			if(quadID != -1) _terraformApply(terrainId_, quadID);
+		}
+		int RedactorTerrainManager::_terraPick(precomputeRay* pickRay, int* terrainId)
 		{
 			vector<QuadTree*> realIntersected_;
 			_pick(pickRay, &realIntersected_);
@@ -380,14 +401,14 @@
 			int quadID = -1; int terrainId_ = -1;
 			for(int i = 0; i < realIntersected_.size(); i++)
 			{
-				if(_getQuadIntersectID(realIntersected_[i]->terrainSector, &pickRay->direction, &pickRay->origin, &quadID))
+				if(_getQuadIntersectID(_props.sectors[realIntersected_[i]->sectorID], &pickRay->direction, &pickRay->origin, &quadID))
 				{
-					terrainId_ = realIntersected_[i]->terrainSector->terrainId;
+					terrainId_ = realIntersected_[i]->terrainID;
 					break;
 				}
 			}
-			if(quadID != -1) _heightmapWork(terrainId_, quadID);
-
+			terrainId[0] = terrainId_;
+			return quadID;
 		}
 		void RedactorTerrainManager::_pick(precomputeRay* pickRay, vector<QuadTree*>* rayAabbIntersected)
 		{
@@ -421,10 +442,177 @@
 		}
 
 	#pragma endregion
-	void RedactorTerrainManager::_heightmapWork(int terrainId, int vertId)
+	void RedactorTerrainManager::setTerraPenSize(int in, int out)
 	{
+		_heightPen->setSizeIn(in);_heightPen->setSizeOut(out);
+	}
+	void RedactorTerrainManager::setTerraPenHard(float hard)
+	{
+		_heightPen->hard = hard;
+	}
+	inline int RedactorTerrainManager::_getLeftTerrainIDValue(int vId, int currentRaw, int size)
+	{ 
+		int value = vId - size;
+		if(value / _props.numVertsInRaw != currentRaw)
+			value = currentRaw * _props.numVertsInRaw;
+		if(value < 0) value = 0; 
+		return value; 
+	};
+	inline int RedactorTerrainManager::_getRightTerrainIDValue(int vId, int currentRaw, int size)
+	{ 
+		int value = vId + size + 1;
+		if(value / _props.numVertsInRaw != currentRaw)
+			value = (currentRaw + 1) * _props.numVertsInRaw - 1;
+		if(value > _props.maxId) 
+			value = _props.maxId - 1;
+		return value; 
+	};
+	inline int RedactorTerrainManager::_getUpTerrainIDValue(int vId, int size)
+	{ 
+		int value = vId - (size)* _props.numVertsInRaw;
+		if(value < 0)
+			value = vId - (vId / _props.numVertsInRaw) * _props.numVertsInRaw;
+		return value;
+	};
+	inline int RedactorTerrainManager::_getDownTerrainIDValue(int vId, int size)
+	{ 
+		int value = vId + (size + 1) * _props.numVertsInRaw;
+		if(value > _props.maxId) value = _props.maxId - 1;
+		return value;
+	};
+	int4 RedactorTerrainManager::_getLRUD(int vId, int currentRaw, int size)
+	{
+		int left_ = _getLeftTerrainIDValue(vId, currentRaw, size);
+		int right_ = _getRightTerrainIDValue(vId, currentRaw, size);
 
+		int sizeX_ = right_ - left_;
+		left_ = _getUpTerrainIDValue(left_, size);
+		right_ = _getDownTerrainIDValue(right_, size);
+		int sizeY_ = right_ / _props.numVertsInRaw - left_ / _props.numVertsInRaw;
 
+		return int4(left_, right_, sizeX_, sizeY_);
+	}
+	void RedactorTerrainManager::_terraformShow(int terrainId, int vertId)
+	{
+		int currentRaw_ = vertId / _props.numVertsInRaw;
+
+		int4 inStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeIn() - 1);
+		int4 outStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeOut() - 1);
+		int penOut_ = (outStruct_.z + 1) * (outStruct_.w + 1);
+		int penIn_ = (inStruct_.z + 1) * (inStruct_.w + 1);
+
+		int rawDisp_ = 0;
+		for(int i = 0; i < penOut_; i++)
+		{
+			if(i != 0 && i % (outStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (outStruct_.z + 1);
+			_heightPen->vertsOut_x[i][0] = _props.heightMap[outStruct_.x + i + rawDisp_].x;
+			_heightPen->vertsOut_y[i][0] = _props.heightMap[outStruct_.x + i + rawDisp_].y;
+			_heightPen->vertsOut_z[i][0] = _props.heightMap[outStruct_.x + i + rawDisp_].z;
+		}
+		_heightPen->countDrawSizeOut = penOut_;
+
+		rawDisp_ = 0;
+		for(int i = 0; i < penIn_; i++)
+		{
+			if(i != 0 && i % (inStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (inStruct_.z + 1);
+			_heightPen->vertsIn_x[i][0] = _props.heightMap[inStruct_.x + i + rawDisp_].x;
+			_heightPen->vertsIn_y[i][0] = _props.heightMap[inStruct_.x + i + rawDisp_].y;
+			_heightPen->vertsIn_z[i][0] = _props.heightMap[inStruct_.x + i + rawDisp_].z;
+		}
+		_heightPen->countDrawSizeIn = penIn_;
+	}
+	void RedactorTerrainManager::_terraformApply(int terrainId, int vertId)
+	{
+		int currentRaw_ = vertId / _props.numVertsInRaw;
+
+		int4 inStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeIn() - 1);
+		int4 outStruct_ = _getLRUD(vertId, currentRaw_, _heightPen->getSizeOut() - 1);
+		int penOut_ = (outStruct_.z + 1) * (outStruct_.w + 1);
+		int penIn_ = (inStruct_.z + 1) * (inStruct_.w + 1);
+
+		int* temp_ = 0;		int* TerarainIDs_ = 0; 
+		int countTerrainsToUpdate_ = 0;	
+		int rawDisp_ = 0;
+
+		for(int i = 0; i < penOut_; i++)
+		{
+			if(i != 0 && i % (outStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (outStruct_.z + 1);
+			_props.heightMap[outStruct_.x + i + rawDisp_].y += _heightPen->hard;
+			#pragma region TerrainIDs update
+				int counter_ = 0;
+				for(int q = 0; q < _props.heightMapToTerrain[outStruct_.x + i + rawDisp_][0]; q++)
+				{
+					_vertsToUpdate[_props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 1]][_countVertToUpdate[_props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 1]]] = _props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 2];
+					_countVertToUpdate[_props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 1]]++;
+					bool add_ = true;
+					for(int tt = 0; tt<countTerrainsToUpdate_; tt++)
+					{
+						if(TerarainIDs_[tt] == _props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 1])
+						{
+							add_ = false;
+							break;
+						}
+					}
+					if(add_)
+					{
+						temp_ = TerarainIDs_;			TerarainIDs_ = new int[countTerrainsToUpdate_ + 1];
+						for(int tt = 0; tt<countTerrainsToUpdate_; tt++)			TerarainIDs_[tt] = temp_[tt];
+						TerarainIDs_[countTerrainsToUpdate_] = _props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 1];
+						countTerrainsToUpdate_++;
+					}
+					counter_ += 2;
+				}
+			#pragma endregion
+				/*
+			#pragma region TerrainSectors update
+				counter_ = 0;
+				for(int q = 0; q < _props.heightMapToSectors[outStruct_.x + i + rawDisp_][0]; q++)
+				{
+					bool add_ = true;
+					for(int tt = 0; tt<countSectorsToUpdate_; tt++)
+					{
+						if(SectorsIDs_[tt] == _props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 1])
+						{
+							add_ = false;
+							break;
+						}
+					}
+					if(add_)
+					{
+						temp_ = SectorsIDs_;			SectorsIDs_ = new int[countSectorsToUpdate_ + 1];
+						for(int tt = 0; tt<countSectorsToUpdate_; tt++)			SectorsIDs_[tt] = temp_[tt];
+						SectorsIDs_[countSectorsToUpdate_] = _props.heightMapToTerrain[outStruct_.x + i + rawDisp_][counter_ + 1];
+						countSectorsToUpdate_++;
+					}
+					counter_ += 2;
+				}
+			#pragma endregion
+			*/
+				_heightPen->vertsOut_x[i][0] = _props.heightMap[outStruct_.x + i + rawDisp_].x;
+				_heightPen->vertsOut_y[i][0] = _props.heightMap[outStruct_.x + i + rawDisp_].y;
+				_heightPen->vertsOut_z[i][0] = _props.heightMap[outStruct_.x + i + rawDisp_].z;
+		}
+		_heightPen->countDrawSizeOut = penOut_;
+
+		rawDisp_ = 0;
+		for(int i = 0; i < penIn_; i++)
+		{
+			if(i != 0 && i % (inStruct_.z + 1) == 0)
+				rawDisp_ += _props.numVertsInRaw - (inStruct_.z + 1);
+			_props.heightMap[inStruct_.x + i + rawDisp_].y += _heightPen->hard;
+			_heightPen->vertsIn_x[i][0] = _props.heightMap[inStruct_.x + i + rawDisp_].x;
+			_heightPen->vertsIn_y[i][0] = _props.heightMap[inStruct_.x + i + rawDisp_].y;
+			_heightPen->vertsIn_z[i][0] = _props.heightMap[inStruct_.x + i + rawDisp_].z;
+		}
+		_heightPen->countDrawSizeIn = penIn_;
+
+		for(int i = 0; i < countTerrainsToUpdate_; i++)			_updateSubVertexBuffer(TerarainIDs_[i]);
+
+		delete TerarainIDs_; TerarainIDs_ = 0;
+		delete temp_; temp_ = 0;
 	}
 	void RedactorTerrainManager::_textureWork(int terrainId, float2 texcoord)
 	{
@@ -434,6 +622,15 @@
 	{
 		_props = Properties(gridX, gridY);
 		_generateGeometry();
+
+		delete _countVertToUpdate; delete[] _vertsToUpdate;
+		_vertsToUpdate = new int*[_props.numTiles];
+		_countVertToUpdate = new int[_props.numTiles];
+		for(int i = 0; i<_props.numTiles; i++)
+		{
+			_countVertToUpdate[i] = 0;
+			_vertsToUpdate[i] = new int[_heightPen->maxSize * _heightPen->maxSize * 4];
+		}
 
 		D3DX11_IMAGE_LOAD_INFO ili_;
 		ili_.MipLevels = 1;
@@ -503,6 +700,46 @@
 		}
 		float smoothKoeff = ((float)(rand() % 5 + 3))/10.0f;
 		_props.heightMap[id].y = (all_height / (float)count)*smoothKoeff + Main_height*(1.0f - smoothKoeff);
+	}
+	void RedactorTerrainManager::_updateSubVertexBuffer(int idTerrain)
+	{
+		D3D11_MAPPED_SUBRESOURCE mappedResource_;
+		D3dRender::getInstance().mapResource(_vertexBuffers[idTerrain], &mappedResource_, D3D11_MAP_WRITE_NO_OVERWRITE);
+
+
+		int* temp_ = 0;		int* TerarainIDs_ = 0;
+		int countTerrainsToUpdate_ = 0;
+
+		auto pData = reinterpret_cast<Vertex::Simple*>(mappedResource_.pData);
+
+		for(int i = 0; i < _countVertToUpdate[idTerrain]; i++)
+		{
+			pData[_vertsToUpdate[idTerrain][i]].position.y = _props.heightMap[_props.pickToHeightMap[idTerrain][_vertsToUpdate[idTerrain][i]]].y;
+			int counter_ = 1;
+			for(int q = 0; q < _props.heightMapToSectors[_vertsToUpdate[idTerrain][i]][0]; q++)
+			{
+				_props.sectors[_props.heightMapToSectors[_vertsToUpdate[idTerrain][i]][counter_]]->checkMaxMinHeight(_props.heightMap[_props.pickToHeightMap[idTerrain][_vertsToUpdate[idTerrain][i]]].y);
+				
+				bool add_ = true;
+				for(int tt = 0; tt<countTerrainsToUpdate_; tt++){if(TerarainIDs_[tt] == _props.heightMapToSectors[_vertsToUpdate[idTerrain][i]][counter_]){add_ = false;break;}}
+				if(add_)
+				{
+					temp_ = TerarainIDs_;			TerarainIDs_ = new int[countTerrainsToUpdate_ + 1];
+					for(int tt = 0; tt<countTerrainsToUpdate_; tt++)			TerarainIDs_[tt] = temp_[tt];
+					TerarainIDs_[countTerrainsToUpdate_] = _props.heightMapToSectors[_vertsToUpdate[idTerrain][i]][counter_];
+					countTerrainsToUpdate_++;
+				}
+				counter_ += 2;
+			}
+		}
+		D3dRender::getInstance().unmapResource(_vertexBuffers[idTerrain]);
+
+		for(int i = 0; i < countTerrainsToUpdate_; i++)
+			_props.sectors[TerarainIDs_[i]]->father->updateInside();
+
+		delete TerarainIDs_; delete temp_;
+
+		_countVertToUpdate[idTerrain] = 0;
 	}
 	void RedactorTerrainManager::_updateVertexBuffer(int idTerrain)
 	{
@@ -620,6 +857,7 @@
 	{
 		_2048Path = path;
 	}
+
 
 	#pragma region Intersect work
 		bool RedactorTerrainManager::hitTerrainSector(QuadTree* tree, precomputeRay* pickRay, QuadTree** hits, int* count, bool* done)

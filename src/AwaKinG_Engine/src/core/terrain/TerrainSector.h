@@ -1,5 +1,6 @@
 #pragma once
 #include "../../render/D3dRender.h"
+#include "QuadTree.h"
 
 struct TerrainSector
 {
@@ -12,4 +13,6 @@ struct TerrainSector
 
 	float3								min;
 	float3								max;
+
+	QuadTree*							father;
 };

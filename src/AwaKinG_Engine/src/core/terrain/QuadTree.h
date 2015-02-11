@@ -1,22 +1,24 @@
 #pragma once
-#include "TerrainSector.h"
+#include "../../render/D3dRender.h"
 
 struct QuadTree
 {
 	QuadTree();
-	QuadTree(TerrainSector* sector);
+	QuadTree(float3* terMax, float3* terMin, int sectorId, int terrainId);
 	~QuadTree();
 
 	bool intersect(precomputeRay* ray);
 	void findMaxMinFromChilds();
 	void update();
+	void updateInside();
 
-// public for fast non-function use
+	QuadTree*							father;
 	vector<QuadTree*>			childs;
-	TerrainSector*				terrainSector;
 	bool									land;
 	float3*								ps[2];
 	float3								max;
+	int										sectorID;
+	int										terrainID;
 
 	XMFLOAT4X4*						worldMatrix;
 };

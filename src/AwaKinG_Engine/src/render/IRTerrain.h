@@ -28,6 +28,13 @@ struct int3 : int2
 
 	int z;
 };
+struct int4 : int3
+{
+	int4(){}
+	int4(int x_, int y_, int z_, int w_){ x = x_; y = y_; z = z_; w = w_; }
+
+	int w;
+};
 struct precomputeRay
 {
 	float3 origin;

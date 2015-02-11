@@ -89,11 +89,19 @@ void EngineTerrainSetWireframe(RedactorEngine* pointer, bool set)
 {
 	pointer->setTerrainWireframe(set);
 }
-void EngineTerrainHeightWork(RedactorEngine* pointer, int posX, int posY)
+void EngineTerrainTerraformingShow(RedactorEngine* pointer, int posX, int posY)
 {
-	pointer->heightWorkTerrain(posX, posY);
+	pointer->terrainTerraformShow(posX, posY);
 }
-void EngineTerrainTextureWork(RedactorEngine* pointer, int posX, int posY)
+void EngineTerrainTerraformingApply(RedactorEngine* pointer, int posX, int posY)
 {
-	pointer->textureWorkTerrain(posX, posY);
+	pointer->terrainTerraformApply(posX, posY);
+}
+void EngineTerrainSetTerraPenSize(RedactorEngine* pointer, int in, int out)
+{
+	pointer->terrainSetTerraPenSize(in, out);
+}
+void EngineTerrainSetTerraPenHard(RedactorEngine* pointer, float hard)
+{
+	pointer->terrainSetTerraPenHard(hard);
 }

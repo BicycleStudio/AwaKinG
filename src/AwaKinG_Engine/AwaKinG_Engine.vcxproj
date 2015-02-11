@@ -141,6 +141,7 @@
     <ClInclude Include="src\core\Parser.h" />
     <ClInclude Include="src\core\terrain\QuadTree.h" />
     <ClInclude Include="src\core\terrain\TerrainManager.h" />
+    <ClInclude Include="src\core\terrain\TerrainPen.h" />
     <ClInclude Include="src\core\terrain\TerrainSector.h" />
     <ClInclude Include="src\render\D3dRender.h" />
     <ClInclude Include="src\render\IRTerrain.h" />

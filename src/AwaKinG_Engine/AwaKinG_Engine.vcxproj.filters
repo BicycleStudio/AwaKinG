@@ -101,5 +101,8 @@
     <ClInclude Include="src\AwaKing_Engine.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\terrain\TerrainPen.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

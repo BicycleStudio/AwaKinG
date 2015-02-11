@@ -1,6 +1,7 @@
 #pragma once
 #include "../Parser.h"
-#include "QuadTree.h"
+#include "TerrainSector.h"
+#include "TerrainPen.h"
 
 struct Biom
 {
@@ -227,8 +228,18 @@ public:
 	void randomize(int diapazon);
 	void normalizeNormals();
 	void blurHeightmap(int blurHard);
+	void setTerraPenSize(int in, int out);
+	void setTerraPenHard(float hard);
 
-	void heightWork(precomputeRay* pickRay);
+	void terraformShow(precomputeRay* pickRay);
+	void terraformApply(precomputeRay* pickRay);
+	void terraformApplyPosLock(precomputeRay* pickRay);
+	void terraformApplyShiftHeight(precomputeRay* pickRay);
+	void terraformApplyAltHard(precomputeRay* pickRay);
+	void terraformApplySmIn(precomputeRay* pickRay);
+	void terraformApplySmOut(precomputeRay* pickRay);
+	void terraformApplySmInOut(precomputeRay* pickRay);
+
 	void textureWork(precomputeRay* pickRay);
 
 	void set2048Path(string path);
@@ -236,6 +247,7 @@ public:
 
 private:
 	void _pick(precomputeRay* pickRay, vector<QuadTree*>* rayAabbIntersected);
+	int _terraPick(precomputeRay* pickRay, int* terrainId);
 	bool _getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, int* returnedID);
 	bool _getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, float* tu, float* tv);
 	bool _intersectTriangle(float3* pickOrig, float3* pickDir, XMFLOAT3** vs);
@@ -243,8 +255,28 @@ private:
 
 	void _smoothVert(int id);
 	void _updateVertexBuffer(int idTerrain);
-	void _heightmapWork(int terrainId, int vertId);
+	void _updateSubVertexBuffer(int idTerrain);
+
+	void _terraformShow(int terrainId, int vertId);
+	void _terraformApply(int terrainId, int vertId);
+	void _terraformApplyPosLock(int terrainId, int vertId);
+	void _terraformApplyShiftHeight(int terrainId, int vertId);
+	void _terraformApplyAltHard(int terrainId, int vertId);
+	void _terraformApplySmIn(int terrainId, int vertId);
+	void _terraformApplySmOut(int terrainId, int vertId);
+	void _terraformApplySmInOut(int terrainId, int vertId);
+	
 	void _textureWork(int terrainId, XMFLOAT2 texcoord);
+
+	int4 _getLRUD(int vId, int currentRaw, int size);
+	inline int _getLeftTerrainIDValue(int vId, int currentRaw, int size);
+	inline int _getRightTerrainIDValue(int vId, int currentRaw, int size);
+	inline int _getUpTerrainIDValue(int vId, int size);
+	inline int _getDownTerrainIDValue(int vId, int size);
 private:
 	vector<Biom>				_bioms;
+	TextureTerrainPen*	_texturePen;
+	HeightTerrainPen*		_heightPen;
+	int**								_vertsToUpdate;
+	int*								_countVertToUpdate;
 };

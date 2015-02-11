@@ -244,11 +244,24 @@
 		{
 			D3dRender::getInstance().setTerrainWireframe(set);
 		}
-
-		void RedactorEngine::heightWorkTerrain(int posX, int posY)
+		void RedactorEngine::terrainTerraformShow(int posX, int posY)
 		{
 			precomputeRay* precomputeRay_ = D3dRender::getInstance().getPickingRay(posX, posY);
-			_redactorTerrainManager->heightWork(precomputeRay_);
+			_redactorTerrainManager->terraformShow(precomputeRay_);
+		}
+		void RedactorEngine::terrainTerraformApply(int posX, int posY)
+		{
+			precomputeRay* precomputeRay_ = D3dRender::getInstance().getPickingRay(posX, posY);
+			_redactorTerrainManager->terraformApply(precomputeRay_);
+		}
+		
+		void RedactorEngine::terrainSetTerraPenSize(int in, int out)
+		{
+			_redactorTerrainManager->setTerraPenSize(in, out);
+		}
+		void RedactorEngine::terrainSetTerraPenHard(float hard)
+		{
+			_redactorTerrainManager->setTerraPenHard(hard);
 		}
 		void RedactorEngine::textureWorkTerrain(int posX, int posY)
 		{

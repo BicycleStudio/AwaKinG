@@ -46,19 +46,37 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.panel_Ex2 = new GUI_elements.Panel_Ex();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.avbPenHardness = new GUI_elements.AWA_Value_Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.avbPenSizeOuter = new GUI_elements.AWA_Value_Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.avbPenSizeInner = new GUI_elements.AWA_Value_Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.awA_Button6 = new GUI_elements.AWA_Button();
             this.awA_Button5 = new GUI_elements.AWA_Button();
             this.awA_Button4 = new GUI_elements.AWA_Button();
-            this.awA_Button3 = new GUI_elements.AWA_Button();
-            this.awA_Button2 = new GUI_elements.AWA_Button();
-            this.awA_Value_Button3 = new GUI_elements.AWA_Value_Button();
-            this.awA_Button1 = new GUI_elements.AWA_Button();
+            this.panel_Ex1 = new GUI_elements.Panel_Ex();
             this.awA_Value_Button2 = new GUI_elements.AWA_Value_Button();
             this.awA_Value_Button1 = new GUI_elements.AWA_Value_Button();
+            this.awA_Button1 = new GUI_elements.AWA_Button();
+            this.awA_Button2 = new GUI_elements.AWA_Button();
+            this.awA_Button3 = new GUI_elements.AWA_Button();
+            this.awA_Value_Button3 = new GUI_elements.AWA_Value_Button();
             this.pnlRender = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.panel_Ex2.SuspendLayout();
+            this.panel7.SuspendLayout();
+            this.panel6.SuspendLayout();
+            this.panel5.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel_Ex1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -207,20 +225,173 @@
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.panel3.Controls.Add(this.awA_Button6);
-            this.panel3.Controls.Add(this.awA_Button5);
-            this.panel3.Controls.Add(this.awA_Button4);
-            this.panel3.Controls.Add(this.awA_Button3);
-            this.panel3.Controls.Add(this.awA_Button2);
-            this.panel3.Controls.Add(this.awA_Value_Button3);
-            this.panel3.Controls.Add(this.awA_Button1);
-            this.panel3.Controls.Add(this.awA_Value_Button2);
-            this.panel3.Controls.Add(this.awA_Value_Button1);
+            this.panel3.Controls.Add(this.panel_Ex2);
+            this.panel3.Controls.Add(this.panel_Ex1);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel3.Location = new System.Drawing.Point(0, 52);
             this.panel3.Name = "panel3";
+            this.panel3.Padding = new System.Windows.Forms.Padding(2);
             this.panel3.Size = new System.Drawing.Size(173, 481);
             this.panel3.TabIndex = 3;
+            // 
+            // panel_Ex2
+            // 
+            this.panel_Ex2._Checked = false;
+            this.panel_Ex2.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.panel_Ex2.BORDERCOLOR = System.Drawing.Color.Black;
+            this.panel_Ex2.BORDERRADIUS = 5;
+            this.panel_Ex2.BORDERWIDTH = 1;
+            this.panel_Ex2.Controls.Add(this.panel7);
+            this.panel_Ex2.Controls.Add(this.panel6);
+            this.panel_Ex2.Controls.Add(this.panel5);
+            this.panel_Ex2.Controls.Add(this.panel4);
+            this.panel_Ex2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel_Ex2.Location = new System.Drawing.Point(2, 150);
+            this.panel_Ex2.Name = "panel_Ex2";
+            this.panel_Ex2.Padding = new System.Windows.Forms.Padding(0, 25, 0, 0);
+            this.panel_Ex2.Size = new System.Drawing.Size(169, 192);
+            this.panel_Ex2.TabIndex = 10;
+            this.panel_Ex2.Text = "Pen";
+            // 
+            // panel7
+            // 
+            this.panel7.Controls.Add(this.avbPenHardness);
+            this.panel7.Controls.Add(this.label4);
+            this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel7.Location = new System.Drawing.Point(0, 126);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(169, 25);
+            this.panel7.TabIndex = 3;
+            // 
+            // avbPenHardness
+            // 
+            this.avbPenHardness.ARROWHEIGHT = 1;
+            this.avbPenHardness.ARROWTOOLSH = 1;
+            this.avbPenHardness.ARRWIDTH = 20;
+            this.avbPenHardness.BackColor = System.Drawing.Color.Transparent;
+            this.avbPenHardness.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.avbPenHardness.BORDERCOLOR = System.Drawing.Color.Black;
+            this.avbPenHardness.BORDERRADIUS = 5;
+            this.avbPenHardness.BORDERWIDTH = 0;
+            this.avbPenHardness.Image = null;
+            this.avbPenHardness.Location = new System.Drawing.Point(78, 2);
+            this.avbPenHardness.MaxValue = 1000F;
+            this.avbPenHardness.MinValue = -1000F;
+            this.avbPenHardness.Name = "avbPenHardness";
+            this.avbPenHardness.Size = new System.Drawing.Size(75, 20);
+            this.avbPenHardness.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Slow;
+            this.avbPenHardness.TabIndex = 1;
+            this.avbPenHardness.Text = "awA_Value_Button6";
+            this.avbPenHardness.UseVisualStyleBackColor = false;
+            this.avbPenHardness.VALUEV = 1F;
+            this.avbPenHardness.OnValueChanged += new System.EventHandler<System.EventArgs>(this.avbPenHardness_OnValueChanged);
+            this.avbPenHardness.MouseUp += new System.Windows.Forms.MouseEventHandler(this.avbPenHardness_MouseUp);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(14, 6);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(55, 13);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Hardness:";
+            // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.avbPenSizeOuter);
+            this.panel6.Controls.Add(this.label3);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel6.Location = new System.Drawing.Point(0, 101);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(169, 25);
+            this.panel6.TabIndex = 2;
+            // 
+            // avbPenSizeOuter
+            // 
+            this.avbPenSizeOuter.ARROWHEIGHT = 1;
+            this.avbPenSizeOuter.ARROWTOOLSH = 1;
+            this.avbPenSizeOuter.ARRWIDTH = 20;
+            this.avbPenSizeOuter.BackColor = System.Drawing.Color.Transparent;
+            this.avbPenSizeOuter.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.avbPenSizeOuter.BORDERCOLOR = System.Drawing.Color.Black;
+            this.avbPenSizeOuter.BORDERRADIUS = 5;
+            this.avbPenSizeOuter.BORDERWIDTH = 0;
+            this.avbPenSizeOuter.Image = null;
+            this.avbPenSizeOuter.Location = new System.Drawing.Point(78, 2);
+            this.avbPenSizeOuter.MaxValue = 10F;
+            this.avbPenSizeOuter.MinValue = 1F;
+            this.avbPenSizeOuter.Name = "avbPenSizeOuter";
+            this.avbPenSizeOuter.Size = new System.Drawing.Size(75, 20);
+            this.avbPenSizeOuter.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
+            this.avbPenSizeOuter.TabIndex = 1;
+            this.avbPenSizeOuter.Text = "awA_Value_Button5";
+            this.avbPenSizeOuter.UseVisualStyleBackColor = false;
+            this.avbPenSizeOuter.VALUEV = 1F;
+            this.avbPenSizeOuter.OnValueChanged += new System.EventHandler<System.EventArgs>(this.avbPenSizeOuter_OnValueChanged);
+            this.avbPenSizeOuter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.avbPenSizeOuter_MouseUp);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(14, 6);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(57, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Size outer:";
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.avbPenSizeInner);
+            this.panel5.Controls.Add(this.label2);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel5.Location = new System.Drawing.Point(0, 76);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(169, 25);
+            this.panel5.TabIndex = 1;
+            // 
+            // avbPenSizeInner
+            // 
+            this.avbPenSizeInner.ARROWHEIGHT = 1;
+            this.avbPenSizeInner.ARROWTOOLSH = 1;
+            this.avbPenSizeInner.ARRWIDTH = 20;
+            this.avbPenSizeInner.BackColor = System.Drawing.Color.Transparent;
+            this.avbPenSizeInner.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.avbPenSizeInner.BORDERCOLOR = System.Drawing.Color.Black;
+            this.avbPenSizeInner.BORDERRADIUS = 5;
+            this.avbPenSizeInner.BORDERWIDTH = 0;
+            this.avbPenSizeInner.Image = null;
+            this.avbPenSizeInner.Location = new System.Drawing.Point(78, 2);
+            this.avbPenSizeInner.MaxValue = 10F;
+            this.avbPenSizeInner.MinValue = 1F;
+            this.avbPenSizeInner.Name = "avbPenSizeInner";
+            this.avbPenSizeInner.Size = new System.Drawing.Size(75, 20);
+            this.avbPenSizeInner.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
+            this.avbPenSizeInner.TabIndex = 1;
+            this.avbPenSizeInner.Text = "awA_Value_Button4";
+            this.avbPenSizeInner.UseVisualStyleBackColor = false;
+            this.avbPenSizeInner.VALUEV = 1F;
+            this.avbPenSizeInner.OnValueChanged += new System.EventHandler<System.EventArgs>(this.avbPenSizeInner_OnValueChanged);
+            this.avbPenSizeInner.MouseUp += new System.Windows.Forms.MouseEventHandler(this.avbPenSizeOuter_MouseUp);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 6);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Size inner:";
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.awA_Button6);
+            this.panel4.Controls.Add(this.awA_Button5);
+            this.panel4.Controls.Add(this.awA_Button4);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel4.Location = new System.Drawing.Point(0, 25);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(169, 51);
+            this.panel4.TabIndex = 0;
             // 
             // awA_Button6
             // 
@@ -230,7 +401,7 @@
             this.awA_Button6.BORDERRADIUS = 5;
             this.awA_Button6.BORDERWIDTH = 1;
             this.awA_Button6.Image = null;
-            this.awA_Button6.Location = new System.Drawing.Point(115, 189);
+            this.awA_Button6.Location = new System.Drawing.Point(114, 3);
             this.awA_Button6.Name = "awA_Button6";
             this.awA_Button6.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
             this.awA_Button6.SCALEBORD = true;
@@ -248,7 +419,7 @@
             this.awA_Button5.BORDERRADIUS = 5;
             this.awA_Button5.BORDERWIDTH = 1;
             this.awA_Button5.Image = null;
-            this.awA_Button5.Location = new System.Drawing.Point(64, 189);
+            this.awA_Button5.Location = new System.Drawing.Point(63, 3);
             this.awA_Button5.Name = "awA_Button5";
             this.awA_Button5.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
             this.awA_Button5.SCALEBORD = true;
@@ -265,8 +436,9 @@
             this.awA_Button4.BORDERCOLOR = System.Drawing.Color.Black;
             this.awA_Button4.BORDERRADIUS = 5;
             this.awA_Button4.BORDERWIDTH = 1;
+            this.awA_Button4.CHECKABLE = true;
             this.awA_Button4.Image = null;
-            this.awA_Button4.Location = new System.Drawing.Point(12, 189);
+            this.awA_Button4.Location = new System.Drawing.Point(11, 3);
             this.awA_Button4.Name = "awA_Button4";
             this.awA_Button4.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
             this.awA_Button4.SCALEBORD = true;
@@ -276,81 +448,25 @@
             this.awA_Button4.UseVisualStyleBackColor = false;
             this.awA_Button4.Click += new System.EventHandler(this.awA_Button4_Click);
             // 
-            // awA_Button3
+            // panel_Ex1
             // 
-            this.awA_Button3.BackColor = System.Drawing.Color.Transparent;
-            this.awA_Button3.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.awA_Button3.BORDERCOLOR = System.Drawing.Color.Black;
-            this.awA_Button3.BORDERRADIUS = 5;
-            this.awA_Button3.BORDERWIDTH = 1;
-            this.awA_Button3.Image = null;
-            this.awA_Button3.Location = new System.Drawing.Point(79, 145);
-            this.awA_Button3.Name = "awA_Button3";
-            this.awA_Button3.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-            this.awA_Button3.SCALEBORD = true;
-            this.awA_Button3.Size = new System.Drawing.Size(88, 20);
-            this.awA_Button3.TabIndex = 5;
-            this.awA_Button3.Text = "blur";
-            this.awA_Button3.UseVisualStyleBackColor = false;
-            this.awA_Button3.Click += new System.EventHandler(this.awA_Button3_Click);
-            // 
-            // awA_Button2
-            // 
-            this.awA_Button2.BackColor = System.Drawing.Color.Transparent;
-            this.awA_Button2.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.awA_Button2.BORDERCOLOR = System.Drawing.Color.Black;
-            this.awA_Button2.BORDERRADIUS = 5;
-            this.awA_Button2.BORDERWIDTH = 1;
-            this.awA_Button2.Image = null;
-            this.awA_Button2.Location = new System.Drawing.Point(79, 119);
-            this.awA_Button2.Name = "awA_Button2";
-            this.awA_Button2.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-            this.awA_Button2.SCALEBORD = true;
-            this.awA_Button2.Size = new System.Drawing.Size(88, 20);
-            this.awA_Button2.TabIndex = 4;
-            this.awA_Button2.Text = "randomize";
-            this.awA_Button2.UseVisualStyleBackColor = false;
-            this.awA_Button2.Click += new System.EventHandler(this.awA_Button2_Click);
-            // 
-            // awA_Value_Button3
-            // 
-            this.awA_Value_Button3.ARROWHEIGHT = 0;
-            this.awA_Value_Button3.ARROWTOOLSH = 1;
-            this.awA_Value_Button3.ARRWIDTH = 20;
-            this.awA_Value_Button3.BackColor = System.Drawing.Color.Transparent;
-            this.awA_Value_Button3.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.awA_Value_Button3.BORDERCOLOR = System.Drawing.Color.Black;
-            this.awA_Value_Button3.BORDERRADIUS = 5;
-            this.awA_Value_Button3.BORDERWIDTH = 1;
-            this.awA_Value_Button3.Image = null;
-            this.awA_Value_Button3.Location = new System.Drawing.Point(13, 119);
-            this.awA_Value_Button3.MaxValue = 100F;
-            this.awA_Value_Button3.MinValue = 1F;
-            this.awA_Value_Button3.Name = "awA_Value_Button3";
-            this.awA_Value_Button3.Size = new System.Drawing.Size(60, 46);
-            this.awA_Value_Button3.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
-            this.awA_Value_Button3.TabIndex = 3;
-            this.awA_Value_Button3.Text = "awA_Value_Button3";
-            this.awA_Value_Button3.UseVisualStyleBackColor = false;
-            this.awA_Value_Button3.VALUEV = 1F;
-            // 
-            // awA_Button1
-            // 
-            this.awA_Button1.BackColor = System.Drawing.Color.Transparent;
-            this.awA_Button1.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.awA_Button1.BORDERCOLOR = System.Drawing.Color.Black;
-            this.awA_Button1.BORDERRADIUS = 5;
-            this.awA_Button1.BORDERWIDTH = 1;
-            this.awA_Button1.Image = null;
-            this.awA_Button1.Location = new System.Drawing.Point(31, 79);
-            this.awA_Button1.Name = "awA_Button1";
-            this.awA_Button1.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-            this.awA_Button1.SCALEBORD = true;
-            this.awA_Button1.Size = new System.Drawing.Size(107, 20);
-            this.awA_Button1.TabIndex = 2;
-            this.awA_Button1.Text = "create";
-            this.awA_Button1.UseVisualStyleBackColor = false;
-            this.awA_Button1.Click += new System.EventHandler(this.awA_Button1_Click);
+            this.panel_Ex1._Checked = false;
+            this.panel_Ex1.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.panel_Ex1.BORDERCOLOR = System.Drawing.Color.Black;
+            this.panel_Ex1.BORDERRADIUS = 5;
+            this.panel_Ex1.BORDERWIDTH = 1;
+            this.panel_Ex1.Controls.Add(this.awA_Value_Button2);
+            this.panel_Ex1.Controls.Add(this.awA_Value_Button1);
+            this.panel_Ex1.Controls.Add(this.awA_Button1);
+            this.panel_Ex1.Controls.Add(this.awA_Button2);
+            this.panel_Ex1.Controls.Add(this.awA_Button3);
+            this.panel_Ex1.Controls.Add(this.awA_Value_Button3);
+            this.panel_Ex1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel_Ex1.Location = new System.Drawing.Point(2, 2);
+            this.panel_Ex1.Name = "panel_Ex1";
+            this.panel_Ex1.Size = new System.Drawing.Size(169, 148);
+            this.panel_Ex1.TabIndex = 9;
+            this.panel_Ex1.Text = "Main settings";
             // 
             // awA_Value_Button2
             // 
@@ -363,7 +479,7 @@
             this.awA_Value_Button2.BORDERRADIUS = 5;
             this.awA_Value_Button2.BORDERWIDTH = 1;
             this.awA_Value_Button2.Image = null;
-            this.awA_Value_Button2.Location = new System.Drawing.Point(88, 36);
+            this.awA_Value_Button2.Location = new System.Drawing.Point(90, 29);
             this.awA_Value_Button2.MaxValue = 32F;
             this.awA_Value_Button2.MinValue = 1F;
             this.awA_Value_Button2.Name = "awA_Value_Button2";
@@ -385,7 +501,7 @@
             this.awA_Value_Button1.BORDERRADIUS = 5;
             this.awA_Value_Button1.BORDERWIDTH = 1;
             this.awA_Value_Button1.Image = null;
-            this.awA_Value_Button1.Location = new System.Drawing.Point(13, 36);
+            this.awA_Value_Button1.Location = new System.Drawing.Point(15, 29);
             this.awA_Value_Button1.MaxValue = 32F;
             this.awA_Value_Button1.MinValue = 1F;
             this.awA_Value_Button1.Name = "awA_Value_Button1";
@@ -395,6 +511,82 @@
             this.awA_Value_Button1.Text = "awA_Value_Button1";
             this.awA_Value_Button1.UseVisualStyleBackColor = false;
             this.awA_Value_Button1.VALUEV = 1F;
+            // 
+            // awA_Button1
+            // 
+            this.awA_Button1.BackColor = System.Drawing.Color.Transparent;
+            this.awA_Button1.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.awA_Button1.BORDERCOLOR = System.Drawing.Color.Black;
+            this.awA_Button1.BORDERRADIUS = 5;
+            this.awA_Button1.BORDERWIDTH = 1;
+            this.awA_Button1.Image = null;
+            this.awA_Button1.Location = new System.Drawing.Point(30, 66);
+            this.awA_Button1.Name = "awA_Button1";
+            this.awA_Button1.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.awA_Button1.SCALEBORD = true;
+            this.awA_Button1.Size = new System.Drawing.Size(107, 20);
+            this.awA_Button1.TabIndex = 2;
+            this.awA_Button1.Text = "create";
+            this.awA_Button1.UseVisualStyleBackColor = false;
+            this.awA_Button1.Click += new System.EventHandler(this.awA_Button1_Click);
+            // 
+            // awA_Button2
+            // 
+            this.awA_Button2.BackColor = System.Drawing.Color.Transparent;
+            this.awA_Button2.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.awA_Button2.BORDERCOLOR = System.Drawing.Color.Black;
+            this.awA_Button2.BORDERRADIUS = 5;
+            this.awA_Button2.BORDERWIDTH = 1;
+            this.awA_Button2.Image = null;
+            this.awA_Button2.Location = new System.Drawing.Point(76, 92);
+            this.awA_Button2.Name = "awA_Button2";
+            this.awA_Button2.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.awA_Button2.SCALEBORD = true;
+            this.awA_Button2.Size = new System.Drawing.Size(88, 20);
+            this.awA_Button2.TabIndex = 4;
+            this.awA_Button2.Text = "randomize";
+            this.awA_Button2.UseVisualStyleBackColor = false;
+            this.awA_Button2.Click += new System.EventHandler(this.awA_Button2_Click);
+            // 
+            // awA_Button3
+            // 
+            this.awA_Button3.BackColor = System.Drawing.Color.Transparent;
+            this.awA_Button3.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.awA_Button3.BORDERCOLOR = System.Drawing.Color.Black;
+            this.awA_Button3.BORDERRADIUS = 5;
+            this.awA_Button3.BORDERWIDTH = 1;
+            this.awA_Button3.Image = null;
+            this.awA_Button3.Location = new System.Drawing.Point(76, 118);
+            this.awA_Button3.Name = "awA_Button3";
+            this.awA_Button3.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.awA_Button3.SCALEBORD = true;
+            this.awA_Button3.Size = new System.Drawing.Size(88, 20);
+            this.awA_Button3.TabIndex = 5;
+            this.awA_Button3.Text = "blur";
+            this.awA_Button3.UseVisualStyleBackColor = false;
+            this.awA_Button3.Click += new System.EventHandler(this.awA_Button3_Click);
+            // 
+            // awA_Value_Button3
+            // 
+            this.awA_Value_Button3.ARROWHEIGHT = 0;
+            this.awA_Value_Button3.ARROWTOOLSH = 1;
+            this.awA_Value_Button3.ARRWIDTH = 20;
+            this.awA_Value_Button3.BackColor = System.Drawing.Color.Transparent;
+            this.awA_Value_Button3.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.awA_Value_Button3.BORDERCOLOR = System.Drawing.Color.Black;
+            this.awA_Value_Button3.BORDERRADIUS = 5;
+            this.awA_Value_Button3.BORDERWIDTH = 1;
+            this.awA_Value_Button3.Image = null;
+            this.awA_Value_Button3.Location = new System.Drawing.Point(10, 92);
+            this.awA_Value_Button3.MaxValue = 100F;
+            this.awA_Value_Button3.MinValue = 1F;
+            this.awA_Value_Button3.Name = "awA_Value_Button3";
+            this.awA_Value_Button3.Size = new System.Drawing.Size(60, 46);
+            this.awA_Value_Button3.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
+            this.awA_Value_Button3.TabIndex = 3;
+            this.awA_Value_Button3.Text = "awA_Value_Button3";
+            this.awA_Value_Button3.UseVisualStyleBackColor = false;
+            this.awA_Value_Button3.VALUEV = 1F;
             // 
             // pnlRender
             // 
@@ -406,6 +598,7 @@
             this.pnlRender.SizeChanged += new System.EventHandler(this.pnlRender_SizeChanged);
             this.pnlRender.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlRender_MouseDown);
             this.pnlRender.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlRender_MouseMove);
+            this.pnlRender.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlRender_MouseUp);
             // 
             // AwaKinG_Redactor
             // 
@@ -432,6 +625,15 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.panel3.ResumeLayout(false);
+            this.panel_Ex2.ResumeLayout(false);
+            this.panel7.ResumeLayout(false);
+            this.panel7.PerformLayout();
+            this.panel6.ResumeLayout(false);
+            this.panel6.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel_Ex1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -467,6 +669,18 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private GUI_elements.Panel_Ex panel_Ex2;
+        private System.Windows.Forms.Panel panel7;
+        private GUI_elements.AWA_Value_Button avbPenHardness;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Panel panel6;
+        private GUI_elements.AWA_Value_Button avbPenSizeOuter;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel panel5;
+        private GUI_elements.AWA_Value_Button avbPenSizeInner;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel panel4;
+        private GUI_elements.Panel_Ex panel_Ex1;
     }
 }
 

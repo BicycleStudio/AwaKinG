@@ -155,7 +155,7 @@ namespace AwaKinG_Redactor
         }
         private void awA_Button5_Click(object sender, EventArgs e)
         {
-            _engine.SetTerrainWorkType(2);
+            _engine.SetTerrainWorkType(3);
         }
         private void awA_Button6_Click(object sender, EventArgs e)
         {
@@ -167,7 +167,11 @@ namespace AwaKinG_Redactor
         }
         private void pnlRender_MouseDown(object sender, MouseEventArgs e)
         {
-            _engine.PickTerrain(e.Location);
+            if (_engine.mode == EngineWrap.WORK_MODE.WM_HEIGHT)
+            {
+                _engine.SetTerrainWorkType(2);
+                _engine.PickTerrain(e.Location);
+            }
         }
         private void setFileCameraType()
         {
@@ -205,6 +209,34 @@ namespace AwaKinG_Redactor
         private void pnlRender_MouseMove(object sender, MouseEventArgs e)
         {
             _engine.PickTerrain(e.Location);
+        }
+
+        private void pnlRender_MouseUp(object sender, MouseEventArgs e)
+        {
+            if(_engine.mode == EngineWrap.WORK_MODE.WM_HEIGHT)
+                _engine.SetTerrainWorkType(1);
+        }
+        private void avbPenHardness_MouseUp(object sender, MouseEventArgs e)
+        {
+            _engine.SetTerraPenHard(avbPenHardness.Value);
+        }
+        private void avbPenSizeOuter_OnValueChanged(object sender, EventArgs e)
+        {
+            if (avbPenSizeOuter.Value < avbPenSizeInner.Value) avbPenSizeInner.Value = avbPenSizeOuter.Value;
+            avbPenSizeInner.Refresh();
+        }
+        private void avbPenSizeInner_OnValueChanged(object sender, EventArgs e)
+        {
+            if (avbPenSizeOuter.Value < avbPenSizeInner.Value) avbPenSizeOuter.Value = avbPenSizeInner.Value;
+            avbPenSizeOuter.Refresh();
+        }
+        private void avbPenHardness_OnValueChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void avbPenSizeOuter_MouseUp(object sender, MouseEventArgs e)
+        {
+            _engine.SetTerraPenSize((int)avbPenSizeInner.Value, (int)avbPenSizeOuter.Value);
         }
     }
 }
