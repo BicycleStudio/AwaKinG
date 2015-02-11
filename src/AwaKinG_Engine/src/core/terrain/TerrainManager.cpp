@@ -1167,21 +1167,176 @@
 		}
 		void RedactorTerrainManager::diamondSquareAlgorythm()
 		{
-			int curNumV_ = _props.numVerts;
-			struct Quad
+		#pragma region Lists
+			vector<int> _1_;
+			vector<int> _2_;
+			vector<int> _3_;
+			vector<int> _6_;
+
+			vector<int> _11_;
+			vector<int> _22_;
+
+			vector<int> _43_;
+			vector<int> _86_;
+
+			vector<int> _171_;
+			vector<int> _342_;
+			
+			for(int i = 0; i < 1023; i++)
 			{
-				int _1; int _2; int _3; int _4;
-				int center; float diapazon;
+				_1_.push_back(i * 4 + 1);
+				_1_.push_back(i * 4 + 3);
 
-				int leftID; int rightID; int upID; int downID;
-				float left; float right; float up; float down;
+				_2_.push_back(i * 4 + 2);
+				_2_.push_back(i * 4 + 3);
+			}
+			for(int i = 0; i < 511; i++)
+			{
+				_3_.push_back(i * 8 + 4);
+				_3_.push_back(i * 8 + 6);
+			}
+			for(int i = 0; i < 255; i++)
+			{
+				_6_.push_back(i * 16 + 8);
+				_6_.push_back(i * 16 + 9);
 
-				int tileId;
-				int tileIdUp;
-				int tileIdDown;
-				int tileIdRight;
-				int tileIdLeft;
-			};
+				_6_.push_back(i * 16 + 12);
+				_6_.push_back(i * 16 + 13);
+			}
+			for(int i = 0; i < 127; i++)
+			{
+				_11_.push_back(i * 32 + 16);
+				_11_.push_back(i * 32 + 18);
+
+				_11_.push_back(i * 32 + 24);
+				_11_.push_back(i * 32 + 26);
+			}
+			for(int i = 0; i < 63; i++)
+			{
+				_22_.push_back(i * 64 + 32);
+				_22_.push_back(i * 64 + 33);
+
+				_22_.push_back(i * 64 + 36);
+				_22_.push_back(i * 64 + 37);
+
+				_22_.push_back(i * 64 + 48);
+				_22_.push_back(i * 64 + 49);
+
+				_22_.push_back(i * 64 + 52);
+				_22_.push_back(i * 64 + 53);
+			}
+			for(int i = 0; i < 31; i++)
+			{
+				_43_.push_back(i * 128 + 64);
+				_43_.push_back(i * 128 + 66);
+
+				_43_.push_back(i * 128 + 72);
+				_43_.push_back(i * 128 + 74);
+
+				_43_.push_back(i * 128 + 96);
+				_43_.push_back(i * 128 + 98);
+
+				_43_.push_back(i * 128 + 104);
+				_43_.push_back(i * 128 + 106);
+			}
+
+			for(int i = 0; i < 15; i++)
+			{
+				_86_.push_back(i * 256 + 128);
+				_86_.push_back(i * 256 + 129);
+
+				_86_.push_back(i * 256 + 132);
+				_86_.push_back(i * 256 + 133);
+
+				_86_.push_back(i * 256 + 144);
+				_86_.push_back(i * 256 + 145);
+
+				_86_.push_back(i * 256 + 148);
+				_86_.push_back(i * 256 + 149);
+
+				_86_.push_back(i * 256 + 192);
+				_86_.push_back(i * 256 + 193);
+
+				_86_.push_back(i * 256 + 196);
+				_86_.push_back(i * 256 + 197);
+
+				_86_.push_back(i * 256 + 208);
+				_86_.push_back(i * 256 + 209);
+
+				_86_.push_back(i * 256 + 212);
+				_86_.push_back(i * 256 + 213);
+			}
+			for(int i = 0; i < 7; i++)
+			{
+				_171_.push_back(i * 512 + 256);
+				_171_.push_back(i * 512 + 258);
+
+				_171_.push_back(i * 512 + 264);
+				_171_.push_back(i * 512 + 266);
+
+				_171_.push_back(i * 512 + 288);
+				_171_.push_back(i * 512 + 290);
+
+				_171_.push_back(i * 512 + 296);
+				_171_.push_back(i * 512 + 298);
+
+				_171_.push_back(i * 512 + 384);
+				_171_.push_back(i * 512 + 386);
+
+				_171_.push_back(i * 512 + 392);
+				_171_.push_back(i * 512 + 394);
+
+				_171_.push_back(i * 512 + 416);
+				_171_.push_back(i * 512 + 418);
+
+				_171_.push_back(i * 512 + 424);
+				_171_.push_back(i * 512 + 426);
+			}
+			for(int i = 0; i < 3; i++)
+			{
+				_342_.push_back(i * 1024 + 512);
+				_342_.push_back(i * 1024 + 513);
+				_342_.push_back(i * 1024 + 516);
+				_342_.push_back(i * 1024 + 516);
+
+				_342_.push_back(i * 1024 + 528);
+				_342_.push_back(i * 1024 + 529);
+				_342_.push_back(i * 1024 + 532);
+				_342_.push_back(i * 1024 + 533);
+
+				_342_.push_back(i * 1024 + 576);
+				_342_.push_back(i * 1024 + 577);
+				_342_.push_back(i * 1024 + 580);
+				_342_.push_back(i * 1024 + 581);
+
+				_342_.push_back(i * 1024 + 592);
+				_342_.push_back(i * 1024 + 593);
+				_342_.push_back(i * 1024 + 596);
+				_342_.push_back(i * 1024 + 597);
+
+				_342_.push_back(i * 1024 + 768);
+				_342_.push_back(i * 1024 + 769);
+				_342_.push_back(i * 1024 + 772);
+				_342_.push_back(i * 1024 + 773);
+
+				_342_.push_back(i * 1024 + 784);
+				_342_.push_back(i * 1024 + 785);
+				_342_.push_back(i * 1024 + 788);
+				_342_.push_back(i * 1024 + 789);
+
+				_342_.push_back(i * 1024 + 832);
+				_342_.push_back(i * 1024 + 833);
+				_342_.push_back(i * 1024 + 836);
+				_342_.push_back(i * 1024 + 837);
+
+				_342_.push_back(i * 1024 + 848);
+				_342_.push_back(i * 1024 + 849);
+				_342_.push_back(i * 1024 + 852);
+				_342_.push_back(i * 1024 + 853);
+			}
+#pragma endregion
+			int curNumV_ = _props.numVerts;
+
 			vector<Quad>* quads2_ = new vector<Quad>;
 			vector<Quad>* quads_ = new vector<Quad>;
 		#pragma region prepare for diamonSquare
@@ -1281,7 +1436,7 @@
 			curNumV_ = _props.numQuad;
 			int doubleCurNumV_ = curNumV_*curNumV_;
 
-			for(int rep = 0; rep < 3; rep++)
+			for(int rep = 0; rep < 6; rep++)
 			{
 				for(int i = 0; i < quads_->size(); i++)
 				{
@@ -1369,60 +1524,10 @@
 					qd4.left = _props.heightMap[_props.pickToHeightMap[qd4.tileId][qd3.center]].y; qd4.leftID = qd3.center;
 					qd4.up = _props.heightMap[_props.pickToHeightMap[qd2.tileId][qd2.center]].y; qd4.upID = qd2.center;
 				#pragma endregion
-
-					if(quads_[0][i].leftID == -1){qd.left = quads_[0][i].left;qd.leftID = -1;}
-					else
-					{
-						qd.left = _props.heightMap[_props.pickToHeightMap[quads2_[0][quads2_->size() - 3].tileId][quads2_[0][quads2_->size() - 3].center]].y;
-						qd.leftID = quads2_[0][quads2_->size() - 3].center;
-					}
-					if(quads_[0][i].upID == -1){qd.up = quads_[0][i].up;qd.upID = -1;}
-					else
-					{
-						qd.upID = quads_[0][i - 2]._4 - doubleCurNumV_ / 4 - curNumV_;
-						qd.up = _props.heightMap[_props.pickToHeightMap[quads_[0][i - 2].tileId][qd.upID]].y;
-					}
-
-					if(quads_[0][i].upID == -1){qd2.up = quads_[0][i].up;qd2.upID = -1;}
-					else
-					{
-						qd2.upID = quads_[0][i - 2]._4 - doubleCurNumV_ / 4 - curNumV_ / 2;
-						qd2.up = _props.heightMap[_props.pickToHeightMap[quads_[0][i - 2].tileId][qd2.upID]].y;
-					}
-					if(quads_[0][i].rightID == -1){qd2.right = quads_[0][i].right;qd2.rightID = -1;}
-					else
-					{
-						qd2.rightID = quads_[0][i + 1]._1 + doubleCurNumV_ / 4 + curNumV_ / 2;
-						qd2.right = _props.heightMap[_props.pickToHeightMap[quads_[0][i + 1].tileId][qd2.rightID]].y;
-					}
-
-					if(quads_[0][i].leftID == -1){qd3.left = quads_[0][i].left;qd3.leftID = -1;}
-					else
-					{
-						qd3.left = _props.heightMap[_props.pickToHeightMap[quads2_[0][quads2_->size() - 1].tileId][quads2_[0][quads2_->size() - 1].center]].y;
-						qd3.leftID = quads2_[0][quads2_->size() - 1].center;
-					}
-					if(quads_[0][i].downID == -1){qd3.down = quads_[0][i].down;qd3.downID = -1;}
-					else
-					{
-						qd3.downID = quads_[0][i + 2]._1 + doubleCurNumV_ / 4 + curNumV_ / 2;
-						qd3.down = _props.heightMap[_props.pickToHeightMap[quads_[0][i + 2].tileId][qd3.downID]].y;
-					}
-
-					if(quads_[0][i].rightID == -1){qd4.right = quads_[0][i].right;qd4.rightID = -1;}
-					else
-					{
-						qd4.rightID = quads_[0][i + 1].center - curNumV_ / 2 + doubleCurNumV_ / 4 + curNumV_ / 2;
-						qd4.right = _props.heightMap[_props.pickToHeightMap[quads_[0][i + 1].tileId][qd4.rightID]].y;
-					}
-					if(quads_[0][i].downID == -1){qd4.down = quads_[0][i].down;qd4.downID = -1;}
-					else
-					{
-						qd4.downID = qd3.downID + curNumV_ / 2;
-						qd4.down = _props.heightMap[_props.pickToHeightMap[quads_[0][i + 2].tileId][qd4.downID]].y;
-					}
-
-					quads2_->push_back(qd);quads2_->push_back(qd2);quads2_->push_back(qd3);quads2_->push_back(qd4);
+					quads2_->push_back(qd); quads2_->push_back(qd2); quads2_->push_back(qd3); quads2_->push_back(qd4);
+					for(int q = 4; q > 0; q--)
+						_setDSQuadProps(&quads2_[0][quads2_->size() - q], quads2_->size() - q, quads2_, &quads_[0][i],
+						&_1_, &_2_, &_3_, &_6_, &_11_, &_22_, &_43_, &_86_, &_171_, &_342_);
 				}
 				doubleCurNumV_ /= 2;
 				curNumV_ /= 2;
@@ -1434,6 +1539,69 @@
 			delete quads2_;
 			for(int i = 0; i < _props.numTiles; i++)
 			_updateVertexBuffer(i);
+		}
+		void RedactorTerrainManager::_setDSQuadProps(Quad* quad, int indexQuad, vector<Quad>* quads, Quad* father,
+			vector<int>* _1, vector<int>* _2, vector<int>* _3, vector<int>* _6, vector<int>* _11, vector<int>* _22, 
+			vector<int>* _43, vector<int>* _86, vector<int>* _171, vector<int>* _342)
+		{
+			if(father->rightID == -1){ quad->right = father->right; quad->rightID = -1; }
+			if(father->downID == -1){ quad->down = father->down; quad->downID = -1; }
+			if(father->leftID == -1){ quad->left = father->left; quad->leftID = -1; }
+			else
+			{
+				int disp_ = 1;
+				if(_vectorConains(_171, indexQuad)) disp_ = 171;
+				else
+				{
+					if(_vectorConains(_43, indexQuad)) disp_ = 43;
+					else
+					{
+						if(_vectorConains(_11, indexQuad)) disp_ = 11;
+						else
+						{
+							if(_vectorConains(_3, indexQuad)) disp_ = 3;
+						}
+					}
+				}
+				quad->leftID = quads[0][indexQuad - disp_].center;
+				quad->left = _props.heightMap[_props.pickToHeightMap[quads[0][indexQuad - disp_].tileId][quad->leftID]].y;
+				quads[0][indexQuad - disp_].rightID = quad->center;
+				quads[0][indexQuad - disp_].right = _props.heightMap[_props.pickToHeightMap[quads[0][indexQuad].tileId][quad->center]].y;
+			}
+			if(father->upID == -1){ quad->up = father->up; quad->upID = -1; }
+			else
+			{
+				int disp_ = 2;
+				if(_vectorConains(_342, indexQuad)) disp_ = 342;
+				else
+				{
+					if(_vectorConains(_86, indexQuad)) disp_ = 86;
+					else
+					{
+						if(_vectorConains(_22, indexQuad)) disp_ = 22;
+						else
+						{
+							if(_vectorConains(_6, indexQuad)) disp_ = 6;
+						}
+					}
+				}
+
+				quad->upID = quads[0][indexQuad - disp_].center;
+				quad->up = _props.heightMap[_props.pickToHeightMap[quads[0][indexQuad - disp_].tileId][quad->upID]].y;
+				quads[0][indexQuad - disp_].downID = quad->center;
+				quads[0][indexQuad - disp_].down = _props.heightMap[_props.pickToHeightMap[quads[0][indexQuad].tileId][quad->center]].y;
+			}
+		}
+		bool RedactorTerrainManager::_vectorConains(vector<int>* vect, int value)
+		{
+			bool ret_ = false;
+
+			for(int i = 0; i < vect->size(); i++)
+			{
+				if(vect[0][i] == value)
+					return true;
+			}
+			return ret_;
 		}
 #pragma endregion
 

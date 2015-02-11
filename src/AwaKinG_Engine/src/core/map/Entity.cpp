@@ -21,8 +21,5 @@ void Entity::shutdown()
 }
 void Entity::setTransformation(XMFLOAT3 pos, XMFLOAT3 scl, XMFLOAT3 rot)
 {
-
 	XMStoreFloat4x4(_worldMatrix, XMMatrixMultiply(XMMatrixMultiply(XMMatrixScaling(scl.x, scl.y, scl.z), XMMatrixRotationRollPitchYaw(rot.x*0.0174532925f, rot.y*0.0174532925f, rot.z*0.0174532925f)), XMMatrixTranslation(pos.x, pos.y, pos.z)));
-	//XMMatrixAffineTransformation(XMLoadFloat3(&pos),)
-
 }

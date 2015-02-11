@@ -3,6 +3,16 @@
 #include "TerrainSector.h"
 #include "TerrainPen.h"
 
+struct Quad
+{
+	int _1; int _2; int _3; int _4;
+	int center; float diapazon;
+
+	int leftID; int rightID; int upID; int downID;
+	float left; float right; float up; float down;
+
+	int tileId;
+};
 struct Biom
 {
 	Biom(float height_, float range_)
@@ -198,7 +208,7 @@ protected:
 		int numTiles;		int numSectors;
 		int maxId;
 
-		float cellSpace = 20.0f;
+		float cellSpace = 50.0f;
 		int		numVerts = 65;
 		int		numTileVerts = numVerts * numVerts;
 		int		numQuad = numVerts - 1;
@@ -251,6 +261,10 @@ public:
 private:
 		void _pick(precomputeRay* pickRay, vector<QuadTree*>* rayAabbIntersected);
 	int _terraPick(precomputeRay* pickRay, int* terrainId);
+	void _setDSQuadProps(Quad* quad, int indexQuad, vector<Quad>* listQuads, Quad* father,
+		vector<int>* _1, vector<int>* _2, vector<int>* _3, vector<int>* _6, vector<int>* _11, vector<int>* _22,
+		vector<int>* _43, vector<int>* _86, vector<int>* _171, vector<int>* _342);
+	bool _vectorConains(vector<int>* vect, int value);
 	bool _getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, int* returnedID);
 	bool _getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, float* tu, float* tv);
 	bool _intersectTriangle(float3* pickOrig, float3* pickDir, XMFLOAT3** vs);

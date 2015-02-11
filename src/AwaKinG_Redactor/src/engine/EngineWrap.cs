@@ -11,10 +11,13 @@ namespace AwaKinG_Redactor.src.engine
     {
         #region dll import
         const String _dllPath = "../../../../dll/AwaKinG_Engine.dll";
+        
+        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+            EntryPoint = "EngineTerrainDiamondSquare")]
+        private static extern void _terraDiamondSquare(IntPtr pointer);
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineTerrainSetPenVisible")]
         private static extern void _setTerraPenVisible(IntPtr pointer, bool set);
-
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineTerrainSetTerraPenSize")]
         private static extern void _setTerraPenSize(IntPtr pointer,  int in_, int out_);
@@ -154,7 +157,9 @@ namespace AwaKinG_Redactor.src.engine
         }
         public void RandomizeTerrain(int diapazon)
         {
-            _randomizeTerrain(_engine, diapazon);
+            _terraDiamondSquare(_engine);
+            //_blurTerrain(_engine, 12);
+            //_randomizeTerrain(_engine, diapazon);
         }
         public void BlurTerrain(int value)
         {

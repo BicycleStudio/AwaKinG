@@ -155,18 +155,31 @@ namespace AwaKinG_Redactor
         }
         private void awA_Button5_Click(object sender, EventArgs e)
         {
-            _engine.SetTerrainWorkType(3);
-            _engine.SetTerraPenHeightVisible(awA_Button4.CHECKED);
+            if (btnTPHeight.CHECKED)
+            {
+                _engine.SetTerrainWorkType(3);
+                btnTPHeight.CHECKED = false;
+            }
+            else
+                _engine.SetTerrainWorkType(0);
+            _engine.SetTerraPenHeightVisible(btnTPHeight.CHECKED);
         }
         private void awA_Button6_Click(object sender, EventArgs e)
         {
             _engine.SetTerrainWorkType(0);
-            _engine.SetTerraPenHeightVisible(awA_Button4.CHECKED);
+            _engine.SetTerraPenHeightVisible(btnTPHeight.CHECKED);
         }
         private void awA_Button4_Click(object sender, EventArgs e)
         {
-            _engine.SetTerrainWorkType(1);
-            _engine.SetTerraPenHeightVisible(awA_Button4.CHECKED);
+            if (btnTPHeight.CHECKED)
+            {
+                btnTPTexture.CHECKED = false;
+                _engine.SetTerrainWorkType(1);
+                _engine.SetTerraPenHard(vbtnTPHardness.Value / 100.0f);
+            }
+            else
+                _engine.SetTerrainWorkType(0);
+            _engine.SetTerraPenHeightVisible(btnTPHeight.CHECKED);
         }
         private void pnlRender_MouseDown(object sender, MouseEventArgs e)
         {
@@ -221,25 +234,28 @@ namespace AwaKinG_Redactor
         }
         private void avbPenHardness_MouseUp(object sender, MouseEventArgs e)
         {
-            _engine.SetTerraPenHard(avbPenHardness.Value);
+            _engine.SetTerraPenHard(vbtnTPHardness.Value/100.0f);
         }
         private void avbPenSizeOuter_OnValueChanged(object sender, EventArgs e)
         {
-            if (avbPenSizeOuter.Value < avbPenSizeInner.Value) avbPenSizeInner.Value = avbPenSizeOuter.Value;
-            avbPenSizeInner.Refresh();
+            if (vbtnPenSizeOuter.Value < vbtnPenSizeInner.Value) vbtnPenSizeInner.Value = vbtnPenSizeOuter.Value;
+            vbtnPenSizeInner.Refresh();
         }
         private void avbPenSizeInner_OnValueChanged(object sender, EventArgs e)
         {
-            if (avbPenSizeOuter.Value < avbPenSizeInner.Value) avbPenSizeOuter.Value = avbPenSizeInner.Value;
-            avbPenSizeOuter.Refresh();
+            if (vbtnPenSizeOuter.Value < vbtnPenSizeInner.Value) vbtnPenSizeOuter.Value = vbtnPenSizeInner.Value;
+            vbtnPenSizeOuter.Refresh();
         }
         private void avbPenHardness_OnValueChanged(object sender, EventArgs e)
         {
         }
-
         private void avbPenSizeOuter_MouseUp(object sender, MouseEventArgs e)
         {
-            _engine.SetTerraPenSize((int)avbPenSizeInner.Value, (int)avbPenSizeOuter.Value);
+            _engine.SetTerraPenSize((int)vbtnPenSizeInner.Value, (int)vbtnPenSizeOuter.Value);
+        }
+        private void btnTPSmoothInOut_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

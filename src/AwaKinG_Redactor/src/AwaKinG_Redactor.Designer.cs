@@ -45,21 +45,29 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.panel_Ex2 = new GUI_elements.Panel_Ex();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.avbPenHardness = new GUI_elements.AWA_Value_Button();
+            this.pnlLeft = new System.Windows.Forms.Panel();
+            this.pnlTerrainPen = new GUI_elements.Panel_Ex();
+            this.pnlPositionLock = new System.Windows.Forms.Panel();
+            this.btnTPPositionLock = new GUI_elements.AWA_Button();
+            this.pnlTerrainPenSmoothIn = new System.Windows.Forms.Panel();
+            this.btnTPSmoothIn = new GUI_elements.AWA_Button();
+            this.pnlTerrainPenSmoothOut = new System.Windows.Forms.Panel();
+            this.btnTPSmoothOut = new GUI_elements.AWA_Button();
+            this.pnlTerrainPenSmoothLoeff = new System.Windows.Forms.Panel();
+            this.vbtnTPSmoothKoeff = new GUI_elements.AWA_Value_Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.pnlTerrainPenHard = new System.Windows.Forms.Panel();
+            this.vbtnTPHardness = new GUI_elements.AWA_Value_Button();
             this.label4 = new System.Windows.Forms.Label();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.avbPenSizeOuter = new GUI_elements.AWA_Value_Button();
+            this.pnlTerrainPenSizeOuter = new System.Windows.Forms.Panel();
+            this.vbtnPenSizeOuter = new GUI_elements.AWA_Value_Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.avbPenSizeInner = new GUI_elements.AWA_Value_Button();
+            this.pnlTerrainPenSizeInner = new System.Windows.Forms.Panel();
+            this.vbtnPenSizeInner = new GUI_elements.AWA_Value_Button();
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.awA_Button6 = new GUI_elements.AWA_Button();
-            this.awA_Button5 = new GUI_elements.AWA_Button();
-            this.awA_Button4 = new GUI_elements.AWA_Button();
+            this.btnTPTexture = new GUI_elements.AWA_Button();
+            this.btnTPHeight = new GUI_elements.AWA_Button();
             this.panel_Ex1 = new GUI_elements.Panel_Ex();
             this.awA_Value_Button2 = new GUI_elements.AWA_Value_Button();
             this.awA_Value_Button1 = new GUI_elements.AWA_Value_Button();
@@ -68,15 +76,27 @@
             this.awA_Button3 = new GUI_elements.AWA_Button();
             this.awA_Value_Button3 = new GUI_elements.AWA_Value_Button();
             this.pnlRender = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.vbtnTPAltHard = new GUI_elements.AWA_Value_Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.vbtnTPShiftHeight = new GUI_elements.AWA_Value_Button();
+            this.label7 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel_Ex2.SuspendLayout();
-            this.panel7.SuspendLayout();
-            this.panel6.SuspendLayout();
-            this.panel5.SuspendLayout();
+            this.pnlLeft.SuspendLayout();
+            this.pnlTerrainPen.SuspendLayout();
+            this.pnlPositionLock.SuspendLayout();
+            this.pnlTerrainPenSmoothIn.SuspendLayout();
+            this.pnlTerrainPenSmoothOut.SuspendLayout();
+            this.pnlTerrainPenSmoothLoeff.SuspendLayout();
+            this.pnlTerrainPenHard.SuspendLayout();
+            this.pnlTerrainPenSizeOuter.SuspendLayout();
+            this.pnlTerrainPenSizeInner.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel_Ex1.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -222,70 +242,206 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Log:";
             // 
-            // panel3
+            // pnlLeft
             // 
-            this.panel3.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.panel3.Controls.Add(this.panel_Ex2);
-            this.panel3.Controls.Add(this.panel_Ex1);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel3.Location = new System.Drawing.Point(0, 52);
-            this.panel3.Name = "panel3";
-            this.panel3.Padding = new System.Windows.Forms.Padding(2);
-            this.panel3.Size = new System.Drawing.Size(173, 481);
-            this.panel3.TabIndex = 3;
+            this.pnlLeft.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.pnlLeft.Controls.Add(this.pnlTerrainPen);
+            this.pnlLeft.Controls.Add(this.panel_Ex1);
+            this.pnlLeft.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlLeft.Location = new System.Drawing.Point(0, 52);
+            this.pnlLeft.Name = "pnlLeft";
+            this.pnlLeft.Padding = new System.Windows.Forms.Padding(2);
+            this.pnlLeft.Size = new System.Drawing.Size(173, 481);
+            this.pnlLeft.TabIndex = 3;
             // 
-            // panel_Ex2
+            // pnlTerrainPen
             // 
-            this.panel_Ex2._Checked = false;
-            this.panel_Ex2.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.panel_Ex2.BORDERCOLOR = System.Drawing.Color.Black;
-            this.panel_Ex2.BORDERRADIUS = 5;
-            this.panel_Ex2.BORDERWIDTH = 1;
-            this.panel_Ex2.Controls.Add(this.panel7);
-            this.panel_Ex2.Controls.Add(this.panel6);
-            this.panel_Ex2.Controls.Add(this.panel5);
-            this.panel_Ex2.Controls.Add(this.panel4);
-            this.panel_Ex2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_Ex2.Location = new System.Drawing.Point(2, 150);
-            this.panel_Ex2.Name = "panel_Ex2";
-            this.panel_Ex2.Padding = new System.Windows.Forms.Padding(0, 25, 0, 0);
-            this.panel_Ex2.Size = new System.Drawing.Size(169, 192);
-            this.panel_Ex2.TabIndex = 10;
-            this.panel_Ex2.Text = "Pen";
+            this.pnlTerrainPen._Checked = false;
+            this.pnlTerrainPen.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.pnlTerrainPen.BORDERCOLOR = System.Drawing.Color.Black;
+            this.pnlTerrainPen.BORDERRADIUS = 5;
+            this.pnlTerrainPen.BORDERWIDTH = 1;
+            this.pnlTerrainPen.Controls.Add(this.pnlPositionLock);
+            this.pnlTerrainPen.Controls.Add(this.pnlTerrainPenSmoothIn);
+            this.pnlTerrainPen.Controls.Add(this.pnlTerrainPenSmoothOut);
+            this.pnlTerrainPen.Controls.Add(this.pnlTerrainPenSmoothLoeff);
+            this.pnlTerrainPen.Controls.Add(this.panel5);
+            this.pnlTerrainPen.Controls.Add(this.panel3);
+            this.pnlTerrainPen.Controls.Add(this.pnlTerrainPenHard);
+            this.pnlTerrainPen.Controls.Add(this.pnlTerrainPenSizeOuter);
+            this.pnlTerrainPen.Controls.Add(this.pnlTerrainPenSizeInner);
+            this.pnlTerrainPen.Controls.Add(this.panel4);
+            this.pnlTerrainPen.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTerrainPen.Location = new System.Drawing.Point(2, 150);
+            this.pnlTerrainPen.Name = "pnlTerrainPen";
+            this.pnlTerrainPen.Padding = new System.Windows.Forms.Padding(3, 25, 3, 5);
+            this.pnlTerrainPen.Size = new System.Drawing.Size(169, 306);
+            this.pnlTerrainPen.TabIndex = 10;
+            this.pnlTerrainPen.Text = "Pen";
             // 
-            // panel7
+            // pnlPositionLock
             // 
-            this.panel7.Controls.Add(this.avbPenHardness);
-            this.panel7.Controls.Add(this.label4);
-            this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel7.Location = new System.Drawing.Point(0, 126);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(169, 25);
-            this.panel7.TabIndex = 3;
+            this.pnlPositionLock.Controls.Add(this.btnTPPositionLock);
+            this.pnlPositionLock.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlPositionLock.Location = new System.Drawing.Point(3, 276);
+            this.pnlPositionLock.Name = "pnlPositionLock";
+            this.pnlPositionLock.Padding = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.pnlPositionLock.Size = new System.Drawing.Size(163, 25);
+            this.pnlPositionLock.TabIndex = 7;
             // 
-            // avbPenHardness
+            // btnTPPositionLock
             // 
-            this.avbPenHardness.ARROWHEIGHT = 1;
-            this.avbPenHardness.ARROWTOOLSH = 1;
-            this.avbPenHardness.ARRWIDTH = 20;
-            this.avbPenHardness.BackColor = System.Drawing.Color.Transparent;
-            this.avbPenHardness.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.avbPenHardness.BORDERCOLOR = System.Drawing.Color.Black;
-            this.avbPenHardness.BORDERRADIUS = 5;
-            this.avbPenHardness.BORDERWIDTH = 0;
-            this.avbPenHardness.Image = null;
-            this.avbPenHardness.Location = new System.Drawing.Point(78, 2);
-            this.avbPenHardness.MaxValue = 1000F;
-            this.avbPenHardness.MinValue = -1000F;
-            this.avbPenHardness.Name = "avbPenHardness";
-            this.avbPenHardness.Size = new System.Drawing.Size(75, 20);
-            this.avbPenHardness.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Slow;
-            this.avbPenHardness.TabIndex = 1;
-            this.avbPenHardness.Text = "awA_Value_Button6";
-            this.avbPenHardness.UseVisualStyleBackColor = false;
-            this.avbPenHardness.VALUEV = 1F;
-            this.avbPenHardness.OnValueChanged += new System.EventHandler<System.EventArgs>(this.avbPenHardness_OnValueChanged);
-            this.avbPenHardness.MouseUp += new System.Windows.Forms.MouseEventHandler(this.avbPenHardness_MouseUp);
+            this.btnTPPositionLock.BackColor = System.Drawing.Color.Transparent;
+            this.btnTPPositionLock.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.btnTPPositionLock.BORDERCOLOR = System.Drawing.Color.Black;
+            this.btnTPPositionLock.BORDERRADIUS = 10;
+            this.btnTPPositionLock.BORDERWIDTH = 0;
+            this.btnTPPositionLock.CHECKABLE = true;
+            this.btnTPPositionLock.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnTPPositionLock.Image = null;
+            this.btnTPPositionLock.Location = new System.Drawing.Point(4, 2);
+            this.btnTPPositionLock.Name = "btnTPPositionLock";
+            this.btnTPPositionLock.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.btnTPPositionLock.SCALEBORD = true;
+            this.btnTPPositionLock.Size = new System.Drawing.Size(155, 21);
+            this.btnTPPositionLock.TabIndex = 5;
+            this.btnTPPositionLock.Text = "Position lock";
+            this.btnTPPositionLock.UseVisualStyleBackColor = false;
+            // 
+            // pnlTerrainPenSmoothIn
+            // 
+            this.pnlTerrainPenSmoothIn.Controls.Add(this.btnTPSmoothIn);
+            this.pnlTerrainPenSmoothIn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTerrainPenSmoothIn.Location = new System.Drawing.Point(3, 251);
+            this.pnlTerrainPenSmoothIn.Name = "pnlTerrainPenSmoothIn";
+            this.pnlTerrainPenSmoothIn.Padding = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.pnlTerrainPenSmoothIn.Size = new System.Drawing.Size(163, 25);
+            this.pnlTerrainPenSmoothIn.TabIndex = 5;
+            // 
+            // btnTPSmoothIn
+            // 
+            this.btnTPSmoothIn.BackColor = System.Drawing.Color.Transparent;
+            this.btnTPSmoothIn.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.btnTPSmoothIn.BORDERCOLOR = System.Drawing.Color.Black;
+            this.btnTPSmoothIn.BORDERRADIUS = 10;
+            this.btnTPSmoothIn.BORDERWIDTH = 0;
+            this.btnTPSmoothIn.CHECKABLE = true;
+            this.btnTPSmoothIn.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnTPSmoothIn.Image = null;
+            this.btnTPSmoothIn.Location = new System.Drawing.Point(4, 2);
+            this.btnTPSmoothIn.Name = "btnTPSmoothIn";
+            this.btnTPSmoothIn.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.btnTPSmoothIn.SCALEBORD = true;
+            this.btnTPSmoothIn.Size = new System.Drawing.Size(155, 21);
+            this.btnTPSmoothIn.TabIndex = 5;
+            this.btnTPSmoothIn.Text = "Smooth in";
+            this.btnTPSmoothIn.UseVisualStyleBackColor = false;
+            this.btnTPSmoothIn.Click += new System.EventHandler(this.btnTPSmoothInOut_Click);
+            // 
+            // pnlTerrainPenSmoothOut
+            // 
+            this.pnlTerrainPenSmoothOut.Controls.Add(this.btnTPSmoothOut);
+            this.pnlTerrainPenSmoothOut.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTerrainPenSmoothOut.Location = new System.Drawing.Point(3, 226);
+            this.pnlTerrainPenSmoothOut.Name = "pnlTerrainPenSmoothOut";
+            this.pnlTerrainPenSmoothOut.Padding = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.pnlTerrainPenSmoothOut.Size = new System.Drawing.Size(163, 25);
+            this.pnlTerrainPenSmoothOut.TabIndex = 4;
+            // 
+            // btnTPSmoothOut
+            // 
+            this.btnTPSmoothOut.BackColor = System.Drawing.Color.Transparent;
+            this.btnTPSmoothOut.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.btnTPSmoothOut.BORDERCOLOR = System.Drawing.Color.Black;
+            this.btnTPSmoothOut.BORDERRADIUS = 10;
+            this.btnTPSmoothOut.BORDERWIDTH = 0;
+            this.btnTPSmoothOut.CHECKABLE = true;
+            this.btnTPSmoothOut.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnTPSmoothOut.Image = null;
+            this.btnTPSmoothOut.Location = new System.Drawing.Point(4, 2);
+            this.btnTPSmoothOut.Name = "btnTPSmoothOut";
+            this.btnTPSmoothOut.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.btnTPSmoothOut.SCALEBORD = true;
+            this.btnTPSmoothOut.Size = new System.Drawing.Size(155, 21);
+            this.btnTPSmoothOut.TabIndex = 5;
+            this.btnTPSmoothOut.Text = "Smooth out";
+            this.btnTPSmoothOut.UseVisualStyleBackColor = false;
+            this.btnTPSmoothOut.Click += new System.EventHandler(this.btnTPSmoothInOut_Click);
+            // 
+            // pnlTerrainPenSmoothLoeff
+            // 
+            this.pnlTerrainPenSmoothLoeff.Controls.Add(this.vbtnTPSmoothKoeff);
+            this.pnlTerrainPenSmoothLoeff.Controls.Add(this.label5);
+            this.pnlTerrainPenSmoothLoeff.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTerrainPenSmoothLoeff.Location = new System.Drawing.Point(3, 201);
+            this.pnlTerrainPenSmoothLoeff.Name = "pnlTerrainPenSmoothLoeff";
+            this.pnlTerrainPenSmoothLoeff.Size = new System.Drawing.Size(163, 25);
+            this.pnlTerrainPenSmoothLoeff.TabIndex = 6;
+            // 
+            // vbtnTPSmoothKoeff
+            // 
+            this.vbtnTPSmoothKoeff.ARROWHEIGHT = 1;
+            this.vbtnTPSmoothKoeff.ARROWTOOLSH = 1;
+            this.vbtnTPSmoothKoeff.ARRWIDTH = 20;
+            this.vbtnTPSmoothKoeff.BackColor = System.Drawing.Color.Transparent;
+            this.vbtnTPSmoothKoeff.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.vbtnTPSmoothKoeff.BORDERCOLOR = System.Drawing.Color.Black;
+            this.vbtnTPSmoothKoeff.BORDERRADIUS = 5;
+            this.vbtnTPSmoothKoeff.BORDERWIDTH = 0;
+            this.vbtnTPSmoothKoeff.Image = null;
+            this.vbtnTPSmoothKoeff.Location = new System.Drawing.Point(78, 2);
+            this.vbtnTPSmoothKoeff.MaxValue = 1F;
+            this.vbtnTPSmoothKoeff.MinValue = 0F;
+            this.vbtnTPSmoothKoeff.Name = "vbtnTPSmoothKoeff";
+            this.vbtnTPSmoothKoeff.Size = new System.Drawing.Size(75, 20);
+            this.vbtnTPSmoothKoeff.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Very_Slow;
+            this.vbtnTPSmoothKoeff.TabIndex = 1;
+            this.vbtnTPSmoothKoeff.Text = "awA_Value_Button6";
+            this.vbtnTPSmoothKoeff.UseVisualStyleBackColor = false;
+            this.vbtnTPSmoothKoeff.VALUEV = 1F;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 6);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(73, 13);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "Smooth koeff:";
+            // 
+            // pnlTerrainPenHard
+            // 
+            this.pnlTerrainPenHard.Controls.Add(this.vbtnTPHardness);
+            this.pnlTerrainPenHard.Controls.Add(this.label4);
+            this.pnlTerrainPenHard.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTerrainPenHard.Location = new System.Drawing.Point(3, 126);
+            this.pnlTerrainPenHard.Name = "pnlTerrainPenHard";
+            this.pnlTerrainPenHard.Size = new System.Drawing.Size(163, 25);
+            this.pnlTerrainPenHard.TabIndex = 3;
+            // 
+            // vbtnTPHardness
+            // 
+            this.vbtnTPHardness.ARROWHEIGHT = 1;
+            this.vbtnTPHardness.ARROWTOOLSH = 1;
+            this.vbtnTPHardness.ARRWIDTH = 20;
+            this.vbtnTPHardness.BackColor = System.Drawing.Color.Transparent;
+            this.vbtnTPHardness.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.vbtnTPHardness.BORDERCOLOR = System.Drawing.Color.Black;
+            this.vbtnTPHardness.BORDERRADIUS = 5;
+            this.vbtnTPHardness.BORDERWIDTH = 0;
+            this.vbtnTPHardness.Image = null;
+            this.vbtnTPHardness.Location = new System.Drawing.Point(78, 2);
+            this.vbtnTPHardness.MaxValue = 1000F;
+            this.vbtnTPHardness.MinValue = -1000F;
+            this.vbtnTPHardness.Name = "vbtnTPHardness";
+            this.vbtnTPHardness.Size = new System.Drawing.Size(75, 20);
+            this.vbtnTPHardness.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Slow;
+            this.vbtnTPHardness.TabIndex = 1;
+            this.vbtnTPHardness.Text = "awA_Value_Button6";
+            this.vbtnTPHardness.UseVisualStyleBackColor = false;
+            this.vbtnTPHardness.VALUEV = 1F;
+            this.vbtnTPHardness.OnValueChanged += new System.EventHandler<System.EventArgs>(this.avbPenHardness_OnValueChanged);
+            this.vbtnTPHardness.MouseUp += new System.Windows.Forms.MouseEventHandler(this.avbPenHardness_MouseUp);
             // 
             // label4
             // 
@@ -296,39 +452,39 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Hardness:";
             // 
-            // panel6
+            // pnlTerrainPenSizeOuter
             // 
-            this.panel6.Controls.Add(this.avbPenSizeOuter);
-            this.panel6.Controls.Add(this.label3);
-            this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel6.Location = new System.Drawing.Point(0, 101);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(169, 25);
-            this.panel6.TabIndex = 2;
+            this.pnlTerrainPenSizeOuter.Controls.Add(this.vbtnPenSizeOuter);
+            this.pnlTerrainPenSizeOuter.Controls.Add(this.label3);
+            this.pnlTerrainPenSizeOuter.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTerrainPenSizeOuter.Location = new System.Drawing.Point(3, 101);
+            this.pnlTerrainPenSizeOuter.Name = "pnlTerrainPenSizeOuter";
+            this.pnlTerrainPenSizeOuter.Size = new System.Drawing.Size(163, 25);
+            this.pnlTerrainPenSizeOuter.TabIndex = 2;
             // 
-            // avbPenSizeOuter
+            // vbtnPenSizeOuter
             // 
-            this.avbPenSizeOuter.ARROWHEIGHT = 1;
-            this.avbPenSizeOuter.ARROWTOOLSH = 1;
-            this.avbPenSizeOuter.ARRWIDTH = 20;
-            this.avbPenSizeOuter.BackColor = System.Drawing.Color.Transparent;
-            this.avbPenSizeOuter.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.avbPenSizeOuter.BORDERCOLOR = System.Drawing.Color.Black;
-            this.avbPenSizeOuter.BORDERRADIUS = 5;
-            this.avbPenSizeOuter.BORDERWIDTH = 0;
-            this.avbPenSizeOuter.Image = null;
-            this.avbPenSizeOuter.Location = new System.Drawing.Point(78, 2);
-            this.avbPenSizeOuter.MaxValue = 10F;
-            this.avbPenSizeOuter.MinValue = 1F;
-            this.avbPenSizeOuter.Name = "avbPenSizeOuter";
-            this.avbPenSizeOuter.Size = new System.Drawing.Size(75, 20);
-            this.avbPenSizeOuter.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
-            this.avbPenSizeOuter.TabIndex = 1;
-            this.avbPenSizeOuter.Text = "awA_Value_Button5";
-            this.avbPenSizeOuter.UseVisualStyleBackColor = false;
-            this.avbPenSizeOuter.VALUEV = 1F;
-            this.avbPenSizeOuter.OnValueChanged += new System.EventHandler<System.EventArgs>(this.avbPenSizeOuter_OnValueChanged);
-            this.avbPenSizeOuter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.avbPenSizeOuter_MouseUp);
+            this.vbtnPenSizeOuter.ARROWHEIGHT = 1;
+            this.vbtnPenSizeOuter.ARROWTOOLSH = 1;
+            this.vbtnPenSizeOuter.ARRWIDTH = 20;
+            this.vbtnPenSizeOuter.BackColor = System.Drawing.Color.Transparent;
+            this.vbtnPenSizeOuter.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.vbtnPenSizeOuter.BORDERCOLOR = System.Drawing.Color.Black;
+            this.vbtnPenSizeOuter.BORDERRADIUS = 5;
+            this.vbtnPenSizeOuter.BORDERWIDTH = 0;
+            this.vbtnPenSizeOuter.Image = null;
+            this.vbtnPenSizeOuter.Location = new System.Drawing.Point(78, 2);
+            this.vbtnPenSizeOuter.MaxValue = 10F;
+            this.vbtnPenSizeOuter.MinValue = 1F;
+            this.vbtnPenSizeOuter.Name = "vbtnPenSizeOuter";
+            this.vbtnPenSizeOuter.Size = new System.Drawing.Size(75, 20);
+            this.vbtnPenSizeOuter.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
+            this.vbtnPenSizeOuter.TabIndex = 1;
+            this.vbtnPenSizeOuter.Text = "awA_Value_Button5";
+            this.vbtnPenSizeOuter.UseVisualStyleBackColor = false;
+            this.vbtnPenSizeOuter.VALUEV = 1F;
+            this.vbtnPenSizeOuter.OnValueChanged += new System.EventHandler<System.EventArgs>(this.avbPenSizeOuter_OnValueChanged);
+            this.vbtnPenSizeOuter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.avbPenSizeOuter_MouseUp);
             // 
             // label3
             // 
@@ -339,39 +495,39 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Size outer:";
             // 
-            // panel5
+            // pnlTerrainPenSizeInner
             // 
-            this.panel5.Controls.Add(this.avbPenSizeInner);
-            this.panel5.Controls.Add(this.label2);
-            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(0, 76);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(169, 25);
-            this.panel5.TabIndex = 1;
+            this.pnlTerrainPenSizeInner.Controls.Add(this.vbtnPenSizeInner);
+            this.pnlTerrainPenSizeInner.Controls.Add(this.label2);
+            this.pnlTerrainPenSizeInner.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTerrainPenSizeInner.Location = new System.Drawing.Point(3, 76);
+            this.pnlTerrainPenSizeInner.Name = "pnlTerrainPenSizeInner";
+            this.pnlTerrainPenSizeInner.Size = new System.Drawing.Size(163, 25);
+            this.pnlTerrainPenSizeInner.TabIndex = 1;
             // 
-            // avbPenSizeInner
+            // vbtnPenSizeInner
             // 
-            this.avbPenSizeInner.ARROWHEIGHT = 1;
-            this.avbPenSizeInner.ARROWTOOLSH = 1;
-            this.avbPenSizeInner.ARRWIDTH = 20;
-            this.avbPenSizeInner.BackColor = System.Drawing.Color.Transparent;
-            this.avbPenSizeInner.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.avbPenSizeInner.BORDERCOLOR = System.Drawing.Color.Black;
-            this.avbPenSizeInner.BORDERRADIUS = 5;
-            this.avbPenSizeInner.BORDERWIDTH = 0;
-            this.avbPenSizeInner.Image = null;
-            this.avbPenSizeInner.Location = new System.Drawing.Point(78, 2);
-            this.avbPenSizeInner.MaxValue = 10F;
-            this.avbPenSizeInner.MinValue = 1F;
-            this.avbPenSizeInner.Name = "avbPenSizeInner";
-            this.avbPenSizeInner.Size = new System.Drawing.Size(75, 20);
-            this.avbPenSizeInner.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
-            this.avbPenSizeInner.TabIndex = 1;
-            this.avbPenSizeInner.Text = "awA_Value_Button4";
-            this.avbPenSizeInner.UseVisualStyleBackColor = false;
-            this.avbPenSizeInner.VALUEV = 1F;
-            this.avbPenSizeInner.OnValueChanged += new System.EventHandler<System.EventArgs>(this.avbPenSizeInner_OnValueChanged);
-            this.avbPenSizeInner.MouseUp += new System.Windows.Forms.MouseEventHandler(this.avbPenSizeOuter_MouseUp);
+            this.vbtnPenSizeInner.ARROWHEIGHT = 1;
+            this.vbtnPenSizeInner.ARROWTOOLSH = 1;
+            this.vbtnPenSizeInner.ARRWIDTH = 20;
+            this.vbtnPenSizeInner.BackColor = System.Drawing.Color.Transparent;
+            this.vbtnPenSizeInner.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.vbtnPenSizeInner.BORDERCOLOR = System.Drawing.Color.Black;
+            this.vbtnPenSizeInner.BORDERRADIUS = 5;
+            this.vbtnPenSizeInner.BORDERWIDTH = 0;
+            this.vbtnPenSizeInner.Image = null;
+            this.vbtnPenSizeInner.Location = new System.Drawing.Point(78, 2);
+            this.vbtnPenSizeInner.MaxValue = 10F;
+            this.vbtnPenSizeInner.MinValue = 1F;
+            this.vbtnPenSizeInner.Name = "vbtnPenSizeInner";
+            this.vbtnPenSizeInner.Size = new System.Drawing.Size(75, 20);
+            this.vbtnPenSizeInner.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
+            this.vbtnPenSizeInner.TabIndex = 1;
+            this.vbtnPenSizeInner.Text = "awA_Value_Button4";
+            this.vbtnPenSizeInner.UseVisualStyleBackColor = false;
+            this.vbtnPenSizeInner.VALUEV = 1F;
+            this.vbtnPenSizeInner.OnValueChanged += new System.EventHandler<System.EventArgs>(this.avbPenSizeInner_OnValueChanged);
+            this.vbtnPenSizeInner.MouseUp += new System.Windows.Forms.MouseEventHandler(this.avbPenSizeOuter_MouseUp);
             // 
             // label2
             // 
@@ -384,69 +540,51 @@
             // 
             // panel4
             // 
-            this.panel4.Controls.Add(this.awA_Button6);
-            this.panel4.Controls.Add(this.awA_Button5);
-            this.panel4.Controls.Add(this.awA_Button4);
+            this.panel4.Controls.Add(this.btnTPTexture);
+            this.panel4.Controls.Add(this.btnTPHeight);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(0, 25);
+            this.panel4.Location = new System.Drawing.Point(3, 25);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(169, 51);
+            this.panel4.Size = new System.Drawing.Size(163, 51);
             this.panel4.TabIndex = 0;
             // 
-            // awA_Button6
+            // btnTPTexture
             // 
-            this.awA_Button6.BackColor = System.Drawing.Color.Transparent;
-            this.awA_Button6.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.awA_Button6.BORDERCOLOR = System.Drawing.Color.Black;
-            this.awA_Button6.BORDERRADIUS = 5;
-            this.awA_Button6.BORDERWIDTH = 1;
-            this.awA_Button6.Image = null;
-            this.awA_Button6.Location = new System.Drawing.Point(114, 3);
-            this.awA_Button6.Name = "awA_Button6";
-            this.awA_Button6.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-            this.awA_Button6.SCALEBORD = true;
-            this.awA_Button6.Size = new System.Drawing.Size(42, 44);
-            this.awA_Button6.TabIndex = 8;
-            this.awA_Button6.Text = "N";
-            this.awA_Button6.UseVisualStyleBackColor = false;
-            this.awA_Button6.Click += new System.EventHandler(this.awA_Button6_Click);
+            this.btnTPTexture.BackColor = System.Drawing.Color.Transparent;
+            this.btnTPTexture.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.btnTPTexture.BORDERCOLOR = System.Drawing.Color.Black;
+            this.btnTPTexture.BORDERRADIUS = 5;
+            this.btnTPTexture.BORDERWIDTH = 1;
+            this.btnTPTexture.CHECKABLE = true;
+            this.btnTPTexture.Image = null;
+            this.btnTPTexture.Location = new System.Drawing.Point(87, 4);
+            this.btnTPTexture.Name = "btnTPTexture";
+            this.btnTPTexture.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.btnTPTexture.SCALEBORD = true;
+            this.btnTPTexture.Size = new System.Drawing.Size(42, 44);
+            this.btnTPTexture.TabIndex = 7;
+            this.btnTPTexture.Text = "T";
+            this.btnTPTexture.UseVisualStyleBackColor = false;
+            this.btnTPTexture.Click += new System.EventHandler(this.awA_Button5_Click);
             // 
-            // awA_Button5
+            // btnTPHeight
             // 
-            this.awA_Button5.BackColor = System.Drawing.Color.Transparent;
-            this.awA_Button5.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.awA_Button5.BORDERCOLOR = System.Drawing.Color.Black;
-            this.awA_Button5.BORDERRADIUS = 5;
-            this.awA_Button5.BORDERWIDTH = 1;
-            this.awA_Button5.Image = null;
-            this.awA_Button5.Location = new System.Drawing.Point(63, 3);
-            this.awA_Button5.Name = "awA_Button5";
-            this.awA_Button5.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-            this.awA_Button5.SCALEBORD = true;
-            this.awA_Button5.Size = new System.Drawing.Size(42, 44);
-            this.awA_Button5.TabIndex = 7;
-            this.awA_Button5.Text = "T";
-            this.awA_Button5.UseVisualStyleBackColor = false;
-            this.awA_Button5.Click += new System.EventHandler(this.awA_Button5_Click);
-            // 
-            // awA_Button4
-            // 
-            this.awA_Button4.BackColor = System.Drawing.Color.Transparent;
-            this.awA_Button4.BACKCOLOR = System.Drawing.Color.Transparent;
-            this.awA_Button4.BORDERCOLOR = System.Drawing.Color.Black;
-            this.awA_Button4.BORDERRADIUS = 5;
-            this.awA_Button4.BORDERWIDTH = 1;
-            this.awA_Button4.CHECKABLE = true;
-            this.awA_Button4.Image = null;
-            this.awA_Button4.Location = new System.Drawing.Point(11, 3);
-            this.awA_Button4.Name = "awA_Button4";
-            this.awA_Button4.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-            this.awA_Button4.SCALEBORD = true;
-            this.awA_Button4.Size = new System.Drawing.Size(42, 44);
-            this.awA_Button4.TabIndex = 6;
-            this.awA_Button4.Text = "H";
-            this.awA_Button4.UseVisualStyleBackColor = false;
-            this.awA_Button4.Click += new System.EventHandler(this.awA_Button4_Click);
+            this.btnTPHeight.BackColor = System.Drawing.Color.Transparent;
+            this.btnTPHeight.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.btnTPHeight.BORDERCOLOR = System.Drawing.Color.Black;
+            this.btnTPHeight.BORDERRADIUS = 5;
+            this.btnTPHeight.BORDERWIDTH = 1;
+            this.btnTPHeight.CHECKABLE = true;
+            this.btnTPHeight.Image = null;
+            this.btnTPHeight.Location = new System.Drawing.Point(35, 4);
+            this.btnTPHeight.Name = "btnTPHeight";
+            this.btnTPHeight.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+            this.btnTPHeight.SCALEBORD = true;
+            this.btnTPHeight.Size = new System.Drawing.Size(42, 44);
+            this.btnTPHeight.TabIndex = 6;
+            this.btnTPHeight.Text = "H";
+            this.btnTPHeight.UseVisualStyleBackColor = false;
+            this.btnTPHeight.Click += new System.EventHandler(this.awA_Button4_Click);
             // 
             // panel_Ex1
             // 
@@ -600,13 +738,95 @@
             this.pnlRender.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlRender_MouseMove);
             this.pnlRender.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlRender_MouseUp);
             // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.vbtnTPAltHard);
+            this.panel3.Controls.Add(this.label6);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(3, 151);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(163, 25);
+            this.panel3.TabIndex = 8;
+            // 
+            // vbtnTPAltHard
+            // 
+            this.vbtnTPAltHard.ARROWHEIGHT = 1;
+            this.vbtnTPAltHard.ARROWTOOLSH = 1;
+            this.vbtnTPAltHard.ARRWIDTH = 20;
+            this.vbtnTPAltHard.BackColor = System.Drawing.Color.Transparent;
+            this.vbtnTPAltHard.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.vbtnTPAltHard.BORDERCOLOR = System.Drawing.Color.Black;
+            this.vbtnTPAltHard.BORDERRADIUS = 5;
+            this.vbtnTPAltHard.BORDERWIDTH = 0;
+            this.vbtnTPAltHard.Image = null;
+            this.vbtnTPAltHard.Location = new System.Drawing.Point(78, 2);
+            this.vbtnTPAltHard.MaxValue = 1000F;
+            this.vbtnTPAltHard.MinValue = -1000F;
+            this.vbtnTPAltHard.Name = "vbtnTPAltHard";
+            this.vbtnTPAltHard.Size = new System.Drawing.Size(75, 20);
+            this.vbtnTPAltHard.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Slow;
+            this.vbtnTPAltHard.TabIndex = 1;
+            this.vbtnTPAltHard.Text = "awA_Value_Button6";
+            this.vbtnTPAltHard.UseVisualStyleBackColor = false;
+            this.vbtnTPAltHard.VALUEV = 0F;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(9, 6);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(68, 13);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "Alt-hardness:";
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.vbtnTPShiftHeight);
+            this.panel5.Controls.Add(this.label7);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel5.Location = new System.Drawing.Point(3, 176);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(163, 25);
+            this.panel5.TabIndex = 9;
+            // 
+            // vbtnTPShiftHeight
+            // 
+            this.vbtnTPShiftHeight.ARROWHEIGHT = 1;
+            this.vbtnTPShiftHeight.ARROWTOOLSH = 1;
+            this.vbtnTPShiftHeight.ARRWIDTH = 20;
+            this.vbtnTPShiftHeight.BackColor = System.Drawing.Color.Transparent;
+            this.vbtnTPShiftHeight.BACKCOLOR = System.Drawing.Color.Transparent;
+            this.vbtnTPShiftHeight.BORDERCOLOR = System.Drawing.Color.Black;
+            this.vbtnTPShiftHeight.BORDERRADIUS = 5;
+            this.vbtnTPShiftHeight.BORDERWIDTH = 0;
+            this.vbtnTPShiftHeight.Image = null;
+            this.vbtnTPShiftHeight.Location = new System.Drawing.Point(78, 2);
+            this.vbtnTPShiftHeight.MaxValue = 10000F;
+            this.vbtnTPShiftHeight.MinValue = -10000F;
+            this.vbtnTPShiftHeight.Name = "vbtnTPShiftHeight";
+            this.vbtnTPShiftHeight.Size = new System.Drawing.Size(75, 20);
+            this.vbtnTPShiftHeight.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Slow;
+            this.vbtnTPShiftHeight.TabIndex = 1;
+            this.vbtnTPShiftHeight.Text = "awA_Value_Button6";
+            this.vbtnTPShiftHeight.UseVisualStyleBackColor = false;
+            this.vbtnTPShiftHeight.VALUEV = 0F;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(10, 6);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(63, 13);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Shift-height:";
+            // 
             // AwaKinG_Redactor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 561);
             this.Controls.Add(this.pnlRender);
-            this.Controls.Add(this.panel3);
+            this.Controls.Add(this.pnlLeft);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip1);
@@ -624,16 +844,25 @@
             this.menuStrip1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel_Ex2.ResumeLayout(false);
-            this.panel7.ResumeLayout(false);
-            this.panel7.PerformLayout();
-            this.panel6.ResumeLayout(false);
-            this.panel6.PerformLayout();
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
+            this.pnlLeft.ResumeLayout(false);
+            this.pnlTerrainPen.ResumeLayout(false);
+            this.pnlPositionLock.ResumeLayout(false);
+            this.pnlTerrainPenSmoothIn.ResumeLayout(false);
+            this.pnlTerrainPenSmoothOut.ResumeLayout(false);
+            this.pnlTerrainPenSmoothLoeff.ResumeLayout(false);
+            this.pnlTerrainPenSmoothLoeff.PerformLayout();
+            this.pnlTerrainPenHard.ResumeLayout(false);
+            this.pnlTerrainPenHard.PerformLayout();
+            this.pnlTerrainPenSizeOuter.ResumeLayout(false);
+            this.pnlTerrainPenSizeOuter.PerformLayout();
+            this.pnlTerrainPenSizeInner.ResumeLayout(false);
+            this.pnlTerrainPenSizeInner.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel_Ex1.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -644,7 +873,7 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel pnlLeft;
         private System.Windows.Forms.Panel pnlRender;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openMapToolStripMenuItem;
@@ -662,25 +891,39 @@
         private System.Windows.Forms.ToolStripMenuItem terrainToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadFromFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToFileToolStripMenuItem;
-        private GUI_elements.AWA_Button awA_Button6;
-        private GUI_elements.AWA_Button awA_Button5;
-        private GUI_elements.AWA_Button awA_Button4;
+        private GUI_elements.AWA_Button btnTPTexture;
+        private GUI_elements.AWA_Button btnTPHeight;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private GUI_elements.Panel_Ex panel_Ex2;
-        private System.Windows.Forms.Panel panel7;
-        private GUI_elements.AWA_Value_Button avbPenHardness;
+        private GUI_elements.Panel_Ex pnlTerrainPen;
+        private System.Windows.Forms.Panel pnlTerrainPenHard;
+        private GUI_elements.AWA_Value_Button vbtnTPHardness;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Panel panel6;
-        private GUI_elements.AWA_Value_Button avbPenSizeOuter;
+        private System.Windows.Forms.Panel pnlTerrainPenSizeOuter;
+        private GUI_elements.AWA_Value_Button vbtnPenSizeOuter;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Panel panel5;
-        private GUI_elements.AWA_Value_Button avbPenSizeInner;
+        private System.Windows.Forms.Panel pnlTerrainPenSizeInner;
+        private GUI_elements.AWA_Value_Button vbtnPenSizeInner;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel4;
         private GUI_elements.Panel_Ex panel_Ex1;
+        private System.Windows.Forms.Panel pnlTerrainPenSmoothOut;
+        private GUI_elements.AWA_Button btnTPSmoothOut;
+        private System.Windows.Forms.Panel pnlTerrainPenSmoothIn;
+        private GUI_elements.AWA_Button btnTPSmoothIn;
+        private System.Windows.Forms.Panel pnlTerrainPenSmoothLoeff;
+        private GUI_elements.AWA_Value_Button vbtnTPSmoothKoeff;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Panel pnlPositionLock;
+        private GUI_elements.AWA_Button btnTPPositionLock;
+        private System.Windows.Forms.Panel panel5;
+        private GUI_elements.AWA_Value_Button vbtnTPShiftHeight;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Panel panel3;
+        private GUI_elements.AWA_Value_Button vbtnTPAltHard;
+        private System.Windows.Forms.Label label6;
     }
 }
 

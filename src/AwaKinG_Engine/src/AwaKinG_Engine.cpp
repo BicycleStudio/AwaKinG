@@ -109,3 +109,8 @@ void EngineTerrainSetPenVisible(RedactorEngine* pointer, bool value)
 {
 	pointer->setTerrainPenVisible(value);
 }
+void EngineTerrainDiamondSquare(RedactorEngine* pointer)
+{
+	pointer->diamondSquareTerrain();
+}
+
