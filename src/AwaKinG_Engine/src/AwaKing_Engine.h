@@ -29,7 +29,7 @@ DLL_SPEC void EngineTerrainQuadTreeSetVisible(RedactorEngine* pointer, bool set)
 DLL_SPEC void EngineTerrainSetWireframe(RedactorEngine* pointer, bool set);
 DLL_SPEC void EngineTerrainTerraformingShow(RedactorEngine* pointer, int posX, int posY);
 DLL_SPEC void EngineTerrainTerraformingApply(RedactorEngine* pointer, int posX, int posY);
-
 DLL_SPEC void EngineTerrainSetTerraPenSize(RedactorEngine* pointer, int in, int out);
 DLL_SPEC void EngineTerrainSetTerraPenHard(RedactorEngine* pointer, float hard);
+DLL_SPEC void EngineTerrainSetPenVisible(RedactorEngine* pointer, bool value);
 #endif // __AWAKING_ENGINE_H setCameraManagerType

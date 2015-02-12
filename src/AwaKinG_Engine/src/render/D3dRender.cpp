@@ -45,17 +45,25 @@
 		_worldMatrixs.push_back(worldMatrixsTextureModels_);
 		_worldMatrixs.push_back(worldMatrixsbumpModels_);
 
-		_renderTerrainQuadTree = true; 
-		_renderTerrainWireframe = true; 
+		_renderTerrainQuadTree = true; _renderTerrainWireframe = true; _renderTerrainPen = false;
+		_countDrawInTerrainPen = new int;_countDrawOutTerrainPen = new int;
+		_countDrawInTerrainPen[0] = 0; _countDrawOutTerrainPen[0] = 0;
+
+		_colorInTerrainPen = float4(0.9f,0.1f,0.1f,1.0f);
+		_colorOutTerrainPen = float4(0.1f, 0.1f, 0.9f, 1.0f);
 	}
-	void D3dRender::shutdown()
+	void D3dRender::shutdown() 
 	{
 		for(unsigned int i = 0; i < _models.size(); i++)
 		{
 			for(unsigned int j = 0; j < _models[i].size(); j++)
 			{
-				_models[i][j]->shutdown();
-				delete _models[i][j];
+				if(_models[i][j])
+				{
+					_models[i][j]->shutdown();
+					delete _models[i][j];
+					_models[i][j] = 0;
+				}
 			}
 			_models[i].clear();
 		}
@@ -67,7 +75,9 @@
 			{
 				for(unsigned int k = 0; k < _worldMatrixs[i][j].size(); k++)
 				{
-					delete _worldMatrixs[i][j][k];
+					// ÊÎÑÒÛËÜ ÄËß ÊÈÑÒÈ!!!!!!
+					if(j != 1 && j != 2)
+		 			delete _worldMatrixs[i][j][k];
 				}
 				_worldMatrixs[i][j].clear();
 			}
@@ -353,9 +363,41 @@
 		mdl_->setBuffers(vBuf_, iBuf_, 16);
 
 		_models[AMT_COLORMAP].push_back(mdl_);
+
+		mdl_ = new SystemModel();
+		inds_ = new unsigned int[36];
+		inds_[0] = 0; inds_[1] = 1; inds_[2] = 2; 
+		inds_[3] = 2;	inds_[4] = 3; inds_[5] = 0; 
+		inds_[6] = 7; inds_[7] = 6;	inds_[8] = 5; 
+		inds_[9] = 5; inds_[10] = 4; inds_[11] = 7;
+
+
+		inds_[12] = 3; inds_[13] = 2; inds_[14] = 6; 
+		inds_[15] = 6; inds_[16] = 7; inds_[17] = 3;
+		inds_[18] = 0; inds_[19] = 4; inds_[20] = 5;
+		inds_[21] = 5; inds_[22] = 1; inds_[23] = 0;
+
+		inds_[24] = 0; inds_[25] = 3; inds_[26] = 7;
+		inds_[27] = 7; inds_[28] = 4; inds_[29] = 0;
+		inds_[30] = 1; inds_[31] = 5; inds_[32] = 6;
+		inds_[33] = 6; inds_[34] = 2; inds_[35] = 1;
+
+		initData_.pSysMem = inds_;
+		bd_.ByteWidth = sizeof(UINT)* 36;
+
+		ID3D11Buffer* iBuf2_;
+		createBuffer(&bd_, &initData_, &iBuf2_);
+		mdl_->setBuffers(vBuf_, iBuf2_, 36);
+
+		_models[AMT_COLORMAP].push_back(mdl_);
 		vector<XMFLOAT4X4*> list_;
+		vector<XMFLOAT4X4*> list1_;
+		vector<XMFLOAT4X4*> list2_;
 		_worldMatrixs[AMT_COLORMAP].push_back(list_);
-		delete verts_;			//NEED?
+		_worldMatrixs[AMT_COLORMAP].push_back(list1_);
+		_worldMatrixs[AMT_COLORMAP].push_back(list2_);
+
+		delete verts_;
 		delete inds_;
 	}
 #pragma endregion
@@ -367,11 +409,22 @@
 
 		_immediateContext->RSSetState(_rs.Solid);
 
-		_immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
+		// System objects - colormapping
 		_prepareToRenderTechnique(_colorMap);
-		if(_renderTerrainQuadTree)
-			_renderColorMapModel(_models[AMT_COLORMAP][SMT_QUADTREE], &_worldMatrixs[AMT_COLORMAP][SMT_QUADTREE]);
 
+		if(_renderTerrainPen)
+		{
+			_renderColorMapModel(_models[AMT_COLORMAP][SMT_TERRAINPENIN], &_worldMatrixs[AMT_COLORMAP][SMT_TERRAINPENIN], &_colorInTerrainPen, _countDrawInTerrainPen[0]);
+			_renderColorMapModel(_models[AMT_COLORMAP][SMT_TERRAINPENIN], &_worldMatrixs[AMT_COLORMAP][SMT_TERRAINPENOUT], &_colorOutTerrainPen, _countDrawOutTerrainPen[0]);
+		}
+		if(_renderTerrainQuadTree)
+		{
+			_immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
+			_renderColorMapModel(_models[AMT_COLORMAP][SMT_QUADTREE], &_worldMatrixs[AMT_COLORMAP][SMT_QUADTREE], _models[AMT_COLORMAP][SMT_QUADTREE]->getColor());
+		}
+
+
+		// other objects - advanced techiniques
 		_immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		_prepareToRenderTechnique(_textureMap);
 		for(unsigned int i = 0; i < _models[AMT_TEXTUREMAP].size(); i++)
@@ -393,18 +446,34 @@
 		_immediateContext->IASetVertexBuffers(0, 1, model->getVertexBuffer(), &_terrainTech.VertexStride, &offset_);
 		_immediateContext->DrawIndexed(model->getIndexCount(), 0, 0);
 	}
-	void D3dRender::_renderColorMapModel(ModelEx* model, vector<XMFLOAT4X4*>* matrixs)
+	void D3dRender::_renderColorMapModel(ModelEx* model, vector<XMFLOAT4X4*>* matrixs, float4* color, int count)
 	{
 		UINT offset_ = 0;
 		_immediateContext->IASetVertexBuffers(0, 1, model->getVertexBuffer(), &_colorMap.VertexStride, &offset_);
 		_immediateContext->IASetIndexBuffer(model->getIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
 
+		_mapConstantBufferResource(&_colorMap.Buffer[1], color);
+		_immediateContext->PSSetConstantBuffers(_colorMap.IndexOfBuffer[1], 1, &_colorMap.Buffer[1]);
+		for(unsigned int j = 0; j < count; j++)
+		{
+			_mapConstantBufferResource(&_colorMap.Buffer[0], matrixs[0][j]);
+			_immediateContext->VSSetConstantBuffers(_colorMap.IndexOfBuffer[0], 1, &_colorMap.Buffer[0]);
+			_immediateContext->DrawIndexed(model->getIndexCount(), 0, 0);
+		}
+	}
+	void D3dRender::_renderColorMapModel(ModelEx* model, vector<XMFLOAT4X4*>* matrixs, float4* color)
+	{
+		UINT offset_ = 0;
+		_immediateContext->IASetVertexBuffers(0, 1, model->getVertexBuffer(), &_colorMap.VertexStride, &offset_);
+		_immediateContext->IASetIndexBuffer(model->getIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+
+		_mapConstantBufferResource(&_colorMap.Buffer[1], color);
+		_immediateContext->PSSetConstantBuffers(_colorMap.IndexOfBuffer[1], 1, &_colorMap.Buffer[1]);
+
 		for(unsigned int j = 0; j < matrixs->size(); j++)
 		{
 			_mapConstantBufferResource(&_colorMap.Buffer[0], matrixs[0][j]);
 			_immediateContext->VSSetConstantBuffers(_colorMap.IndexOfBuffer[0], 1, &_colorMap.Buffer[0]);
-			_mapConstantBufferResource(&_colorMap.Buffer[1], model->getColor());
-			_immediateContext->PSSetConstantBuffers(_colorMap.IndexOfBuffer[1], 1, &_colorMap.Buffer[1]);
 			_immediateContext->DrawIndexed(model->getIndexCount(), 0, 0);
 		}
 	}
@@ -441,6 +510,10 @@
 #pragma endregion
 
 #pragma region additionalFunctions
+	void D3dRender::setTerrainPenVisible(bool set)
+	{
+		_renderTerrainPen = set;
+	}
 	void D3dRender::setVisibleTerrainQuadTree(bool set)
 	{
 		_renderTerrainQuadTree = set;
@@ -629,31 +702,44 @@
 #pragma endregion
 
 #pragma region interface for terrain
-void D3dRender::clearQuadTreeMatrixVector()
-{
-	_worldMatrixs[AMT_COLORMAP][SMT_QUADTREE].clear();
-}
-void D3dRender::addQuadTreeModel(XMFLOAT4X4* worldMatrix)
-{
-	_worldMatrixs[AMT_COLORMAP][SMT_QUADTREE].push_back(worldMatrix);
-}
-void D3dRender::saveResourceToFile(string fileName, ID3D11Resource* resource)
-{
-	D3DX11SaveTextureToFile(_immediateContext, resource, D3DX11_IMAGE_FILE_FORMAT::D3DX11_IFF_DDS, fileName.c_str());
-}
-void D3dRender::setTerrainModels(ID3D11Buffer** vertexBuffers, ID3D11ShaderResourceView** textures, int count, ID3D11Buffer* indexBuffer, int indexCount)
-{
-	for(unsigned int j = 0; j < _terrainTiles.size(); j++)	{	_terrainTiles[j]->shutdown();	delete _terrainTiles[j]; }
-	_terrainTiles.clear();
-
-	for(int i = 0; i < count; i++)
+	void D3dRender::setTerrainPenProps(int* countIn, int* countOut)
 	{
-		Model* mdl = new Model();
-		mdl->setBuffers(vertexBuffers[i], NULL, indexCount);
-		mdl->setTexture(textures[i]);
-		_terrainTiles.push_back(mdl);
+		_countDrawInTerrainPen = countIn;
+		_countDrawOutTerrainPen = countOut;
 	}
+	void D3dRender::addTerrainPenInMatrix(XMFLOAT4X4* worldMatrix)
+	{
+		_worldMatrixs[AMT_COLORMAP][SMT_TERRAINPENIN].push_back(worldMatrix);
+	}
+	void D3dRender::addTerrainPenOutMatrix(XMFLOAT4X4* worldMatrix)
+	{
+		_worldMatrixs[AMT_COLORMAP][SMT_TERRAINPENOUT].push_back(worldMatrix);
+	}
+	void D3dRender::clearQuadTreeMatrixVector()
+	{
+		_worldMatrixs[AMT_COLORMAP][SMT_QUADTREE].clear();
+	}
+	void D3dRender::addQuadTreeModel(XMFLOAT4X4* worldMatrix)
+	{
+		_worldMatrixs[AMT_COLORMAP][SMT_QUADTREE].push_back(worldMatrix);
+	}
+	void D3dRender::saveResourceToFile(string fileName, ID3D11Resource* resource)
+	{
+		D3DX11SaveTextureToFile(_immediateContext, resource, D3DX11_IMAGE_FILE_FORMAT::D3DX11_IFF_DDS, fileName.c_str());
+	}
+	void D3dRender::setTerrainModels(ID3D11Buffer** vertexBuffers, ID3D11ShaderResourceView** textures, int count, ID3D11Buffer* indexBuffer, int indexCount)
+	{
+		for(unsigned int j = 0; j < _terrainTiles.size(); j++)	{	_terrainTiles[j]->shutdown();	delete _terrainTiles[j]; }
+		_terrainTiles.clear();
 
-	_terrainTileIndexBuffer = indexBuffer;
-}
+		for(int i = 0; i < count; i++)
+		{
+			Model* mdl = new Model();
+			mdl->setBuffers(vertexBuffers[i], NULL, indexCount);
+			mdl->setTexture(textures[i]);
+			_terrainTiles.push_back(mdl);
+		}
+
+		_terrainTileIndexBuffer = indexBuffer;
+	}
 #pragma endregion

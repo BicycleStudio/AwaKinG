@@ -12,6 +12,7 @@ HWND gHwnd;
 Window* gWindow = 0;
 RedactorEngine* gEngine = 0;
 bool gMinimized = false;
+bool gEngineInitialized = false;
 
 void messageLoop();
 void shutdown();
@@ -29,11 +30,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 		shutdown(); 
 		return 1; 
 	}
-	gEngine->createTerrain(1, 1);
+	gEngineInitialized = true;
+
+	gEngine->createTerrain(2, 2);
 	//gEngine->randomizeTerrain(1);
 
-	gEngine->terrainTerraformApply(50, 50);
-
+	gEngine->terrainSetTerraPenSize(5, 5);
+	gEngine->terrainSetTerraPenSize(5, 5);
 	gEngine->terrainTerraformApply(50, 50);
 
 	gEngine->setCameraManagerType(Engine::CameraManagerType::CMT_REDACTORFREE);
@@ -49,8 +52,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 }
 void shutdown()
 {
-	//gEngine->shutdown();
-	//gWindow->shutdown();
+	gEngine->shutdown();
+	gWindow->shutdown();
 }
 LRESULT CALLBACK WndProc(HWND	hWnd, UINT	uMsg, WPARAM	wParam, LPARAM	lParam)			// Additional Message Information
 {
@@ -96,10 +99,12 @@ LRESULT CALLBACK WndProc(HWND	hWnd, UINT	uMsg, WPARAM	wParam, LPARAM	lParam)			/
 			return 0;
 		}
 		case WM_SIZE: 
-		{
-			//gWindow->resizeScene(LOWORD(lParam), HIWORD(lParam));
+			if(gEngineInitialized)
+			{
+				if(gEngine->active())
+					gEngine->resizeRenderBuffer(LOWORD(lParam), HIWORD(lParam));
+			}
 			return 0;
-		}
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }

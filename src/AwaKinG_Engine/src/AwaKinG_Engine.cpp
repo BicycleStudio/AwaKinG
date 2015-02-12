@@ -105,3 +105,7 @@ void EngineTerrainSetTerraPenHard(RedactorEngine* pointer, float hard)
 {
 	pointer->terrainSetTerraPenHard(hard);
 }
+void EngineTerrainSetPenVisible(RedactorEngine* pointer, bool value)
+{
+	pointer->setTerrainPenVisible(value);
+}

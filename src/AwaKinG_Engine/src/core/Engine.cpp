@@ -47,6 +47,35 @@
 		_systemInitialized = true;
 		return true;
 	}
+	bool RedactorEngine::initialize(HWND mainHwnd, HWND renderHwnd, int sizeX, int sizeY)
+	{
+		string path_ = "../../fx/";
+		if(!_shortPaths) path_ = "../../" + path_;
+		D3dRender::getInstance().setInitialize(renderHwnd, sizeX, sizeY, path_);
+
+		safeSystemInit(D3dRender::getInstance());
+		safeSystemInit(Scene::getInstance());
+
+		InputManager::getInstance().setInitialize(mainHwnd);
+		safeSystemInit(InputManager::getInstance());
+
+#pragma region Camera manager init
+		//Create redactor now & use RedactorCameraManager;
+		_redactorFreeCameraManager = new RedactorFreeCameraManager();
+		_redactorFreeCameraManager->initialize(&Camera::getInstance());
+		_redactorFreeCameraManager->setInputInterface();
+
+		_redactorCameraManager = new RedactorCameraManager();
+		_redactorCameraManager->initialize(&Camera::getInstance());
+		_redactorCameraManager->setInputInterface();
+
+		_cameraManagerSwitch();
+#pragma endregion
+
+		_systemInitialized = true;
+		_redactorTerrainManager->initialize();
+		return true;
+	}
 	bool Engine::update()
 	{
 		safeUpdate(InputManager::getInstance());
@@ -58,6 +87,14 @@
 	void Engine::shutdown()
 	{
 		D3dRender::getInstance().shutdown();
+		delete _terrainManager;
+		Scene::getInstance().shutdown();
+		Camera::getInstance().shutdown();
+	}
+	void RedactorEngine::shutdown()
+	{
+		D3dRender::getInstance().shutdown();
+		delete _redactorTerrainManager;
 		Scene::getInstance().shutdown();
 		Camera::getInstance().shutdown();
 	}
@@ -254,7 +291,6 @@
 			precomputeRay* precomputeRay_ = D3dRender::getInstance().getPickingRay(posX, posY);
 			_redactorTerrainManager->terraformApply(precomputeRay_);
 		}
-		
 		void RedactorEngine::terrainSetTerraPenSize(int in, int out)
 		{
 			_redactorTerrainManager->setTerraPenSize(in, out);
@@ -268,7 +304,10 @@
 			precomputeRay* precomputeRay_ = D3dRender::getInstance().getPickingRay(posX, posY);
 			_redactorTerrainManager->textureWork(precomputeRay_);
 		}
-
+		void RedactorEngine::setTerrainPenVisible(bool set)
+		{
+			D3dRender::getInstance().setTerrainPenVisible(set);
+		}
 	#pragma endregion
 
 	bool RedactorEngine::createMapFromFile(string fileName)

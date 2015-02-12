@@ -11,6 +11,7 @@ struct QuadTree
 	void findMaxMinFromChilds();
 	void update();
 	void updateInside();
+	void updateMatrix();
 
 	QuadTree*							father;
 	vector<QuadTree*>			childs;

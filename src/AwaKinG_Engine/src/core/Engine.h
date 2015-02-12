@@ -19,8 +19,8 @@ public:
 #pragma region public functions
 public:
 	Engine();
-	bool initialize(HWND mainHwnd, HWND renderHwnd, int sizeX, int sizeY);
-	void shutdown();
+	virtual bool initialize(HWND mainHwnd, HWND renderHwnd, int sizeX, int sizeY);
+	virtual	void shutdown();
 	bool active();
 	bool update();
 	void setActive(bool value);
@@ -58,11 +58,14 @@ public:
 
 	// FOR C++ REDACTOR
 	void setShortPaths();
+	bool initialize(HWND mainHwnd, HWND renderHwnd, int sizeX, int sizeY);
+	void shutdown();
 #pragma endregion
 
 #pragma region redactor functions
 	void setCameraSpeed(float speed);
 
+	void setTerrainPenVisible(bool set);
 	void setTerrainQuadTreeVisible(bool set);
 	void setTerrainWireframe(bool set);
 	void saveTerrain(string fileName);

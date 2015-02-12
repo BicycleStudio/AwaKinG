@@ -7,7 +7,7 @@ class D3dRender : public IRTerrain
 {
 public:
 	enum AwaKinGModelTechnique { AMT_COLORMAP = 0, AMT_TEXTUREMAP = 1, AMT_BUMPMAP = 2 };
-	enum SystemModelType { SMT_QUADTREE = 0, SMT_TERRAINPEN = 1 };
+	enum SystemModelType { SMT_QUADTREE = 0, SMT_TERRAINPENIN = 1, SMT_TERRAINPENOUT = 2 };
 #pragma region structs
 	struct SystemConfiguration
 	{
@@ -71,10 +71,14 @@ public:
 	void setRasterizerState(int stateType);
 
 	#pragma region for terrain
+	void setTerrainPenVisible(bool set);
+	void setTerrainPenProps(int* countIn, int* countOut);
 	void setVisibleTerrainQuadTree(bool set);
 	void setTerrainWireframe(bool set);
 	void clearQuadTreeMatrixVector();
 	void addQuadTreeModel(XMFLOAT4X4* worldMatrix);
+	void addTerrainPenInMatrix(XMFLOAT4X4* worldMatrix);
+	void addTerrainPenOutMatrix(XMFLOAT4X4* worldMatrix);
 	void saveResourceToFile(string fileName, ID3D11Resource* resource);
 	void unmapResource(ID3D11Buffer* buf);
 	void mapResource(ID3D11Buffer* buf, D3D11_MAPPED_SUBRESOURCE* mappedSubResource, D3D11_MAP mapType);
@@ -87,7 +91,8 @@ private:
 	void _prepareToRenderTechnique(TechniqueVP tech);
 	void _renderTerrainTile(Model* model);
 	void _renderTextureMapModel(ModelEx* model, vector<XMFLOAT4X4*>* matrixs);
-	void _renderColorMapModel(ModelEx* model, vector<XMFLOAT4X4*>* matrixs);
+	void _renderColorMapModel(ModelEx* model, vector<XMFLOAT4X4*>* matrixs, float4* color);
+	void _renderColorMapModel(ModelEx* model, vector<XMFLOAT4X4*>* matrixs, float4* color, int count);
 	void _endScene();
 	bool _initializeShaders();
 	bool _compileShaderFromFile(LPCSTR file, const D3D_SHADER_MACRO* pDefs,	LPCSTR szEntry, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppBlobOut);
@@ -104,7 +109,14 @@ private:
 	ID3D11Buffer*													_terrainTileIndexBuffer;
 	bool																	_renderTerrainQuadTree;
 	bool																	_renderTerrainWireframe;
-	 
+	#pragma region for terrain pen
+		bool																	_renderTerrainPen;
+		int*																	_countDrawInTerrainPen;
+		int*																	_countDrawOutTerrainPen;
+		float4																_colorInTerrainPen;
+		float4																_colorOutTerrainPen;
+	#pragma endregion
+
 	#pragma region shader vars 
 		string									_shaderPath;
 		TechniqueVP_Buf					_textureMap;

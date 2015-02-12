@@ -12,13 +12,15 @@ namespace AwaKinG_Redactor.src.engine
         #region dll import
         const String _dllPath = "../../../../dll/AwaKinG_Engine.dll";
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
-                   EntryPoint = "EngineTerrainSetTerraPenSize")]
+            EntryPoint = "EngineTerrainSetPenVisible")]
+        private static extern void _setTerraPenVisible(IntPtr pointer, bool set);
+
+        [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
+            EntryPoint = "EngineTerrainSetTerraPenSize")]
         private static extern void _setTerraPenSize(IntPtr pointer,  int in_, int out_);
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
            EntryPoint = "EngineTerrainSetTerraPenHard")]
         private static extern void _setTerraPenHard(IntPtr pointer, float hard);
-
-
         [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
            EntryPoint = "EngineTerrainQuadTreeSetVisible")]
         private static extern void _setTerrainQuadTreeVisible(IntPtr pointer, bool set);
@@ -85,6 +87,11 @@ namespace AwaKinG_Redactor.src.engine
         HeightPickWorker _heightShowWorker = new HeightPickWorker();
         ApplyHeightPickWorker _applyHeightWorker = new ApplyHeightPickWorker();
         TexturePickWorker _textureTerrainWorker = new TexturePickWorker();
+
+        public void SetTerraPenHeightVisible(bool set)
+        {
+            _setTerraPenVisible(_engine, set);
+        }
         public void SetConfig()
         {
             float camSpeed = Camera.GetInstance().Speed;
@@ -223,10 +230,10 @@ namespace AwaKinG_Redactor.src.engine
     {
         [DllImport("../../../../dll/AwaKinG_Engine.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl,
             EntryPoint = "EngineTerrainTerraformingApply")]
-        private static extern int _terraformingShow(IntPtr pointer, int posX, int posY);
+        private static extern int _terraformingApply(IntPtr pointer, int posX, int posY);
         public override void Pick(IntPtr engine, System.Drawing.Point mouse)
         {
-            _terraformingShow(engine, mouse.X, mouse.Y);
+            _terraformingApply(engine, mouse.X, mouse.Y);
         }
     }
     public class TexturePickWorker: PickWorker

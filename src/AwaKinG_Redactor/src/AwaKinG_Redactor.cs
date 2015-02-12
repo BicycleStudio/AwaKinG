@@ -156,14 +156,17 @@ namespace AwaKinG_Redactor
         private void awA_Button5_Click(object sender, EventArgs e)
         {
             _engine.SetTerrainWorkType(3);
+            _engine.SetTerraPenHeightVisible(awA_Button4.CHECKED);
         }
         private void awA_Button6_Click(object sender, EventArgs e)
         {
             _engine.SetTerrainWorkType(0);
+            _engine.SetTerraPenHeightVisible(awA_Button4.CHECKED);
         }
         private void awA_Button4_Click(object sender, EventArgs e)
         {
             _engine.SetTerrainWorkType(1);
+            _engine.SetTerraPenHeightVisible(awA_Button4.CHECKED);
         }
         private void pnlRender_MouseDown(object sender, MouseEventArgs e)
         {

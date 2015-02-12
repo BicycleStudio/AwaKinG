@@ -24,7 +24,6 @@ QuadTree::QuadTree()
 }
 QuadTree::~QuadTree()
 {
-	if(father) delete father;
 }
 bool QuadTree::intersect(precomputeRay *r)
 {
@@ -75,7 +74,7 @@ void QuadTree::update()
 		//worldMatrix->_22 = max.y;
 		//worldMatrix->_42 = ps[0]->y;
 
-		XMStoreFloat4x4(worldMatrix, (XMMatrixMultiply(XMMatrixScaling(max.x, max.y, max.z), XMMatrixTranslation(ps[0]->x, ps[0]->y, ps[0]->z))));
+		XMStoreFloat4x4(childs_[i]->worldMatrix, (XMMatrixMultiply(XMMatrixScaling(childs_[i]->max.x, childs_[i]->max.y, childs_[i]->max.z), XMMatrixTranslation(childs_[i]->ps[0]->x, childs_[i]->ps[0]->y, childs_[i]->ps[0]->z))));
 		//XMStoreFloat4x4(worldMatrix, (XMMatrixMultiply(XMMatrixScaling(max.x, max.y, max.z), XMMatrixTranslation(center.x, center.y, center.z))));
 
 		childs_.erase(childs_.begin() + i);
@@ -93,4 +92,9 @@ void QuadTree::updateInside()
 		father->findMaxMinFromChilds();
 		father->updateInside();
 	}
+}
+void QuadTree::updateMatrix()
+{
+	max.x = ps[1]->x - ps[0]->x; max.y = ps[1]->y - ps[0]->y; max.z = ps[1]->z - ps[0]->z;
+	XMStoreFloat4x4(worldMatrix, (XMMatrixMultiply(XMMatrixScaling(max.x, max.y, max.z), XMMatrixTranslation(ps[0]->x, ps[0]->y, ps[0]->z))));
 }

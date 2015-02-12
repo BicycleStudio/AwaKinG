@@ -23,7 +23,7 @@ public:
 
 #pragma region functions
 public:
-	void shutdown();
+	virtual void shutdown();
 	virtual bool loadFromFile(string fileName);
 	bool _readVertexBlock(string fileName);
 
@@ -222,6 +222,8 @@ class RedactorTerrainManager : public TerrainManager
 {
 public:
 	RedactorTerrainManager();
+	void initialize();
+	void shutdown();
 	bool generate(int gridX, int gridY);
 	bool loadFromFile(string fileName);
 	bool saveToFile(string fileName);
@@ -254,6 +256,7 @@ private:
 	bool _intersectTriangle(float3* pickOrig, float3* pickDir, XMFLOAT3** vs, float* tu, float* tv);
 
 	void _smoothVert(int id);
+	void _updateSector(int idSector);
 	void _updateVertexBuffer(int idTerrain);
 	void _updateSubVertexBuffer(int idTerrain);
 
@@ -277,6 +280,7 @@ private:
 	vector<Biom>				_bioms;
 	TextureTerrainPen*	_texturePen;
 	HeightTerrainPen*		_heightPen;
+
 	int**								_vertsToUpdate;
 	int*								_countVertToUpdate;
 };
