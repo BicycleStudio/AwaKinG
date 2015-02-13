@@ -32,13 +32,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 	}
 	gEngineInitialized = true;
 
-	gEngine->createTerrain(2, 2);
+	gEngine->createTerrain(1, 1);
+	gEngine->diamondSquareTerrain();
 	//gEngine->randomizeTerrain(1);
-
-	gEngine->terrainSetTerraPenSize(5, 5);
-	gEngine->terrainSetTerraPenSize(5, 5);
-	gEngine->terrainTerraformApply(50, 50);
-
+	
 	gEngine->setCameraManagerType(Engine::CameraManagerType::CMT_REDACTORFREE);
 	//gEngine->loadTerrain("../../resources/map/terrain/DK2.ter");
 

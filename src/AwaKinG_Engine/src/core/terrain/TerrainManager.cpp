@@ -1159,6 +1159,284 @@
 	#pragma endregion
 
 #pragma endregion
+
+#pragma region diamondSquare
+		float RedactorTerrainManager::_dist(float3 point1, float3 point2)
+		{
+			return sqrt(pow(point2.x - point1.x, 2) + pow(point2.y - point1.y, 2) + pow(point2.z - point1.z, 2));
+		}
+		void RedactorTerrainManager::diamondSquareAlgorythm()
+		{
+			int curNumV_ = _props.numVerts;
+			struct Quad
+			{
+				int _1; int _2; int _3; int _4;
+				int center; float diapazon;
+
+				int leftID; int rightID; int upID; int downID;
+				float left; float right; float up; float down;
+
+				int tileId;
+				int tileIdUp;
+				int tileIdDown;
+				int tileIdRight;
+				int tileIdLeft;
+			};
+			vector<Quad>* quads2_ = new vector<Quad>;
+			vector<Quad>* quads_ = new vector<Quad>;
+		#pragma region prepare for diamonSquare
+			for(int i = 0; i < _props.numTiles; i++)
+			{
+				int randBiomIndex_ = rand() % _bioms.size();
+				float height_ = (float)((rand() % ((int)_bioms[randBiomIndex_].range)) - _bioms[randBiomIndex_].halfRange);
+
+				Quad tile_;
+				_props.heightMap[_props.pickToHeightMap[i][(_props.numTileVerts / 2)]].y = height_;
+				tile_.center = _props.numTileVerts / 2; //_props.pickToHeightMap[i][(_props.numTileVerts / 2)];
+				tile_.tileId = i;
+
+				tile_._1 = 0;
+				tile_._2 = _props.numVerts - 1;
+				tile_._3 = _props.numTileVerts - _props.numVerts;
+				tile_._4 = _props.numTileVerts - 1;
+
+				quads_->push_back(tile_);
+			}
+
+			for(int i = 0; i < _props.numTiles; i++)
+			{
+				float diap_ = _props.numVerts * _props.cellSpace * 2;
+				int randBiomIndex_ = rand() % _bioms.size();
+				float height_ = (float)((rand() % ((int)_bioms[randBiomIndex_].range)) - _bioms[randBiomIndex_].halfRange);
+
+				if((quads_[0][i].tileId - 1) / _props.sizeX == quads_[0][i].tileId / _props.sizeX && quads_[0][i].tileId != 0)
+				{
+					quads_[0][i].left = _props.heightMap[_props.pickToHeightMap[quads_[0][i - 1].tileId][quads_[0][i - 1].center]].y;
+					quads_[0][i].leftID = quads_[0][i - 1].center;
+				}
+				else
+				{
+					quads_[0][i].left = height_;
+					randBiomIndex_ = rand() % _bioms.size();
+					height_ = (float)((rand() % ((int)_bioms[randBiomIndex_].range)) - _bioms[randBiomIndex_].halfRange);
+					quads_[0][i].leftID = -1;
+				}
+				if((quads_[0][i].tileId + 1) / _props.sizeX == quads_[0][i].tileId / _props.sizeX && quads_[0][i].tileId != _props.numTiles - 1)
+				{
+					quads_[0][i].right = _props.heightMap[_props.pickToHeightMap[quads_[0][i + 1].tileId][quads_[0][i + 1].center]].y;
+					quads_[0][i].rightID = quads_[0][i + 1].center;
+				}
+				else
+				{
+					quads_[0][i].right = height_;
+					randBiomIndex_ = rand() % _bioms.size();
+					height_ = (float)((rand() % ((int)_bioms[randBiomIndex_].range)) - _bioms[randBiomIndex_].halfRange);
+					quads_[0][i].rightID = -1;
+				}
+				if((quads_[0][i].tileId - _props.sizeX) >= 0)
+				{
+					quads_[0][i].up = _props.heightMap[_props.pickToHeightMap[quads_[0][i - _props.sizeX].tileId][quads_[0][i - _props.sizeX].center]].y;
+					quads_[0][i].upID = quads_[0][i - _props.sizeX].center;
+				}
+				else
+				{
+					quads_[0][i].up = height_;
+					randBiomIndex_ = rand() % _bioms.size();
+					height_ = (float)((rand() % ((int)_bioms[randBiomIndex_].range)) - _bioms[randBiomIndex_].halfRange);
+					quads_[0][i].upID = -1;
+				}
+				if((quads_[0][i].tileId + _props.sizeX) < _props.numTiles)
+				{
+					quads_[0][i].down = _props.heightMap[_props.pickToHeightMap[quads_[0][i + _props.sizeX].tileId][quads_[0][i + _props.sizeX].center]].y;
+					quads_[0][i].downID = quads_[0][i + _props.sizeX].center;
+				}
+				else
+				{
+					quads_[0][i].down = height_;
+					randBiomIndex_ = rand() % _bioms.size();
+					height_ = (float)((rand() % ((int)_bioms[randBiomIndex_].range)) - _bioms[randBiomIndex_].halfRange);
+					quads_[0][i].downID = -1;
+				}
+
+				height_ = (float)((rand() % ((int)diap_)) - diap_/2.0f);
+				_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._1]].y =
+					(_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i].center]].y + quads_[0][i].left + quads_[0][i].up) / 3.0f + height_;
+
+				height_ = (float)((rand() % ((int)diap_)) - diap_ / 2.0f);
+				_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._2]].y =
+					(_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i].center]].y + quads_[0][i].right + quads_[0][i].up) / 3.0f + height_;
+
+				height_ = (float)((rand() % ((int)diap_)) - diap_ / 2.0f);
+				_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._4]].y =
+					(_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i].center]].y + quads_[0][i].right + quads_[0][i].down) / 3.0f + height_;
+
+				height_ = (float)((rand() % ((int)diap_)) - diap_ / 2.0f);
+				_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._3]].y =
+					(_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i].center]].y + quads_[0][i].down + quads_[0][i].left) / 3.0f + height_;
+
+				quads_[0][i].diapazon = diap_;
+			}
+	#pragma endregion
+
+			curNumV_ = _props.numQuad;
+			int doubleCurNumV_ = curNumV_*curNumV_;
+
+			for(int rep = 0; rep < 3; rep++)
+			{
+				for(int i = 0; i < quads_->size(); i++)
+				{
+				#pragma region WORKS correct
+					float randValue_ = (float)(rand() % ((int)quads_[0][i].diapazon)) - (quads_[0][i].diapazon / 2.0f);
+					_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i].center]].y =
+						(_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._1]].y+
+						_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._2]].y+
+						_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._3]].y+
+						_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._4]].y)/4.0f + randValue_;
+					
+					int centrLeft_ = quads_[0][i].center - curNumV_ / 2;
+					int centrUp_ = quads_[0][i]._1 + curNumV_ / 2;
+					int centrRight_ = quads_[0][i].center + curNumV_ / 2;
+					int centrDown_ = quads_[0][i]._4 - curNumV_ / 2;
+					
+					float diamondDiap_ = sqrt(quads_[0][i].diapazon);
+					randValue_ = (float)(rand() % ((int)diamondDiap_)) - (diamondDiap_ / 2.0f);
+					_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][centrLeft_]].y =
+						(_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i].center]].y +
+						_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._1]].y +
+						_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._3]].y +
+						quads_[0][i].left)/4.0f + randValue_ ;
+
+					_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][centrUp_]].y =
+						(_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i].center]].y +
+						_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._1]].y +
+						_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._2]].y +
+						quads_[0][i].up) / 4.0f + randValue_;
+
+					_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][centrRight_]].y =
+						(_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i].center]].y +
+						_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._2]].y +
+						_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._4]].y +
+						quads_[0][i].right) / 4.0f + randValue_;
+
+					_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][centrDown_]].y =
+						(_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i].center]].y +
+						_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._3]].y +
+						_props.heightMap[_props.pickToHeightMap[quads_[0][i].tileId][quads_[0][i]._4]].y +
+						quads_[0][i].down) / 4.0f + randValue_;
+
+					Quad qd;qd._1 = quads_[0][i]._1;
+					qd._2 = centrUp_;
+					qd._4 = quads_[0][i].center;
+					qd._3 = centrLeft_;
+					qd.center = qd._1 + doubleCurNumV_ / 4 + curNumV_ / 2;
+					qd.diapazon = quads_[0][i].diapazon / 2.0f;
+					qd.tileId = quads_[0][i].tileId;
+
+					Quad qd2;
+					qd2._1 = centrUp_;
+					qd2._2 = quads_[0][i]._2;
+					qd2._3 = quads_[0][i].center;
+					qd2._4 = centrRight_;
+					qd2.center = qd.center + curNumV_ / 2;
+					qd2.diapazon = quads_[0][i].diapazon / 2.0f;
+					qd2.tileId = quads_[0][i].tileId;
+
+					Quad qd3;
+					qd3._1 = centrLeft_; 
+					qd3._2 = quads_[0][i].center; 
+					qd3._3 = quads_[0][i]._3;
+					qd3._4 = centrDown_;
+					qd3.center = qd3._1 + doubleCurNumV_ / 4 + curNumV_ / 2;
+					
+					qd3.diapazon = quads_[0][i].diapazon / 2.0f;
+					qd3.tileId = quads_[0][i].tileId;
+
+					Quad qd4;
+					qd4._1 = quads_[0][i].center; 
+					qd4._2 = centrRight_;
+					qd4._3 = centrDown_;
+					qd4._4 = quads_[0][i]._4;
+					qd4.center = qd4._1 + doubleCurNumV_ / 4 + curNumV_ / 2;
+					qd4.diapazon = quads_[0][i].diapazon / 2.0f;
+					qd4.tileId = quads_[0][i].tileId;
+
+					qd.right = _props.heightMap[_props.pickToHeightMap[qd2.tileId][qd2.center]].y; qd.rightID = qd2.center;
+					qd.down = _props.heightMap[_props.pickToHeightMap[qd2.tileId][qd3.center]].y; qd.downID = qd3.center;
+					qd2.left = _props.heightMap[_props.pickToHeightMap[qd2.tileId][qd.center]].y; qd2.leftID = qd.center;
+					qd2.down = _props.heightMap[_props.pickToHeightMap[qd4.tileId][qd4.center]].y; qd2.downID = qd4.center;
+					qd3.up = _props.heightMap[_props.pickToHeightMap[qd2.tileId][qd.center]].y; qd3.upID = qd.center;
+					qd3.right = _props.heightMap[_props.pickToHeightMap[qd4.tileId][qd4.center]].y; qd3.rightID = qd4.center;
+					qd4.left = _props.heightMap[_props.pickToHeightMap[qd4.tileId][qd3.center]].y; qd4.leftID = qd3.center;
+					qd4.up = _props.heightMap[_props.pickToHeightMap[qd2.tileId][qd2.center]].y; qd4.upID = qd2.center;
+				#pragma endregion
+
+					if(quads_[0][i].leftID == -1){qd.left = quads_[0][i].left;qd.leftID = -1;}
+					else
+					{
+						qd.left = _props.heightMap[_props.pickToHeightMap[quads2_[0][quads2_->size() - 3].tileId][quads2_[0][quads2_->size() - 3].center]].y;
+						qd.leftID = quads2_[0][quads2_->size() - 3].center;
+					}
+					if(quads_[0][i].upID == -1){qd.up = quads_[0][i].up;qd.upID = -1;}
+					else
+					{
+						qd.upID = quads_[0][i - 2]._4 - doubleCurNumV_ / 4 - curNumV_;
+						qd.up = _props.heightMap[_props.pickToHeightMap[quads_[0][i - 2].tileId][qd.upID]].y;
+					}
+
+					if(quads_[0][i].upID == -1){qd2.up = quads_[0][i].up;qd2.upID = -1;}
+					else
+					{
+						qd2.upID = quads_[0][i - 2]._4 - doubleCurNumV_ / 4 - curNumV_ / 2;
+						qd2.up = _props.heightMap[_props.pickToHeightMap[quads_[0][i - 2].tileId][qd2.upID]].y;
+					}
+					if(quads_[0][i].rightID == -1){qd2.right = quads_[0][i].right;qd2.rightID = -1;}
+					else
+					{
+						qd2.rightID = quads_[0][i + 1]._1 + doubleCurNumV_ / 4 + curNumV_ / 2;
+						qd2.right = _props.heightMap[_props.pickToHeightMap[quads_[0][i + 1].tileId][qd2.rightID]].y;
+					}
+
+					if(quads_[0][i].leftID == -1){qd3.left = quads_[0][i].left;qd3.leftID = -1;}
+					else
+					{
+						qd3.left = _props.heightMap[_props.pickToHeightMap[quads2_[0][quads2_->size() - 1].tileId][quads2_[0][quads2_->size() - 1].center]].y;
+						qd3.leftID = quads2_[0][quads2_->size() - 1].center;
+					}
+					if(quads_[0][i].downID == -1){qd3.down = quads_[0][i].down;qd3.downID = -1;}
+					else
+					{
+						qd3.downID = quads_[0][i + 2]._1 + doubleCurNumV_ / 4 + curNumV_ / 2;
+						qd3.down = _props.heightMap[_props.pickToHeightMap[quads_[0][i + 2].tileId][qd3.downID]].y;
+					}
+
+					if(quads_[0][i].rightID == -1){qd4.right = quads_[0][i].right;qd4.rightID = -1;}
+					else
+					{
+						qd4.rightID = quads_[0][i + 1].center - curNumV_ / 2 + doubleCurNumV_ / 4 + curNumV_ / 2;
+						qd4.right = _props.heightMap[_props.pickToHeightMap[quads_[0][i + 1].tileId][qd4.rightID]].y;
+					}
+					if(quads_[0][i].downID == -1){qd4.down = quads_[0][i].down;qd4.downID = -1;}
+					else
+					{
+						qd4.downID = qd3.downID + curNumV_ / 2;
+						qd4.down = _props.heightMap[_props.pickToHeightMap[quads_[0][i + 2].tileId][qd4.downID]].y;
+					}
+
+					quads2_->push_back(qd);quads2_->push_back(qd2);quads2_->push_back(qd3);quads2_->push_back(qd4);
+				}
+				doubleCurNumV_ /= 2;
+				curNumV_ /= 2;
+				quads_ = quads2_;
+				quads2_ = new vector<Quad>;
+			}
+			quads_->clear();
+			delete quads_;
+			delete quads2_;
+			for(int i = 0; i < _props.numTiles; i++)
+			_updateVertexBuffer(i);
+		}
+#pragma endregion
+
 		/*
 void quick_sort(vector <QuadTree*> &v, int begin0, int end0)
 {

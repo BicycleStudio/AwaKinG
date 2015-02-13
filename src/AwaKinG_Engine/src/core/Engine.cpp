@@ -253,6 +253,10 @@
 
 #pragma region Redactor
 	#pragma region Terrain
+		void RedactorEngine::diamondSquareTerrain()
+		{ 
+			_redactorTerrainManager->diamondSquareAlgorythm();
+		}
 		bool RedactorEngine::createTerrain(int gridX, int gridY)
 		{
 			return _redactorTerrainManager->generate(gridX, gridY);

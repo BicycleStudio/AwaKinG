@@ -70,6 +70,7 @@ public:
 	void setTerrainWireframe(bool set);
 	void saveTerrain(string fileName);
 	void randomizeTerrain(int diapazon);
+	void diamondSquareTerrain();
 	void blurTerrain(int value);
 	bool createTerrain(int gridX, int gridY);
 	bool createMapFromFile(string fileName);

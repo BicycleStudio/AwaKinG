@@ -228,6 +228,7 @@ public:
 	bool loadFromFile(string fileName);
 	bool saveToFile(string fileName);
 	void randomize(int diapazon);
+	void diamondSquareAlgorythm();
 	void normalizeNormals();
 	void blurHeightmap(int blurHard);
 	void setTerraPenSize(int in, int out);
@@ -248,7 +249,7 @@ public:
 	bool hitTerrainSector(QuadTree* tree, precomputeRay* pickRay, QuadTree** hits, int* count, bool* done);
 
 private:
-	void _pick(precomputeRay* pickRay, vector<QuadTree*>* rayAabbIntersected);
+		void _pick(precomputeRay* pickRay, vector<QuadTree*>* rayAabbIntersected);
 	int _terraPick(precomputeRay* pickRay, int* terrainId);
 	bool _getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, int* returnedID);
 	bool _getQuadIntersectID(TerrainSector* sector, float3* pickDir, float3* pickOrig, float* tu, float* tv);
@@ -276,6 +277,7 @@ private:
 	inline int _getRightTerrainIDValue(int vId, int currentRaw, int size);
 	inline int _getUpTerrainIDValue(int vId, int size);
 	inline int _getDownTerrainIDValue(int vId, int size);
+	float _dist(float3 point1, float3 point2);
 private:
 	vector<Biom>				_bioms;
 	TextureTerrainPen*	_texturePen;
