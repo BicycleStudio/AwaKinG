@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("AwaKinG_Redactor")]
+[assembly: AssemblyTitle("AwaKinG_Editor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AwaKinG_Redactor")]
+[assembly: AssemblyProduct("AwaKinG_Editor")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("68f89ea3-13fd-45ec-8ae3-f2702057af14")]
+[assembly: Guid("8b9d15e1-3340-45d4-8f42-0d6764bb4192")]
 
 // Сведения о версии сборки состоят из следующих четырех значений:
 //

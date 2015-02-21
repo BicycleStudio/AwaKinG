@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AwaKinG_Redactor
+namespace AwaKinG_Editor
 {
     public static class EngineDll
     {

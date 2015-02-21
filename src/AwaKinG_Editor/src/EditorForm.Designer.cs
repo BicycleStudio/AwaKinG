@@ -1,6 +1,6 @@
-﻿namespace AwaKinG_Redactor
+﻿namespace AwaKinG_Editor
 {
-    partial class RedactorForm
+    partial class EditorForm
     {
         /// <summary>
         /// Required designer variable.
@@ -100,7 +100,7 @@
             this.pnlRender.TabIndex = 4;
             this.pnlRender.SizeChanged += new System.EventHandler(this.pnlRender_SizeChanged);
             // 
-            // redactorForm
+            // EditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -111,9 +111,9 @@
             this.Controls.Add(this.pnlDown);
             this.Controls.Add(this.menuMain);
             this.MainMenuStrip = this.menuMain;
-            this.Name = "redactorForm";
+            this.Name = "EditorForm";
             this.ShowIcon = false;
-            this.Text = "AwaKinG Engine Redactor";
+            this.Text = "AwaKinG Engine Editor";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.redactorForm_FormClosing);
             this.menuMain.ResumeLayout(false);

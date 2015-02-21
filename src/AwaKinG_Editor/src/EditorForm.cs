@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AwaKinG_Redactor
+namespace AwaKinG_Editor
 {
-    public partial class RedactorForm : Form
+    public partial class EditorForm : Form
     {
-        public RedactorForm()
+        public EditorForm()
         {
             InitializeComponent();
             Application.Idle += Application_Idle;

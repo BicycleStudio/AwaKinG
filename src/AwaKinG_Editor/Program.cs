@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AwaKinG_Redactor
+namespace AwaKinG_Editor
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace AwaKinG_Redactor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new RedactorForm());
+            Application.Run(new EditorForm());
         }
     }
 }

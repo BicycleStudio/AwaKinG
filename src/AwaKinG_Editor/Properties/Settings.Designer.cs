@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AwaKinG_Redactor.Properties
+namespace AwaKinG_Editor.Properties
 {
 
 
