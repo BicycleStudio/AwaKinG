@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AwaKinG_Engine", "AwaKinG_Engine.vcxproj", "{10A9FAB9-E0CF-4F51-9CDB-C1E6EE1FD0C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		dllExport|Win32 = dllExport|Win32
+		libExport|Win32 = libExport|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10A9FAB9-E0CF-4F51-9CDB-C1E6EE1FD0C1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{10A9FAB9-E0CF-4F51-9CDB-C1E6EE1FD0C1}.Debug|Win32.Build.0 = Debug|Win32
+		{10A9FAB9-E0CF-4F51-9CDB-C1E6EE1FD0C1}.dllExport|Win32.ActiveCfg = dllExport|Win32
+		{10A9FAB9-E0CF-4F51-9CDB-C1E6EE1FD0C1}.dllExport|Win32.Build.0 = dllExport|Win32
+		{10A9FAB9-E0CF-4F51-9CDB-C1E6EE1FD0C1}.libExport|Win32.ActiveCfg = libExport|Win32
+		{10A9FAB9-E0CF-4F51-9CDB-C1E6EE1FD0C1}.libExport|Win32.Build.0 = libExport|Win32
+		{10A9FAB9-E0CF-4F51-9CDB-C1E6EE1FD0C1}.Release|Win32.ActiveCfg = Release|Win32
+		{10A9FAB9-E0CF-4F51-9CDB-C1E6EE1FD0C1}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
