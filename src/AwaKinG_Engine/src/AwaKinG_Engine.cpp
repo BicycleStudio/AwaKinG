@@ -1,25 +1,27 @@
 #include "AwaKinG_Engine.h"
 
-Engine* getEnginePointer(){
-	return Engine::getInstance();
-}
-/*
-bool initialize(Engine* pointer, HWND mainHwnd, HWND hwnd, int sizeX, int sizeY){
+bool initialize(HWND mainHwnd, HWND hwnd){
+	if (!Render::getInstance()->initialize(hwnd, 2000, 2000)) return false;
+	if (!Input::getInstance()->initialize(mainHwnd)) return false;
+	if (!Engine::getInstance()->initialize()) return false;
 
+	return true;
 }
-void release(Engine* pointer){
-
+void release(){
+	Engine::getInstance()->shutdown();
+	Input::getInstance()->shutdown();
+	Render::getInstance()->shutdown();
 }
-bool update(Engine* pointer){
-
+void update(){
+	if(Engine::getInstance()->getActive()){
+		Input::getInstance()->update();
+		Engine::getInstance()->update();
+		Render::getInstance()->update();
+	}
 }
-void setActive(Engine* pointer, bool value) {
-
+void setActive(bool value){
+	Engine::getInstance()->setActive(value);
 }
-bool getActive(Engine* pointer){
-
+void resizeBuffer(int sizeX, int sizeY){
+	Render::getInstance()->resizeBuffer(sizeX, sizeY);
 }
-bool resizeBuffer(Engine* pointer, int sizeX, int sizeY){
-
-}
-*/

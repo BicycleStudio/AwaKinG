@@ -8,15 +8,14 @@
 #define DLL_SPEC extern "C" __declspec(dllimport)
 #endif // AWAKINGDLL_EXPORTS
 
-#include "core\Engine.h"
+#include "core/Engine.h"
+#include "render/Render.h"
+#include "core/Input.h"
 
-DLL_SPEC Engine* getEnginePointer();
-/*
-DLL_SPEC bool initialize(Engine* pointer, HWND mainHwnd, HWND hwnd, int sizeX, int sizeY);
-DLL_SPEC void release(Engine* pointer);
-DLL_SPEC bool update(Engine* pointer);
-DLL_SPEC void setActive(Engine* pointer, bool value);
-DLL_SPEC bool getActive(Engine* pointer);
-DLL_SPEC bool resizeBuffer(Engine* pointer, int sizeX, int sizeY);
-*/
+DLL_SPEC bool initialize(HWND mainHwnd, HWND hwnd);
+DLL_SPEC void release();
+DLL_SPEC void update();
+DLL_SPEC void setActive(bool value);
+DLL_SPEC void resizeBuffer(int sizeX, int sizeY);
+
 #endif // __AWAKING_ENGINE_H 
