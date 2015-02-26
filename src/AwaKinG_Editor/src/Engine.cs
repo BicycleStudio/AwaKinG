@@ -22,6 +22,7 @@ namespace AwaKinG_Editor {
   public class Engine {
     public bool Done { get { return _done; } set { _done = value; if (_done) EngineDll.Release(); } }
     private bool _done = false;
+    private bool _active = false;
     private bool _initialized = false;
     static Engine _engine = new Engine();
 
@@ -39,6 +40,7 @@ namespace AwaKinG_Editor {
     }
     public void SetActive(bool set) {
       EngineDll.SetActive(set);
+      _active = set;
     }
     public void Resize(System.Drawing.Size size) {
       if (_initialized)

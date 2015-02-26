@@ -8,8 +8,8 @@ class Input
 public:
 	void update();
 	void shutdown();
-
 	bool initialize(HWND hwnd);
+
 	static Input* getInstance()  {
 		static Input *input_ = new Input();
 		return input_;

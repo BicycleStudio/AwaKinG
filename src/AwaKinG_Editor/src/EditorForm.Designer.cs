@@ -116,7 +116,11 @@
       this.ShowIcon = false;
       this.Text = "AwaKinG Engine Editor";
       this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+      this.Activated += new System.EventHandler(this.EditorForm_Activated);
+      this.Deactivate += new System.EventHandler(this.EditorForm_Deactivate);
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.redactorForm_FormClosing);
+      this.Load += new System.EventHandler(this.EditorForm_Load);
+      this.SizeChanged += new System.EventHandler(this.EditorForm_SizeChanged);
       this.menuMain.ResumeLayout(false);
       this.menuMain.PerformLayout();
       this.ResumeLayout(false);
