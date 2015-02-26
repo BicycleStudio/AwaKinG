@@ -1,21 +1,8 @@
 #ifndef __RENDER_H
 #define __RENDER_H
 
-#include <Windows.h>
-#include <vector>
-#include <string>
-#include "../../../../include/d3d11.h"
-#include "../../../../include/D3DX11.h"
-#include "../../../../include/d3dcompiler.h"
-#include "../../../../include/xnamath.h"
-
-using namespace std;
-
-#pragma comment(lib, "../../lib/x86/D3DX11.lib")
-#pragma comment(lib, "../../lib/x86/D3D11.lib")
-
-#define CHECK_RESULT(hres, msg) if(FAILED(hres)){errorMessage = msg;return false; }
-#define SAFE_RELEASE(d3dpointer) if(d3dpointer){d3dpointer->Release(); d3dpointer = 0;}
+#include "Additional.h"
+using namespace Shader;
 
 class Render
 {
@@ -36,15 +23,24 @@ private:
 	Render(const Render&);
 
 	void _beginScene();
+	void _prepareToRenderTechnique(Technique tech);
 	void _endScene();
 
+	void _renderTextureMapModel(/*Model* model,*/ vector<XMFLOAT4X4*>* matrixs);
+	bool _initializeShaders();
+	bool _initializeRasterizerStates();
+	bool _initializeSamplerStates();
+	bool _compileShaderFromFile(LPCSTR file, const D3D_SHADER_MACRO* pDefs, LPCSTR szEntry, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppBlobOut);
+	void _mapViewProjectionBufferResource();
+
 #pragma region private vars
-	struct SystemConfiguration
-	{
-		SystemConfiguration(){}
-		const float Zfar = 100000.0f;
-		const float Znear = 0.01f;
-	}; SystemConfiguration _config;
+	SystemConfiguration _config;
+	#pragma region shader vars
+		RasterizerState				_rasterizerStates;
+		SamplerState					_samplerStates;
+		TechniqueBuffers			_textureMap;
+		ID3D11Buffer*					_bufferViewProj;
+	#pragma endregion
 
 	#pragma region d3d main vars
 		private:
