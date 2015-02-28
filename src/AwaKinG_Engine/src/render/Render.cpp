@@ -183,6 +183,17 @@
 		return true;
 	}
 	void Render::shutdown(){
+		for(int i = 0; i < 1; i++)  {
+			for(int j = 0; j < _models[i].size(); j++) {
+				delete _models[i][j];
+				for(int k = 0; k < _worldMatrix[i][j].size(); k++)
+					delete _worldMatrix[i][j][k];
+				_worldMatrix[i][j].clear();
+			}
+			_worldMatrix[i].clear();
+			_models[i].clear();
+		}
+
 		_textureMap.release();
 		_rasterizerStates.release();
 		_samplerStates.release();
@@ -199,13 +210,13 @@
 		_beginScene();
 
 		_prepareToRenderTechnique(_textureMap);
-		/*
-		for(int i=0; i<textureMapModels.size(); i++)
-			_renderTextureMapModel(&_matrixs[ART_TEXTURE_MAP][i]);
+		for(int i = 0; i<_models[MRT_TEXTURE_MAP].size(); i++)
+			_renderTextureMapModel(_models[MRT_TEXTURE_MAP][i], &_worldMatrix[MRT_TEXTURE_MAP][i]);
 
+		/*
 		_prepareToRenderTechnique(_bumpMap);
-		for(int i=0; i<textureMapModels.size(); i++)
-			_renderTextureMapModel(&_matrixs[ART_BUMP_MAP][i]);
+		for(int i=0; i<_models[MRT_BUMP_MAP].size(); i++)
+			_renderTextureMapModel(&_matrixs[MRT_BUMP_MAP][i]);
 		*/
 		_endScene();
 	}
@@ -222,17 +233,17 @@
 		_immediateContext->PSSetShader(tech.PixelShader, nullptr, 0);
 		_immediateContext->IASetInputLayout(tech.InputLayout);
 	}
-	void Render::_renderTextureMapModel(/*ModelEx* model,*/ vector<XMFLOAT4X4*>* matrixs) {
-		/*UINT offset_ = 0;
-		_immediateContext->PSSetShaderResources(0, 1, model->getTexture());
+	void Render::_renderTextureMapModel(Model* model, vector<XMFLOAT4X4*>* matrixs) {
+		UINT offset_ = 0;
+		_immediateContext->PSSetShaderResources(0, 1, model->getDiffuseMap());
 		_immediateContext->IASetVertexBuffers(0, 1, model->getVertexBuffer(), &_textureMap.VertexStride, &offset_);
 		_immediateContext->IASetIndexBuffer(model->getIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
-
+		
 		for(unsigned int j = 0; j < matrixs->size(); j++) {
-			_mapConstantBufferResource(&_textureMap.Buffer[0], matrixs[0][j]);
-			_immediateContext->VSSetConstantBuffers(_textureMap.IndexOfBuffer[0], 1, &_textureMap.Buffer[0]);
+			_mapConstantBufferResource(&_textureMap.Buffers[0], matrixs[0][j]);
+			_immediateContext->VSSetConstantBuffers(_textureMap.IndexsOfBuffers[0], 1, &_textureMap.Buffers[0]);
 			_immediateContext->DrawIndexed(model->getIndexCount(), 0, 0);
-		}*/
+		}
 	}
 #pragma endregion
 
@@ -282,6 +293,13 @@
 		//	_immediateContext->PSSetConstantBuffers(0, 1, &_bViewProj);
 		//	_immediateContext->HSSetConstantBuffers(0, 1, &_bViewProj);
 		//	_immediateContext->DSSetConstantBuffers(0, 1, &_bViewProj);
+	}
+	void Render::_mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* matrix) {
+		D3D11_MAPPED_SUBRESOURCE MappedResource;
+		HRESULT hr = _immediateContext->Map(buffer[0], 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
+		auto pData = reinterpret_cast<XMFLOAT4X4*>(MappedResource.pData);
+		XMStoreFloat4x4(pData, XMLoadFloat4x4(matrix));
+		_immediateContext->Unmap(buffer[0], 0);
 	}
 	bool Render::_compileShaderFromFile(LPCSTR szFileName, const D3D_SHADER_MACRO* pDefines,
 		LPCSTR szEntryPoint, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppBlobOut) {

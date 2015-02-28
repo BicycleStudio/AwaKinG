@@ -120,6 +120,7 @@
     <ClCompile Include="src\AwaKinG_Engine.cpp" />
     <ClCompile Include="src\core\Engine.cpp" />
     <ClCompile Include="src\core\Input.cpp" />
+    <ClCompile Include="src\render\Model.cpp" />
     <ClCompile Include="src\render\Render.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +128,7 @@
     <ClInclude Include="src\core\Engine.h" />
     <ClInclude Include="src\core\Input.h" />
     <ClInclude Include="src\render\Additional.h" />
+    <ClInclude Include="src\render\Model.h" />
     <ClInclude Include="src\render\Render.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -17,7 +17,16 @@ using namespace std;
 #define CHECK_RESULT(hres, msg) if(FAILED(hres)){errorMessage = msg;return false; }
 #define SAFE_RELEASE(d3dpointer) if(d3dpointer){d3dpointer->Release(); d3dpointer = 0;}
 
-namespace Shader  {
+enum ModelRenderTechnique { MRT_TEXTURE_MAP = 0 };
+
+namespace Vertex {
+	struct Default {
+		XMFLOAT3 position;
+		XMFLOAT2 texCoords;
+		XMFLOAT3 normal;
+	};
+}
+namespace Shader {
 	struct SystemConfiguration {
 		SystemConfiguration() {}
 		const float Zfar = 100000.0f;
@@ -46,7 +55,6 @@ namespace Shader  {
 			Buffers.clear();
 			IndexsOfBuffers.clear();
 		}
-		
 		vector<ID3D11Buffer*>	Buffers;
 		vector<int>	IndexsOfBuffers;
 	};

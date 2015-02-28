@@ -1,7 +1,7 @@
 #ifndef __RENDER_H
 #define __RENDER_H
 
-#include "Additional.h"
+#include "Model.h"
 using namespace Shader;
 
 class Render
@@ -26,12 +26,13 @@ private:
 	void _prepareToRenderTechnique(Technique tech);
 	void _endScene();
 
-	void _renderTextureMapModel(/*Model* model,*/ vector<XMFLOAT4X4*>* matrixs);
+	void _renderTextureMapModel(Model* model, vector<XMFLOAT4X4*>* matrixs);
 	bool _initializeShaders();
 	bool _initializeRasterizerStates();
 	bool _initializeSamplerStates();
 	bool _compileShaderFromFile(LPCSTR file, const D3D_SHADER_MACRO* pDefs, LPCSTR szEntry, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppBlobOut);
 	void _mapViewProjectionBufferResource();
+	void _mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* matrix);
 
 #pragma region private vars
 	SystemConfiguration _config;
@@ -59,9 +60,11 @@ private:
 	#pragma endregion
 	#pragma region main vars
 		private:
-			int											_sizeX;
-			int											_sizeY;
-			float*									_sceneColor;
+			vector<Model*>								_models[1];
+			vector<vector<XMFLOAT4X4*>>		_worldMatrix[1];
+			int														_sizeX;
+			int														_sizeY;
+			float*												_sceneColor;
 	#pragma endregion
 #pragma endregion
 };

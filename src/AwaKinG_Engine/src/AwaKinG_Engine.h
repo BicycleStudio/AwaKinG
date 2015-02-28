@@ -8,6 +8,7 @@
 #define DLL_SPEC extern "C" __declspec(dllimport)
 #endif // AWAKINGDLL_EXPORTS
 
+#include "core/map/Map.h"
 #include "core/Engine.h"
 #include "render/Render.h"
 #include "core/Input.h"
