@@ -4,6 +4,24 @@
 
 LRESULT CALLBACK WndProc(HWND	hWnd, UINT	uMsg, WPARAM	wParam, LPARAM	lParam);
 
+Window *Window::_window = 0;
+DestroyerWindow Window::_destroyer;
+
+DestroyerWindow::~DestroyerWindow(){
+  delete _window;
+}
+void DestroyerWindow::initialize(Window* window){
+  _window = window;
+}
+
+Window& Window::getInstance(){
+  if(!_window){
+    _window = new Window();
+    _destroyer.initialize(_window);
+  }
+  return *_window;	
+}
+
 Window::Window() {
 	ErrorMessage = "Window";
 	_fullscreen = false;
