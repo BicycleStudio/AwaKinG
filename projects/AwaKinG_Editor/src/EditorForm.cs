@@ -29,7 +29,28 @@ namespace AwaKinG_Editor {
       Engine.GetInstance().Done = true;
     }
     private void pnlRender_SizeChanged(object sender, EventArgs e) {
-      Engine.GetInstance().Resize(pnlRender.Size);
+      if (WindowState != FormWindowState.Minimized) { 
+        Engine.GetInstance().SetActive(true);
+        Engine.GetInstance().Resize(pnlRender.Size);
+      }
+    }
+    private void EditorForm_Load(object sender, EventArgs e) {
+      Engine.GetInstance().SetActive(true);
+    }
+    private void EditorForm_SizeChanged(object sender, EventArgs e) {
+      if (WindowState == FormWindowState.Minimized) 
+        Engine.GetInstance().SetActive(false);
+      else
+        Engine.GetInstance().SetActive(true);
+    }
+
+    private void EditorForm_Activated(object sender, EventArgs e) {
+      if (WindowState != FormWindowState.Minimized)
+        Engine.GetInstance().SetActive(true);
+    }
+
+    private void EditorForm_Deactivate(object sender, EventArgs e) {
+      Engine.GetInstance().SetActive(false);
     }
   }
 }

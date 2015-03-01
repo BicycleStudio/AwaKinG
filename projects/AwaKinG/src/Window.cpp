@@ -21,13 +21,13 @@ Window& Window::getInstance(){
   }
   return *_window;	
 }
-Window::Window(){
+
+Window::Window() {
 	ErrorMessage = "Window";
 	_fullscreen = false;
 	_hWnd = NULL;
 }
-bool Window::initialize(HWND* hwnd, int sizeX, int sizeY)
-{
+bool Window::initialize(HWND* hwnd, int sizeX, int sizeY) {
 	HINSTANCE hInstance_ = GetModuleHandle(NULL);
 	_width = sizeX;
 	_height = sizeY;
@@ -132,28 +132,22 @@ bool Window::initialize(HWND* hwnd, int sizeX, int sizeY)
 
 	return true;
 }
-void Window::shutdown() 
-{
-	if(_fullscreen)
-	{
+void Window::shutdown() {
+	if(_fullscreen)	{
 		ChangeDisplaySettings(NULL, 0);			
 		ShowCursor(false);									
 	}
-	if(_hWnd && !DestroyWindow(_hWnd)) 
-	{
+	if(_hWnd && !DestroyWindow(_hWnd)) 	{
 		MessageBox(NULL, "Could Not Release hWnd.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 		_hWnd = NULL;
 	}
-	if(!UnregisterClass("AwaKinG", GetModuleHandle(NULL)))
-	{
+	if(!UnregisterClass("AwaKinG", GetModuleHandle(NULL)))	{
 		MessageBox(NULL, "Could Not Unregister Class.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION);
 	}
 }
-int Window::getWidth()
-{
+int Window::getWidth() {
 	return _width;
 }
-int Window::getHeight()
-{
+int Window::getHeight() {
 	return _height;
 }
