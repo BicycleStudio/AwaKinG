@@ -1,5 +1,22 @@
 #include "EngineWrap.h"
 
+EngineWrap *EngineWrap::_engine = 0;
+DestroyerEngineWrap EngineWrap::_destroyer;
+
+DestroyerEngineWrap::~DestroyerEngineWrap(){
+  delete _engine;
+}
+void DestroyerEngineWrap::initialize(EngineWrap *engine){
+  _engine = engine;
+}
+
+EngineWrap& EngineWrap::getInstance(){
+  if(!_engine){
+		_engine = new EngineWrap();
+    _destroyer.initialize(_engine);
+	}
+	return *_engine;
+}
 EngineWrap::EngineWrap()
 {
 	_initialized = false;
