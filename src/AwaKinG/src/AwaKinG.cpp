@@ -12,9 +12,9 @@ void shutdown();
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine, int	nCmdShow)
 {
 	HWND hwnd_;
-	Window::getInstance()->initialize(&hwnd_, SCREEN_WIDTH, SCREEN_HEIGHT);
+	Window::getInstance().initialize(&hwnd_, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	if(!EngineWrap::getInstance()->initialize(hwnd_, hwnd_))
+	if(!EngineWrap::getInstance().initialize(hwnd_, hwnd_))
 	{
 		MessageBox(NULL,"initialize", "initialize error", MB_OK | MB_ICONERROR);
 		shutdown();
@@ -27,8 +27,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 }
 void shutdown()
 {
-	EngineWrap::getInstance()->release();
-	Window::getInstance()->shutdown();
+	EngineWrap::getInstance().release();
+	Window::getInstance().shutdown();
 }
 LRESULT CALLBACK WndProc(HWND	hWnd, UINT	uMsg, WPARAM	wParam, LPARAM	lParam)			// Additional Message Information
 {
@@ -40,11 +40,11 @@ LRESULT CALLBACK WndProc(HWND	hWnd, UINT	uMsg, WPARAM	wParam, LPARAM	lParam)			/
 										{
 											if(wParam)
 											{
-												EngineWrap::getInstance()->setActive(true);
+												EngineWrap::getInstance().setActive(true);
 											}
 											else
 											{
-												EngineWrap::getInstance()->setActive(false);
+												EngineWrap::getInstance().setActive(false);
 											}
 											return 0;
 										}
@@ -55,11 +55,11 @@ LRESULT CALLBACK WndProc(HWND	hWnd, UINT	uMsg, WPARAM	wParam, LPARAM	lParam)			/
 											{
 											case SC_MINIMIZE:
 												gMinimized = true;
-												EngineWrap::getInstance()->setActive(false);
+												EngineWrap::getInstance().setActive(false);
 												break;
 											case 1:
 												gMinimized = false;
-												EngineWrap::getInstance()->setActive(true);
+												EngineWrap::getInstance().setActive(true);
 												break;
 											case SC_SCREENSAVE:
 												return 0;
@@ -74,10 +74,10 @@ LRESULT CALLBACK WndProc(HWND	hWnd, UINT	uMsg, WPARAM	wParam, LPARAM	lParam)			/
 								 return 0;
 	}
 	case WM_SIZE:
-		if(EngineWrap::getInstance()->getInitialized())
+		if(EngineWrap::getInstance().getInitialized())
 		{
-			if(EngineWrap::getInstance()->getActive())
-				EngineWrap::getInstance()->resizeBuffer(LOWORD(lParam), HIWORD(lParam));
+			if(EngineWrap::getInstance().getActive())
+				EngineWrap::getInstance().resizeBuffer(LOWORD(lParam), HIWORD(lParam));
 		}
 		return 0;
 	}
@@ -101,7 +101,7 @@ void messageLoop()
 		}
 		else
 		{
-			EngineWrap::getInstance()->update();
+			EngineWrap::getInstance().update();
 		}
 	}
 }
