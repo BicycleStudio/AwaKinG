@@ -10,8 +10,8 @@ DestroyerWindow Window::_destroyer;
 DestroyerWindow::~DestroyerWindow(){
   delete _window;
 }
-void DestroyerWindow::initialize(Window* p_window){
-  _window = p_window;
+void DestroyerWindow::initialize(Window* window){
+  _window = window;
 }
 
 Window& Window::getInstance(){

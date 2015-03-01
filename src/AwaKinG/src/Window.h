@@ -8,7 +8,7 @@ class DestroyerWindow
 {
 public:
   ~DestroyerWindow();
-  void initialize(Window *p_window);
+  void initialize(Window *window);
 private:
   Window *_window;
 };

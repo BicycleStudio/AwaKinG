@@ -8,7 +8,7 @@ class DestroyerEngineWrap
 {
 public:
   ~DestroyerEngineWrap();
-  void initialize(EngineWrap *p_engine);
+  void initialize(EngineWrap *engine);
 private:
   EngineWrap *_engine;
 };
