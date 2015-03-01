@@ -2,6 +2,7 @@
 
 #pragma region init&shutdown methods
 	Render::Render() {
+		errorMessage = "Undefined error";
 		_sceneColor = new float[4] { 0.0f, 0.125f, 0.3f, 1.0f };
 		_device = 0;
 		_immediateContext = 0;
@@ -184,9 +185,9 @@
 	}
 	void Render::shutdown(){
 		for(int i = 0; i < 1; i++)  {
-			for(int j = 0; j < _models[i].size(); j++) {
+			for(uint j = 0; j < _models[i].size(); j++) {
 				delete _models[i][j];
-				for(int k = 0; k < _worldMatrix[i][j].size(); k++)
+				for(uint k = 0; k < _worldMatrix[i][j].size(); k++)
 					delete _worldMatrix[i][j][k];
 				_worldMatrix[i][j].clear();
 			}
@@ -210,13 +211,14 @@
 		_beginScene();
 
 		_prepareToRenderTechnique(_textureMap);
-		for(int i = 0; i<_models[MRT_TEXTURE_MAP].size(); i++)
+		for(uint i = 0; i<_models[MRT_TEXTURE_MAP].size(); i++)
 			_renderTextureMapModel(_models[MRT_TEXTURE_MAP][i], &_worldMatrix[MRT_TEXTURE_MAP][i]);
 
+		//TODO: iss#20 Normal map
 		/*
-		_prepareToRenderTechnique(_bumpMap);
-		for(int i=0; i<_models[MRT_BUMP_MAP].size(); i++)
-			_renderTextureMapModel(&_matrixs[MRT_BUMP_MAP][i]);
+		_prepareToRenderTechnique(_normalMap);
+		for(int i=0; i<_models[MRT_NORMAL_MAP].size(); i++)
+			_renderNormalMapModel(&_matrixs[MRT_NORMAL_MAP][i]);
 		*/
 		_endScene();
 	}
@@ -281,18 +283,22 @@
 		return true;
 	}
 	void Render::_mapViewProjectionBufferResource() {
-		XMMATRIX viewProjection_ = _perspectiveMatrix; //XMMatrixMultiply(XMLoadFloat4x4(Camera::getInstance().getViewMatrixPointer()), _PerspectiveMatrix);
+		//TODO: когда iss#10 viewMatrix для рендера будет готов, необходимо передавать в шейдер view*proj
+		//XMMatrixMultiply(Camera::getInstance().getViewMatrixPointer(), _perspectiveMatrix);
+
+		XMMATRIX viewProjection_ = _perspectiveMatrix;
 		D3D11_MAPPED_SUBRESOURCE MappedResource;
 		_immediateContext->Map(_bufferViewProj, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
 		auto pData = reinterpret_cast<XMFLOAT4X4*>(MappedResource.pData);
 		XMStoreFloat4x4(pData, viewProjection_);
 		_immediateContext->Unmap(_bufferViewProj, 0);
 		_immediateContext->VSSetConstantBuffers(0, 1, &_bufferViewProj);
+		//TODO: когда будет необходимость добавить главный constantBuffer в различные шейдеры
 		//	_immediateContext->GSSetConstantBuffers(0, 1, &_bViewProj);
 		//	_immediateContext->CSSetConstantBuffers(0, 1, &_bViewProj);
-		//	_immediateContext->PSSetConstantBuffers(0, 1, &_bViewProj);
 		//	_immediateContext->HSSetConstantBuffers(0, 1, &_bViewProj);
 		//	_immediateContext->DSSetConstantBuffers(0, 1, &_bViewProj);
+		//	_immediateContext->PSSetConstantBuffers(0, 1, &_bViewProj);
 	}
 	void Render::_mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* matrix) {
 		D3D11_MAPPED_SUBRESOURCE MappedResource;
@@ -307,9 +313,12 @@
 		hr = D3DX11CompileFromFile(szFileName, pDefines, NULL, szEntryPoint,
 			pTarget, Flags1, Flags2, NULL, ppBlobOut, &pErrorBlob, NULL);
 		if(FAILED(hr)) {
-			if(pErrorBlob != NULL)
+			if(pErrorBlob != NULL) {
 				OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
-			errorMessage = reinterpret_cast<const char*>(pErrorBlob->GetBufferPointer());
+				errorMessage = reinterpret_cast<const char*>(pErrorBlob->GetBufferPointer());
+			}
+			else
+				errorMessage = "Shader path error. File does not exist!"; 
 			if(pErrorBlob) pErrorBlob->Release();
 			return false;
 		}

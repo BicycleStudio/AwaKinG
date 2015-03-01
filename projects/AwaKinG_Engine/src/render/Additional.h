@@ -1,9 +1,11 @@
 #ifndef __ADDITIONAL_H
 #define __ADDITIONAL_H
 
+#pragma warning(push)
+#pragma warning(disable:4005)
+
 #include <Windows.h>
 #include <vector>
-#include <string>
 #include "../../../../include/d3d11.h"
 #include "../../../../include/D3DX11.h"
 #include "../../../../include/d3dcompiler.h"
@@ -11,13 +13,21 @@
 
 using namespace std;
 
+#ifdef __x86
 #pragma comment(lib, "../../lib/x86/D3DX11.lib")
 #pragma comment(lib, "../../lib/x86/D3D11.lib")
+#endif
+
+#ifdef __x64
+#pragma comment(lib, "../../lib/x64/D3DX11.lib")
+#pragma comment(lib, "../../lib/x64/D3D11.lib")
+#endif
 
 #define CHECK_RESULT(hres, msg) if(FAILED(hres)){errorMessage = msg;return false; }
 #define SAFE_RELEASE(d3dpointer) if(d3dpointer){d3dpointer->Release(); d3dpointer = 0;}
 
 enum ModelRenderTechnique { MRT_TEXTURE_MAP = 0 };
+typedef unsigned int uint;
 
 namespace Vertex {
 	struct Default {
@@ -50,7 +60,7 @@ namespace Shader {
 			SAFE_RELEASE(VertexShader);
 			SAFE_RELEASE(PixelShader);
 			SAFE_RELEASE(InputLayout);
-			for(int i = 0; i < Buffers.size(); i++)
+			for(uint i = 0; i < Buffers.size(); i++)
 				SAFE_RELEASE(Buffers[i]);
 			Buffers.clear();
 			IndexsOfBuffers.clear();
@@ -77,4 +87,5 @@ namespace Shader {
 		ID3D11SamplerState* Linear;
 	};
 }
+#pragma warning(pop)
 #endif // __ADDITIONAL_H 

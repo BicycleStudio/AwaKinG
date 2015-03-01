@@ -14,8 +14,8 @@ public:
 	string errorMessage;
 	bool initialize(HWND hwnd, int sizeX, int sizeY);
 
-	static Render* getInstance()  {
-		static Render *render_ = new Render();
+	static Render& getInstance()  {
+		static Render render_;
 		return render_;
 	}
 private:
@@ -55,7 +55,6 @@ private:
 
 			D3D_FEATURE_LEVEL       _featureLevel;
 			D3D_DRIVER_TYPE         _driverType;
-
 			XMMATRIX								_perspectiveMatrix;
 	#pragma endregion
 	#pragma region main vars
@@ -65,7 +64,7 @@ private:
 			int														_sizeX;
 			int														_sizeY;
 			float*												_sceneColor;
-	#pragma endregion
+#pragma endregion
 #pragma endregion
 };
 

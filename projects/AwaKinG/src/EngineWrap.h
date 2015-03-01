@@ -2,6 +2,8 @@
 #include "../../AwaKinG_Engine/src/AwaKing_Engine.h"
 #pragma comment(lib, "../../Lib/AwaKinG_Engine.lib")
 
+#define OUTPUT_ERROR(instance, strClass) {MessageBox(NULL, instance.errorMessage.c_str(), strClass, MB_ICONERROR);return false;}
+
 class EngineWrap
 {
 public:

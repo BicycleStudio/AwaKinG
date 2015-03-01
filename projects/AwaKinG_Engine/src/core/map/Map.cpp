@@ -1,9 +1,10 @@
 #include "Map.h"
 
 Map::Map() {
+	errorMessage = "Undefined error";
 }
 void Map::shutdown() {
-	for(int i = 0; i < _entities.size(); i++)
+	for(uint i = 0; i < _entities.size(); i++)
 		delete _entities[i];
 	_entities.clear();
 }

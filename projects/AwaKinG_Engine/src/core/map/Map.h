@@ -3,12 +3,14 @@
 
 class Map {
 public:
+	string errorMessage;
+
 	void update();
 	void shutdown();
 	bool initialize();
 
-	static Map* getInstance() {
-		static Map *map_ = new Map();
+	static Map& getInstance() {
+		static Map map_;
 		return map_;
 	}
 private:

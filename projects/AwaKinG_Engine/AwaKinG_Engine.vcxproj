@@ -85,7 +85,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_LIB_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__x86;_LIB_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -96,7 +96,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__x86;_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -120,6 +120,8 @@
     <ClCompile Include="src\AwaKinG_Engine.cpp" />
     <ClCompile Include="src\core\Engine.cpp" />
     <ClCompile Include="src\core\Input.cpp" />
+    <ClCompile Include="src\core\map\Entity.cpp" />
+    <ClCompile Include="src\core\map\Map.cpp" />
     <ClCompile Include="src\render\Model.cpp" />
     <ClCompile Include="src\render\Render.cpp" />
   </ItemGroup>
@@ -127,6 +129,8 @@
     <ClInclude Include="src\AwaKinG_Engine.h" />
     <ClInclude Include="src\core\Engine.h" />
     <ClInclude Include="src\core\Input.h" />
+    <ClInclude Include="src\core\map\Entity.h" />
+    <ClInclude Include="src\core\map\Map.h" />
     <ClInclude Include="src\render\Additional.h" />
     <ClInclude Include="src\render\Model.h" />
     <ClInclude Include="src\render\Render.h" />
