@@ -1,7 +1,7 @@
 #include "Map.h"
 
 Map::Map() {
-	errorMessage = "Undefined error";
+	errorMessage = ED_UNDEFINED;
 }
 void Map::shutdown() {
 	for(uint i = 0; i < _entities.size(); i++)

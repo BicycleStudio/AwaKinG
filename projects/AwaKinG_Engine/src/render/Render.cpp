@@ -2,7 +2,7 @@
 
 #pragma region init&shutdown methods
 	Render::Render() {
-		errorMessage = "Undefined error";
+		errorMessage = ED_UNDEFINED;
 		_sceneColor = new float[4] { 0.0f, 0.125f, 0.3f, 1.0f };
 		_device = 0;
 		_immediateContext = 0;
@@ -61,9 +61,9 @@
 				D3D11_SDK_VERSION, &sd, &_swapChain, &_device, &_featureLevel, &_immediateContext);
 			if(SUCCEEDED(hr))			break;
 		}
-		CHECK_RESULT(hr, "Creation of device & swapChain failed");
-		CHECK_RESULT(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer), "Getting backbuffer of swapChain failed");
-		CHECK_RESULT(_device->CreateRenderTargetView(_backBuffer, NULL, &_renderTargetView), "Creation of RenderTargetView failed");
+		CHECK_RESULT(hr, EDR_DEVICE_SWAP_CHAIN);
+		CHECK_RESULT(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer), EDR_GET_BACKBUFFER);
+		CHECK_RESULT(_device->CreateRenderTargetView(_backBuffer, NULL, &_renderTargetView), EDR_CREATE_RTV);
 
 		D3D11_TEXTURE2D_DESC descDepth;
 		ZeroMemory(&descDepth, sizeof(descDepth));
@@ -78,14 +78,14 @@
 		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 		descDepth.CPUAccessFlags = 0;
 		descDepth.MiscFlags = 0;
-		CHECK_RESULT(_device->CreateTexture2D(&descDepth, NULL, &_depthStencil), "Creation of depth stencil texture failed");
+		CHECK_RESULT(_device->CreateTexture2D(&descDepth, NULL, &_depthStencil), EDR_CREATE_DS);
 
 		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
 		ZeroMemory(&descDSV, sizeof(descDSV));
 		descDSV.Format = descDepth.Format;
 		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		descDSV.Texture2D.MipSlice = 0;
-		CHECK_RESULT(_device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView), "Creation of depth stencil view failed");
+		CHECK_RESULT(_device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView), EDR_CREATE_DSV);
 
 		_immediateContext->OMSetRenderTargets(1, &_renderTargetView, _depthStencilView);
 
@@ -117,10 +117,8 @@
 		if(!_compileShaderFromFile(currentShaderPath_.c_str(), nullptr, "VS", "vs_5_0", flags, 0, &BlobVS_)) return false;
 		if(!_compileShaderFromFile(currentShaderPath_.c_str(), nullptr, "PS", "ps_5_0", flags, 0, &BlobPS_)) return false;
 
-		CHECK_RESULT(_device->CreateVertexShader(BlobVS_->GetBufferPointer(), BlobVS_->GetBufferSize(), nullptr, &_textureMap.VertexShader),
-			"Creation of Texture_Mapping vertex shader failed");
-		CHECK_RESULT(_device->CreatePixelShader(BlobPS_->GetBufferPointer(), BlobPS_->GetBufferSize(), nullptr, &_textureMap.PixelShader),
-			"Creation of Texture_Mapping pixel shader failed");
+		CHECK_RESULT(_device->CreateVertexShader(BlobVS_->GetBufferPointer(), BlobVS_->GetBufferSize(), nullptr, &_textureMap.VertexShader), EDR_CREATE_VSHADER);
+		CHECK_RESULT(_device->CreatePixelShader(BlobPS_->GetBufferPointer(), BlobPS_->GetBufferSize(), nullptr, &_textureMap.PixelShader), EDR_CREATE_PSHADER);
 
 		const D3D11_INPUT_ELEMENT_DESC layout[] =
 		{
@@ -136,10 +134,10 @@
 		bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		bd.ByteWidth = sizeof(XMFLOAT4X4);
 		bd.MiscFlags = 0;
-		CHECK_RESULT(_device->CreateBuffer(&bd, NULL, &_bufferViewProj), "Creation of constant buffer ViewProjection failed");
+		CHECK_RESULT(_device->CreateBuffer(&bd, NULL, &_bufferViewProj), EDR_CREATE_CB);
 	
 		ID3D11Buffer* buff_;
-		CHECK_RESULT(_device->CreateBuffer(&bd, NULL, &buff_), "Creation of constant buffer failed");
+		CHECK_RESULT(_device->CreateBuffer(&bd, NULL, &buff_), EDR_CREATE_CB);
 		_textureMap.Buffers.push_back(buff_);	
 		_textureMap.IndexsOfBuffers.push_back(1);
 
@@ -154,14 +152,11 @@
 		RasterDesc.FillMode = D3D11_FILL_SOLID;
 		RasterDesc.CullMode = D3D11_CULL_BACK;
 		RasterDesc.DepthClipEnable = TRUE;
-		CHECK_RESULT(_device->CreateRasterizerState(&RasterDesc, &_rasterizerStates.Solid),
-			"Creation of Solid RS failed");
+		CHECK_RESULT(_device->CreateRasterizerState(&RasterDesc, &_rasterizerStates.Solid), EDR_CREATE_RS);
 		RasterDesc.CullMode = D3D11_CULL_NONE;
-		CHECK_RESULT(_device->CreateRasterizerState(&RasterDesc, &_rasterizerStates.SolidNonCull),
-			"Creation of NonCull RS failed");
+		CHECK_RESULT(_device->CreateRasterizerState(&RasterDesc, &_rasterizerStates.SolidNonCull), EDR_CREATE_RS);
 		RasterDesc.FillMode = D3D11_FILL_WIREFRAME;
-		CHECK_RESULT(_device->CreateRasterizerState(&RasterDesc, &_rasterizerStates.Wireframe),
-			"Creation of Wireframe RS failed");
+		CHECK_RESULT(_device->CreateRasterizerState(&RasterDesc, &_rasterizerStates.Wireframe), EDR_CREATE_RS);
 		_immediateContext->RSSetState(_rasterizerStates.Solid);
 
 		return true;
@@ -177,8 +172,7 @@
 		samplDesc_.MipLODBias = 0;
 		samplDesc_.MinLOD = 0;
 		samplDesc_.MaxLOD = 16;
-		CHECK_RESULT(_device->CreateSamplerState(&samplDesc_, &_samplerStates.Linear),
-			"Creation of Wireframe RS failed");
+		CHECK_RESULT(_device->CreateSamplerState(&samplDesc_, &_samplerStates.Linear), EDR_CREATE_SS);
 		_immediateContext->PSSetSamplers(0, 1, &_samplerStates.Linear);
 
 		return true;
@@ -257,9 +251,9 @@
 
 		_depthStencil->Release();	_depthStencilView->Release();	_renderTargetView->Release();	_backBuffer->Release();
 
-		CHECK_RESULT(_swapChain->ResizeBuffers(1, sizeX, sizeY, DXGI_FORMAT_UNKNOWN, 0), "ResizeBuffersError");
-		CHECK_RESULT(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer), "Getting backbuffer of swapChain failed");
-		CHECK_RESULT(_device->CreateRenderTargetView(_backBuffer, NULL, &_renderTargetView), "Creation of RenderTargetView failed");
+		CHECK_RESULT(_swapChain->ResizeBuffers(1, sizeX, sizeY, DXGI_FORMAT_UNKNOWN, 0), EDR_RESIZE_BUFFERS);
+		CHECK_RESULT(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&_backBuffer), EDR_GET_BACKBUFFER);
+		CHECK_RESULT(_device->CreateRenderTargetView(_backBuffer, NULL, &_renderTargetView), EDR_CREATE_RTV);
 
 		D3D11_TEXTURE2D_DESC descDepth;
 		ZeroMemory(&descDepth, sizeof(descDepth));
@@ -269,11 +263,11 @@
 		descDepth.SampleDesc.Count = 1;	descDepth.SampleDesc.Quality = 0;
 		descDepth.Usage = D3D11_USAGE_DEFAULT;	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 		descDepth.CPUAccessFlags = 0;	descDepth.MiscFlags = 0;
-		CHECK_RESULT(_device->CreateTexture2D(&descDepth, NULL, &_depthStencil), "Creation of depth stencil texture failed");
+		CHECK_RESULT(_device->CreateTexture2D(&descDepth, NULL, &_depthStencil), EDR_CREATE_DS);
 		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
 		ZeroMemory(&descDSV, sizeof(descDSV));	descDSV.Format = descDepth.Format;
 		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;	descDSV.Texture2D.MipSlice = 0;
-		CHECK_RESULT(_device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView), "Creation of depth stencil view failed");
+		CHECK_RESULT(_device->CreateDepthStencilView(_depthStencil, &descDSV, &_depthStencilView), EDR_CREATE_DSV);
 
 		D3D11_VIEWPORT vp;	vp.Width = (FLOAT)_sizeX;	vp.Height = (FLOAT)_sizeY;	vp.MinDepth = 0.0f;	vp.MaxDepth = 1.0f;	vp.TopLeftX = 0;	vp.TopLeftY = 0;
 		_immediateContext->RSSetViewports(1, &vp);
@@ -283,7 +277,7 @@
 		return true;
 	}
 	void Render::_mapViewProjectionBufferResource() {
-		//TODO: когда iss#10 viewMatrix для рендера будет готов, необходимо передавать в шейдер view*proj
+		//TODO: iss#10 viewMatrix -> view*proj
 		//XMMatrixMultiply(Camera::getInstance().getViewMatrixPointer(), _perspectiveMatrix);
 
 		XMMATRIX viewProjection_ = _perspectiveMatrix;
@@ -293,12 +287,6 @@
 		XMStoreFloat4x4(pData, viewProjection_);
 		_immediateContext->Unmap(_bufferViewProj, 0);
 		_immediateContext->VSSetConstantBuffers(0, 1, &_bufferViewProj);
-		//TODO: когда будет необходимость добавить главный constantBuffer в различные шейдеры
-		//	_immediateContext->GSSetConstantBuffers(0, 1, &_bViewProj);
-		//	_immediateContext->CSSetConstantBuffers(0, 1, &_bViewProj);
-		//	_immediateContext->HSSetConstantBuffers(0, 1, &_bViewProj);
-		//	_immediateContext->DSSetConstantBuffers(0, 1, &_bViewProj);
-		//	_immediateContext->PSSetConstantBuffers(0, 1, &_bViewProj);
 	}
 	void Render::_mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* matrix) {
 		D3D11_MAPPED_SUBRESOURCE MappedResource;
@@ -318,7 +306,7 @@
 				errorMessage = reinterpret_cast<const char*>(pErrorBlob->GetBufferPointer());
 			}
 			else
-				errorMessage = "Shader path error. File does not exist!"; 
+				errorMessage = EDR_HLSL_PATH;
 			if(pErrorBlob) pErrorBlob->Release();
 			return false;
 		}

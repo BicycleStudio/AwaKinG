@@ -7,12 +7,13 @@ EngineWrap::EngineWrap()
 }
 bool EngineWrap::initialize(HWND mainHwnd, HWND hwnd){
 	if(!Render::getInstance().initialize(hwnd, 2000, 2000))
-		OUTPUT_ERROR(Render::getInstance(), "Render error!");
+		OUTPUT_ERROR(Render::getInstance(), ED_RENDER);
 	if(!Input::getInstance().initialize(mainHwnd)) 
-		OUTPUT_ERROR(Input::getInstance(), "Input error!");
+		OUTPUT_ERROR(Input::getInstance(), ED_INPUT);
 	if(!Engine::getInstance().initialize()) 
-		OUTPUT_ERROR(Engine::getInstance(), "Engine error!");
-
+		OUTPUT_ERROR(Engine::getInstance(), ED_ENGINE);
+	if(!Map::getInstance().initialize())
+		OUTPUT_ERROR(Map::getInstance(), ED_MAP);
 	_initialized = true;
 	_active = true;
 	setActive(_active);

@@ -3,6 +3,7 @@
 
 #include <Windows.h>
 #include <vector>
+#include "../ErrorDefines.h"
 using namespace std;
 
 class Input

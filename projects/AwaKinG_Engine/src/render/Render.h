@@ -1,6 +1,7 @@
 #ifndef __RENDER_H
 #define __RENDER_H
 
+#include "../ErrorDefines.h"
 #include "Model.h"
 using namespace Shader;
 

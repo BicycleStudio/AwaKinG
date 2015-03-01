@@ -6,7 +6,6 @@
 
 #include <Windows.h>
 #include <vector>
-#include "../../../../include/d3d11.h"
 #include "../../../../include/D3DX11.h"
 #include "../../../../include/d3dcompiler.h"
 #include "../../../../include/xnamath.h"

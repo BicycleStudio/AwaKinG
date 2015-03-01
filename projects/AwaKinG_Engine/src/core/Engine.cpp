@@ -1,7 +1,7 @@
 #include "Engine.h"
 
 Engine::Engine(){
-	errorMessage = "Undefined error";
+	errorMessage = ED_UNDEFINED;
 	_active = false;
 }
 bool Engine::initialize(){

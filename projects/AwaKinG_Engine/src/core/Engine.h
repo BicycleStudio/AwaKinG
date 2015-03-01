@@ -2,6 +2,7 @@
 #define __ENGINE_H
 #include <vector>
 using namespace std;
+#include "../ErrorDefines.h"
 
 class Engine
 {

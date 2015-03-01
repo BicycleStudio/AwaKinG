@@ -131,6 +131,7 @@
     <ClInclude Include="src\core\Input.h" />
     <ClInclude Include="src\core\map\Entity.h" />
     <ClInclude Include="src\core\map\Map.h" />
+    <ClInclude Include="src\ErrorDefines.h" />
     <ClInclude Include="src\render\Additional.h" />
     <ClInclude Include="src\render\Model.h" />
     <ClInclude Include="src\render\Render.h" />

@@ -1,7 +1,7 @@
 #include "Input.h"
 
 Input::Input(){
-	errorMessage = "Undefined error";
+	errorMessage = ED_UNDEFINED;
 }
 
 bool Input::initialize(HWND hwnd){
