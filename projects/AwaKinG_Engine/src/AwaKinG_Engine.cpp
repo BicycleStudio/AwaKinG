@@ -20,7 +20,8 @@ void release(){
 void update(){
 	if(Engine::getInstance().getActive()) {
 		Input::getInstance().update();
-		Map::getInstance().update();
+    Camera::getInstance().update();
+    Map::getInstance().update();
 		Engine::getInstance().update();
 		Render::getInstance().update();
 	}
