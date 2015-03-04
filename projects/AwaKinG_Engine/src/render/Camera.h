@@ -6,15 +6,27 @@
 class Camera {
 public:
   static Camera& getInstance() {
-    static Camera camera_;
-    return camera_;
+    static Camera cam_;
+    return cam_;
   }
   XMMATRIX& getViewMatrix();
-private:
+  void shutdown();
+  void update();
+  XMFLOAT3* getPositionPointer();
+  XMFLOAT3* getLookPointer();
+
+  void yaw(float angle);
+  void pitch(float angle);
+  void walk(float units);
+  void strafe(float units);
+protected:
   Camera();
   Camera(const Camera&);
 
   XMMATRIX _viewMatrix;
+  XMFLOAT3 _position;
+  XMFLOAT3 _look;
+  XMFLOAT3 _up;
+  XMFLOAT3 _right;
 };
-
 #endif
