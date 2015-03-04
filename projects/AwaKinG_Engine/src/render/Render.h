@@ -3,7 +3,10 @@
 
 #include "../ErrorDefines.h"
 #include "Model.h"
+#include "Camera.h"
 using namespace Shader;
+
+#define NUM_RENDER_TECHNIQUES 1
 
 class Render
 {
@@ -60,8 +63,8 @@ private:
 	#pragma endregion
 	#pragma region main vars
 		private:
-			vector<Model*>								_models[1];
-			vector<vector<XMFLOAT4X4*>>		_worldMatrix[1];
+      vector<Model*>								_models[NUM_RENDER_TECHNIQUES];
+      vector<vector<XMFLOAT4X4*>>		_worldMatrix[NUM_RENDER_TECHNIQUES];
 			int														_sizeX;
 			int														_sizeY;
 			float*												_sceneColor;

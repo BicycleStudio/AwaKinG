@@ -277,13 +277,12 @@
 		return true;
 	}
 	void Render::_mapViewProjectionBufferResource() {
-		//TODO: iss#10 viewMatrix -> view*proj
-		//XMMatrixMultiply(Camera::getInstance().getViewMatrixPointer(), _perspectiveMatrix);
+		XMMatrixMultiply(Camera::getInstance().getViewMatrix(), _perspectiveMatrix);
 
 		XMMATRIX viewProjection_ = _perspectiveMatrix;
-		D3D11_MAPPED_SUBRESOURCE MappedResource;
-		_immediateContext->Map(_bufferViewProj, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
-		auto pData = reinterpret_cast<XMFLOAT4X4*>(MappedResource.pData);
+		D3D11_MAPPED_SUBRESOURCE mappedResource_;
+    _immediateContext->Map(_bufferViewProj, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource_);
+    auto pData = reinterpret_cast<XMFLOAT4X4*>(mappedResource_.pData);
 		XMStoreFloat4x4(pData, viewProjection_);
 		_immediateContext->Unmap(_bufferViewProj, 0);
 		_immediateContext->VSSetConstantBuffers(0, 1, &_bufferViewProj);

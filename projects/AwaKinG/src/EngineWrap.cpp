@@ -6,8 +6,8 @@ DestroyerEngineWrap EngineWrap::_destroyer;
 DestroyerEngineWrap::~DestroyerEngineWrap(){
   delete _engine;
 }
-void DestroyerEngineWrap::initialize(EngineWrap *p_engine){
-  _engine = p_engine;
+void DestroyerEngineWrap::initialize(EngineWrap *engine){
+  _engine = engine;
 }
 
 EngineWrap& EngineWrap::getInstance(){
