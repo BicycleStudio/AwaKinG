@@ -187,8 +187,7 @@
 		for(int i = 0; i < 1; i++)  {
 			for(uint j = 0; j < _models[i].size(); j++) {
 				delete _models[i][j];
-				for(uint k = 0; k < _worldMatrix[i][j].size(); k++)
-					delete _worldMatrix[i][j][k];
+
 				_worldMatrix[i][j].clear();
 			}
 			_worldMatrix[i].clear();

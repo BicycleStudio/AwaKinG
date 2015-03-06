@@ -32,5 +32,19 @@ void setActive(bool value){
 void resizeBuffer(int sizeX, int sizeY){
 	Render::getInstance().resizeBuffer(sizeX, sizeY);
 }
-
+void setCameraType(int type) {
+  switch(type) {
+  case 0:
+    Map::getInstance().setCameraType(PCT_GAME);
+    break;
+  case 1:
+    Map::getInstance().setCameraType(PCT_FIRST_PERSON);
+    break;
+  case 2:
+    Map::getInstance().setCameraType(PCT_REDACTOR);
+    break;
+  default:
+    break;
+  }
+}
 #pragma warning(pop)

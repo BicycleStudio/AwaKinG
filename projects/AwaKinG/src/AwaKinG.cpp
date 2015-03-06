@@ -18,7 +18,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 		shutdown();
 		return 1;
 	}
-	messageLoop();
+  EngineWrap::getInstance().resizeBuffer(Window::getInstance().getWidth(), Window::getInstance().getHeight());
+  messageLoop();
 
 	shutdown();
 	return 0;
@@ -67,9 +68,9 @@ LRESULT CALLBACK WndProc(HWND	hWnd, UINT	uMsg, WPARAM	wParam, LPARAM	lParam)			/
 	}
 	case WM_SIZE:
 		if(EngineWrap::getInstance().getInitialized()) {
-			if(EngineWrap::getInstance().getActive())
+      if(EngineWrap::getInstance().getActive())
 				EngineWrap::getInstance().resizeBuffer(LOWORD(lParam), HIWORD(lParam));
-		}
+    }
 		return 0;
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);

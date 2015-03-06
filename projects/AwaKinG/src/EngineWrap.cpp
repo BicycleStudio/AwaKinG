@@ -37,7 +37,9 @@ bool EngineWrap::initialize(HWND mainHwnd, HWND hwnd){
 	return true;
 }
 void EngineWrap::release(){
-	Engine::getInstance().shutdown();
+  Camera::getInstance().shutdown();
+  Map::getInstance().shutdown();
+  Engine::getInstance().shutdown();
 	Input::getInstance().shutdown();
 	Render::getInstance().shutdown();
 }
@@ -45,6 +47,7 @@ void EngineWrap::update(){
 	if(Engine::getInstance().getActive()) {
 		Input::getInstance().update();
 		Engine::getInstance().update();
+    Map::getInstance().update();
     Camera::getInstance().update();
 		Render::getInstance().update();
 	}

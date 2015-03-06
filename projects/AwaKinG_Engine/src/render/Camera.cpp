@@ -12,10 +12,10 @@ void Camera::shutdown() {
 XMMATRIX& Camera::getViewMatrix() {
   return _viewMatrix;
 }
-XMFLOAT3* Camera::getPositionPointer() {
+XMFLOAT3* Camera::getPosition() {
   return &_position;
 }
-XMFLOAT3* Camera::getLookPointer() {
+XMFLOAT3* Camera::getLook() {
   return &_look;
 }
 void Camera::pitch(float angle) {
@@ -66,7 +66,4 @@ void Camera::update() {
   _viewMatrix._23 = _look.y; _viewMatrix._24 = 0.0f;
   _viewMatrix._33 = _look.z; _viewMatrix._34 = 0.0f;
   _viewMatrix._43 = z;			 _viewMatrix._44 = 1.0f;
-
-  //TODO: Check this directx function!
-  //XMStoreFloat4x4(&_viewMatrixRender, XMMatrixLookAtLH(XMLoadFloat3(&_position), XMLoadFloat3(&_look), XMLoadFloat3(&_up)));
 }

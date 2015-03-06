@@ -1,5 +1,7 @@
-#pragma once
+#ifndef __ENTITY_H
+#define __ENTITY_H
 #include"../../render/Additional.h"
+#include"../../render/Camera.h"
 
 class Entity {
 public:
@@ -18,4 +20,22 @@ protected:
   XMFLOAT3      _scaling;
   XMFLOAT3      _rotation;
 };
-
+class Player : public Entity {
+public:
+  Player();
+  ~Player();
+  virtual void update();
+};
+class FirstPersonPlayer : public Player {
+public:
+  FirstPersonPlayer();
+  ~FirstPersonPlayer();
+  void update();
+};
+class RedactorPlayer : public Player {
+public:
+  RedactorPlayer();
+  ~RedactorPlayer();
+  void update();
+};
+#endif

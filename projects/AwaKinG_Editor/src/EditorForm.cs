@@ -52,5 +52,13 @@ namespace AwaKinG_Editor {
     private void EditorForm_Deactivate(object sender, EventArgs e) {
       Engine.GetInstance().SetActive(false);
     }
+
+    private void CameraType_Click(object sender, EventArgs e) {
+      int type_ = Convert.ToInt32(((ToolStripMenuItem)sender).Tag);
+      EngineDll.SetCameraType(type_);
+      foreach (ToolStripMenuItem ts in menuEditCamera.DropDownItems)
+        ts.Checked = false;
+      ((ToolStripMenuItem)sender).Checked = true;
+    }
   }
 }

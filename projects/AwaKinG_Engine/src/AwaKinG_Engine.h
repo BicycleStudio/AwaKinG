@@ -18,5 +18,7 @@ DLL_SPEC void release();
 DLL_SPEC void update();
 DLL_SPEC void setActive(bool value);
 DLL_SPEC void resizeBuffer(int sizeX, int sizeY);
+//  type { 0 = Player, 1 = FirstPerson, 2 = Redactor }
+DLL_SPEC void setCameraType(int type);  
 
 #endif // __AWAKING_ENGINE_H 

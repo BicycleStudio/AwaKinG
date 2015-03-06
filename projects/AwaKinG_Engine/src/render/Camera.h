@@ -12,8 +12,8 @@ public:
   XMMATRIX& getViewMatrix();
   void shutdown();
   void update();
-  XMFLOAT3* getPositionPointer();
-  XMFLOAT3* getLookPointer();
+  XMFLOAT3* getPosition();
+  XMFLOAT3* getLook();
 
   void yaw(float angle);
   void pitch(float angle);

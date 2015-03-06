@@ -18,6 +18,8 @@ namespace AwaKinG_Editor {
     public extern static void SetActive(bool value);
     [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl, EntryPoint = "resizeBuffer")]
     public extern static void ResizeBuffer(int sizeX, int sizeY);
+    [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl, EntryPoint = "setCameraType")]
+    public extern static bool SetCameraType(int type);
   }
   public class Engine {
     public bool Done { get { return _done; } set { _done = value; if (_done) EngineDll.Release(); } }

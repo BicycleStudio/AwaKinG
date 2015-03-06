@@ -35,13 +35,18 @@
       this.pnlLeft = new System.Windows.Forms.FlowLayoutPanel();
       this.pnlRight = new System.Windows.Forms.FlowLayoutPanel();
       this.pnlRender = new System.Windows.Forms.Panel();
+      this.menuEdit = new System.Windows.Forms.ToolStripMenuItem();
+      this.menuEditCamera = new System.Windows.Forms.ToolStripMenuItem();
+      this.menuEditCameraFirstPerson = new System.Windows.Forms.ToolStripMenuItem();
+      this.menuEditCameraRedactor = new System.Windows.Forms.ToolStripMenuItem();
       this.menuMain.SuspendLayout();
       this.SuspendLayout();
       // 
       // menuMain
       // 
       this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuFile});
+            this.menuFile,
+            this.menuEdit});
       this.menuMain.Location = new System.Drawing.Point(0, 0);
       this.menuMain.Name = "menuMain";
       this.menuMain.Size = new System.Drawing.Size(784, 24);
@@ -59,7 +64,7 @@
       // menuFileExit
       // 
       this.menuFileExit.Name = "menuFileExit";
-      this.menuFileExit.Size = new System.Drawing.Size(92, 22);
+      this.menuFileExit.Size = new System.Drawing.Size(152, 22);
       this.menuFileExit.Text = "Exit";
       this.menuFileExit.Click += new System.EventHandler(this.menuFileExit_Click);
       // 
@@ -100,6 +105,43 @@
       this.pnlRender.TabIndex = 4;
       this.pnlRender.SizeChanged += new System.EventHandler(this.pnlRender_SizeChanged);
       // 
+      // menuEdit
+      // 
+      this.menuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuEditCamera});
+      this.menuEdit.Name = "menuEdit";
+      this.menuEdit.Size = new System.Drawing.Size(39, 20);
+      this.menuEdit.Text = "Edit";
+      // 
+      // menuEditCamera
+      // 
+      this.menuEditCamera.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuEditCameraFirstPerson,
+            this.menuEditCameraRedactor});
+      this.menuEditCamera.Name = "menuEditCamera";
+      this.menuEditCamera.Size = new System.Drawing.Size(152, 22);
+      this.menuEditCamera.Text = "Camera";
+      // 
+      // menuEditCameraFirstPerson
+      // 
+      this.menuEditCameraFirstPerson.Checked = true;
+      this.menuEditCameraFirstPerson.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.menuEditCameraFirstPerson.Name = "menuEditCameraFirstPerson";
+      this.menuEditCameraFirstPerson.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+      this.menuEditCameraFirstPerson.Size = new System.Drawing.Size(175, 22);
+      this.menuEditCameraFirstPerson.Tag = "1";
+      this.menuEditCameraFirstPerson.Text = "First person";
+      this.menuEditCameraFirstPerson.Click += new System.EventHandler(this.CameraType_Click);
+      // 
+      // menuEditCameraRedactor
+      // 
+      this.menuEditCameraRedactor.Name = "menuEditCameraRedactor";
+      this.menuEditCameraRedactor.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+      this.menuEditCameraRedactor.Size = new System.Drawing.Size(175, 22);
+      this.menuEditCameraRedactor.Tag = "2";
+      this.menuEditCameraRedactor.Text = "Redactor";
+      this.menuEditCameraRedactor.Click += new System.EventHandler(this.CameraType_Click);
+      // 
       // EditorForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -137,5 +179,9 @@
         private System.Windows.Forms.FlowLayoutPanel pnlLeft;
         private System.Windows.Forms.FlowLayoutPanel pnlRight;
         private System.Windows.Forms.Panel pnlRender;
+        private System.Windows.Forms.ToolStripMenuItem menuEdit;
+        private System.Windows.Forms.ToolStripMenuItem menuEditCamera;
+        private System.Windows.Forms.ToolStripMenuItem menuEditCameraFirstPerson;
+        private System.Windows.Forms.ToolStripMenuItem menuEditCameraRedactor;
     }
 }
