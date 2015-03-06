@@ -19,11 +19,13 @@
 #define EDR_CREATE_RS "Creation of RasterizerState failed"
 #define EDR_CREATE_SS "Creation of SamplerState failed"
 #define EDR_CREATE_CB "Creation of ConstantBuffer failed"
+#define EDR_CREATE_INPUT_LAYOUT "Creation of Texture_Mapping input layout failed"
 #define EDR_CREATE_VSHADER "Creation of VertexShader failed"
 #define EDR_CREATE_PSHADER "Creation of PixelShader failed"
 #define EDR_CREATE_GSHADER "Creation of GeometryShader failed"
 #define EDR_CREATE_DSHADER "Creation of DomainShader failed"
 #define EDR_CREATE_HSHADER "Creation of HullShader failed"
 #define EDR_CREATE_CSHADER "Creation of ComputeShader failed"
+#define EDR_CREATE_BUFFER "CreateBuffer failed"
 
 #endif // __ERROR_DEFINES_H 

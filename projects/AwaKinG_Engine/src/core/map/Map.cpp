@@ -11,5 +11,9 @@ void Map::shutdown() {
 void Map::update() {
 }
 bool Map::initialize() {
+
 	return true;
+}
+void Map::addEntity(Entity* entity) {
+  _entities.push_back(entity);
 }

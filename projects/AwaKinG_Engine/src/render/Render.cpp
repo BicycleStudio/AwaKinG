@@ -103,6 +103,8 @@
 		if(!_initializeRasterizerStates()) return false;
 		if(!_initializeSamplerStates()) return false;
 		if(!_initializeShaders()) return false;
+
+    _createDummy();
 		return true;
 	}
 	bool Render::_initializeShaders() {
@@ -126,6 +128,10 @@
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
+    _textureMap.VertexStride = 32;
+    CHECK_RESULT(
+      _device->CreateInputLayout(layout, ARRAYSIZE(layout), BlobVS_->GetBufferPointer(), BlobVS_->GetBufferSize(), &_textureMap.InputLayout), 
+      EDR_CREATE_INPUT_LAYOUT);
 
 		D3D11_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(bd));
@@ -208,18 +214,13 @@
 		for(uint i = 0; i<_models[MRT_TEXTURE_MAP].size(); i++)
 			_renderTextureMapModel(_models[MRT_TEXTURE_MAP][i], &_worldMatrix[MRT_TEXTURE_MAP][i]);
 
-		//TODO: iss#20 Normal map
-		/*
-		_prepareToRenderTechnique(_normalMap);
-		for(int i=0; i<_models[MRT_NORMAL_MAP].size(); i++)
-			_renderNormalMapModel(&_matrixs[MRT_NORMAL_MAP][i]);
-		*/
-		_endScene();
+    _endScene();
 	}
 	void Render::_beginScene(){
 		_immediateContext->ClearRenderTargetView(_renderTargetView, _sceneColor);
 		_immediateContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-		_mapViewProjectionBufferResource();
+    _immediateContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    _mapViewProjectionBufferResource();
 	}
 	void Render::_endScene(){
 		_swapChain->Present(1, 0);
@@ -277,9 +278,7 @@
 		return true;
 	}
 	void Render::_mapViewProjectionBufferResource() {
-		XMMatrixMultiply(Camera::getInstance().getViewMatrix(), _perspectiveMatrix);
-
-		XMMATRIX viewProjection_ = _perspectiveMatrix;
+    XMMATRIX viewProjection_ = XMMatrixMultiply(Camera::getInstance().getViewMatrix(), _perspectiveMatrix);
 		D3D11_MAPPED_SUBRESOURCE mappedResource_;
     _immediateContext->Map(_bufferViewProj, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource_);
     auto pData = reinterpret_cast<XMFLOAT4X4*>(mappedResource_.pData);
@@ -313,4 +312,54 @@
 
 		return true;
 	}
+
+  void Render::_addNewModel(Model* model) {
+    _models[MRT_TEXTURE_MAP].push_back(model);
+    vector<XMFLOAT4X4*> matrixsCurrent_;
+    Entity* entityCurrent_ = new Entity();
+    Map::getInstance().addEntity(entityCurrent_);
+    matrixsCurrent_.push_back(entityCurrent_->getWorldMatrix());
+    _worldMatrix[MRT_TEXTURE_MAP].push_back(matrixsCurrent_);
+  }
+  bool Render::createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff) {
+    ID3D11Buffer* buf_;
+    CHECK_RESULT(_device->CreateBuffer(bd, data, &buf_), EDR_CREATE_BUFFER);
+    buff[0] = buf_;
+    return true;
+  }
+  void Render::_createDummy() {
+    TextureModel* dummy_ = new TextureModel();
+    Vertex::Default vertexs_[] {
+      Vertex::Default(XMFLOAT3(-5.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f)),
+        Vertex::Default(XMFLOAT3(5.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f)),
+        Vertex::Default(XMFLOAT3(0.0f, 0.0f, 10.0f), XMFLOAT2(0.5f, 0.0f), XMFLOAT3(0.0f, 1.0f, 0.0f))};
+
+    int indexCount_ = 3;
+    uint indexs_[] {0, 2, 1};
+
+    D3D11_BUFFER_DESC bd_;
+    ZeroMemory(&bd_, sizeof(bd_));
+    bd_.Usage = D3D11_USAGE_DEFAULT;
+    bd_.ByteWidth = sizeof(Vertex::Default) * indexCount_;
+    bd_.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    D3D11_SUBRESOURCE_DATA initData_;
+    ZeroMemory(&initData_, sizeof(initData_));
+    initData_.pSysMem = vertexs_;
+
+    ID3D11Buffer* vBuf_;
+    ID3D11Buffer* iBuf;
+    createBuffer(&bd_, &initData_, &vBuf_);
+
+    ZeroMemory(&bd_, sizeof(bd_));
+    bd_.Usage = D3D11_USAGE_DEFAULT;
+    bd_.ByteWidth = sizeof(UINT)* indexCount_;
+    bd_.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    ZeroMemory(&initData_, sizeof(initData_));
+    initData_.pSysMem = indexs_;
+    createBuffer(&bd_, &initData_, &iBuf);
+
+    dummy_->setVertexBuffer(vBuf_);
+    dummy_->setIndexBuffer(iBuf, indexCount_);
+    _addNewModel(dummy_);
+  }
 #pragma endregion

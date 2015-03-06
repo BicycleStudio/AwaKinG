@@ -4,16 +4,18 @@
 #include "../ErrorDefines.h"
 #include "Model.h"
 #include "Camera.h"
+#include "../core/map/Map.h"
 using namespace Shader;
 
 #define NUM_RENDER_TECHNIQUES 1
 
-class Render
-{
+class Render {
 public:
 	void update();
 	void shutdown();
 	bool resizeBuffer(int sizeX, int sizeY);
+
+  bool createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff);
 
 	string errorMessage;
 	bool initialize(HWND hwnd, int sizeX, int sizeY);
@@ -37,6 +39,8 @@ private:
 	bool _compileShaderFromFile(LPCSTR file, const D3D_SHADER_MACRO* pDefs, LPCSTR szEntry, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppBlobOut);
 	void _mapViewProjectionBufferResource();
 	void _mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* matrix);
+  void _addNewModel(Model* model);
+  void _createDummy();
 
 #pragma region private vars
 	SystemConfiguration _config;

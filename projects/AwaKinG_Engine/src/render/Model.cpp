@@ -21,17 +21,20 @@ int	Model::getIndexCount() {
 ID3D11ShaderResourceView** Model::getDiffuseMap() {
 	return 0;
 }
+void Model::setVertexBuffer(ID3D11Buffer* buffer) {
+  _vertexBuffer = buffer;
+}
+void Model::setIndexBuffer(ID3D11Buffer* buffer, int countIndexs) {
+  _indexBuffer = buffer;
+  _indexCount = countIndexs;
+}
 #pragma endregion
 
 #pragma region TextureModel
 TextureModel::TextureModel() {
-	_vertexBuffer = 0;
-	_indexBuffer = 0;
 	_diffuseMap = 0;
 }
 TextureModel::~TextureModel() {
-	SAFE_RELEASE(_vertexBuffer);
-	SAFE_RELEASE(_indexBuffer);
 	SAFE_RELEASE(_diffuseMap);
 }
 ID3D11ShaderResourceView** TextureModel::getDiffuseMap() {

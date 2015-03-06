@@ -24,12 +24,19 @@ using namespace std;
 
 #define CHECK_RESULT(hres, msg) if(FAILED(hres)){errorMessage = msg;return false; }
 #define SAFE_RELEASE(d3dpointer) if(d3dpointer){d3dpointer->Release(); d3dpointer = 0;}
+#define PI_180  0.0174532925f
 
 enum ModelRenderTechnique { MRT_TEXTURE_MAP = 0 };
 typedef unsigned int uint;
 
 namespace Vertex {
 	struct Default {
+    Default() {}
+    Default(XMFLOAT3 pos, XMFLOAT2 tutv, XMFLOAT3 nor) { 
+      position = pos;
+      texCoords = tutv;
+      normal = nor;
+    }
 		XMFLOAT3 position;
 		XMFLOAT2 texCoords;
 		XMFLOAT3 normal;

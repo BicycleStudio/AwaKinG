@@ -9,6 +9,7 @@ public:
 	void update();
 	void shutdown();
 	bool initialize();
+  void addEntity(Entity* entity);
 
 	static Map& getInstance() {
 		static Map map_;

@@ -9,7 +9,6 @@ DestroyerEngineWrap::~DestroyerEngineWrap(){
 void DestroyerEngineWrap::initialize(EngineWrap *engine){
   _engine = engine;
 }
-
 EngineWrap& EngineWrap::getInstance(){
   if(!_engine){
 		_engine = new EngineWrap();
@@ -17,7 +16,6 @@ EngineWrap& EngineWrap::getInstance(){
 	}
 	return *_engine;
 }
-
 EngineWrap::EngineWrap()
 {
 	_initialized = false;
@@ -47,6 +45,7 @@ void EngineWrap::update(){
 	if(Engine::getInstance().getActive()) {
 		Input::getInstance().update();
 		Engine::getInstance().update();
+    Camera::getInstance().update();
 		Render::getInstance().update();
 	}
 }
