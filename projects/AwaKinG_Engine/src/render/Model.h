@@ -5,7 +5,7 @@
 
 class Model {
 public:
-	Model();
+  Model();
 	~Model();
 
   void setVertexBuffer(ID3D11Buffer* buffer);
@@ -14,15 +14,18 @@ public:
 	ID3D11Buffer* getIndexBuffer();
 	virtual ID3D11ShaderResourceView** getDiffuseMap();
 	int	getIndexCount();
+  void setName(string name);
+  string getName();
 protected:
 	ID3D11Buffer* _vertexBuffer;
 	ID3D11Buffer* _indexBuffer;
 	int						_indexCount;
+  string        _name;
 };
 
 class TextureModel : public Model {
 public:
-	TextureModel();
+  TextureModel(string name);
 	~TextureModel();
 
 	ID3D11ShaderResourceView** getDiffuseMap();

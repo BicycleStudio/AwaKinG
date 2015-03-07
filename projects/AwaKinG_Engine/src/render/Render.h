@@ -11,7 +11,7 @@ using namespace Shader;
 
 class Render {
 public:
-	void update();
+  void update();
 	void shutdown();
 	bool resizeBuffer(int sizeX, int sizeY);
 
@@ -19,6 +19,7 @@ public:
 
 	string errorMessage;
 	bool initialize(HWND hwnd, int sizeX, int sizeY);
+  bool createTestTri(XMFLOAT4X4* worldMatrix);
 
 	static Render& getInstance()  {
 		static Render render_;
@@ -39,8 +40,8 @@ private:
 	bool _compileShaderFromFile(LPCSTR file, const D3D_SHADER_MACRO* pDefs, LPCSTR szEntry, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppBlobOut);
 	void _mapViewProjectionBufferResource();
 	void _mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* matrix);
-  void _addNewModel(Model* model);
-  void _createDummy();
+  void _addNewModel(ModelRenderTechnique tech, Model* model, XMFLOAT4X4* worldMatrix);
+  void _addModel(ModelRenderTechnique tech, int modelIndex, XMFLOAT4X4* worldMatrix);
 
 #pragma region private vars
 	SystemConfiguration _config;

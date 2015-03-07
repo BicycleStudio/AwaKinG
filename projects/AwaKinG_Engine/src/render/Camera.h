@@ -14,6 +14,8 @@ public:
   void update();
   XMFLOAT3* getPosition();
   XMFLOAT3* getLook();
+  void setPosition(XMFLOAT3& pos);
+  void setLook(XMFLOAT3& look);
 
   void yaw(float angle);
   void pitch(float angle);

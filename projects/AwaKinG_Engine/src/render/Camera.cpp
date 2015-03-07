@@ -67,3 +67,9 @@ void Camera::update() {
   _viewMatrix._33 = _look.z; _viewMatrix._34 = 0.0f;
   _viewMatrix._43 = z;			 _viewMatrix._44 = 1.0f;
 }
+void Camera::setPosition(XMFLOAT3& pos) {
+  _position = pos;
+}
+void Camera::setLook(XMFLOAT3& look) {
+  _look = look;
+}

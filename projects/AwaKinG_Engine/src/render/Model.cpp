@@ -28,11 +28,18 @@ void Model::setIndexBuffer(ID3D11Buffer* buffer, int countIndexs) {
   _indexBuffer = buffer;
   _indexCount = countIndexs;
 }
+void Model::setName(string name) {
+  _name = name;
+}
+string Model::getName() {
+  return _name;
+}
 #pragma endregion
 
 #pragma region TextureModel
-TextureModel::TextureModel() {
+TextureModel::TextureModel(string name) {
 	_diffuseMap = 0;
+  _name = name;
 }
 TextureModel::~TextureModel() {
 	SAFE_RELEASE(_diffuseMap);

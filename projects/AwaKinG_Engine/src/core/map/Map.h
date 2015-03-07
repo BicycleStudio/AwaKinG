@@ -1,7 +1,8 @@
 #pragma once
 #include "Entity.h"
 #include "../../ErrorDefines.h"
-
+#include "../Parser.h"
+#include "../../render/Render.h"
 enum PlayerCameraType {
   PCT_FIRST_PERSON,
   PCT_REDACTOR,
@@ -14,7 +15,9 @@ public:
 
 	void update();
 	void shutdown();
-	bool initialize();
+  bool initializeTestScene1();
+  bool initialize();
+  bool initialize(string fileName);
   void addEntity(Entity* entity);
   void setCameraType(PlayerCameraType type);
 
@@ -25,9 +28,10 @@ public:
 private:
 	Map();
 	Map(const Map&);
+  void _clear();
 
 private:
 	vector<Entity*>			_entities;
-  Player*             _cameraManager;
+  Entity*             _cameraManager;
 };
 

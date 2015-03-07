@@ -13,7 +13,8 @@
     delete _worldMatrix;
   }
   void Entity::update() {
-
+    _position.x += 0.1f;
+    updateTransform();
   }
   void Entity::updateTransform() {
     XMStoreFloat4x4(_worldMatrix, XMMatrixMultiply(XMMatrixMultiply(
@@ -37,9 +38,13 @@
 #pragma region Player
   Player::Player() {
     // TODO: smooth transition to new cameraStyle
+    _target = 0;
   }
   Player::~Player() {
 
+  }
+  void Player::setTarger(Entity* entity) {
+    _target = entity;
   }
   FirstPersonPlayer::FirstPersonPlayer() {
     // TODO: smooth transition to new cameraStyle
@@ -59,6 +64,11 @@
     // WASD walk&strafe on terrainHeight & camera goes to look at player
     // update _worldMatrix, mouseDrug - cameraMove, leftMouseClick - create point to go on terrain
     // rightMouseClick - tips?
+    if(_target) {
+      XMFLOAT3 targetPos_ = 
+        XMFLOAT3(_target->getWorldMatrix()->_41, _target->getWorldMatrix()->_42 + 20.0f, _target->getWorldMatrix()->_43);
+      Camera::getInstance().setPosition(targetPos_);
+    }
   }
   void FirstPersonPlayer::update() {
     // TODO: When inputClass will be exist - rewrite this code

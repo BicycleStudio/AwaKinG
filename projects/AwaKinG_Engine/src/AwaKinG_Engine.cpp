@@ -7,7 +7,8 @@ bool initialize(HWND mainHwnd, HWND hwnd){
 	if (!Render::getInstance().initialize(hwnd, 2000, 2000)) return false;
 	if (!Input::getInstance().initialize(mainHwnd)) return false;
 	if(!Engine::getInstance().initialize()) return false;
-	if(!Map::getInstance().initialize()) return false;
+  //if(!Map::getInstance().initialize()) return false;
+  if(!Map::getInstance().initializeTestScene1()) return false;
 
 	return true;
 }

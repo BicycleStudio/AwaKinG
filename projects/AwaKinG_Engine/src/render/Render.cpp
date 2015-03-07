@@ -104,7 +104,6 @@
 		if(!_initializeSamplerStates()) return false;
 		if(!_initializeShaders()) return false;
 
-    _createDummy();
 		return true;
 	}
 	bool Render::_initializeShaders() {
@@ -311,14 +310,14 @@
 
 		return true;
 	}
-
-  void Render::_addNewModel(Model* model) {
-    _models[MRT_TEXTURE_MAP].push_back(model);
+  void Render::_addNewModel(ModelRenderTechnique tech, Model* model, XMFLOAT4X4* worldMatrix) {
+    _models[tech].push_back(model);
     vector<XMFLOAT4X4*> matrixsCurrent_;
-    Entity* entityCurrent_ = new Entity();
-    Map::getInstance().addEntity(entityCurrent_);
-    matrixsCurrent_.push_back(entityCurrent_->getWorldMatrix());
-    _worldMatrix[MRT_TEXTURE_MAP].push_back(matrixsCurrent_);
+    matrixsCurrent_.push_back(worldMatrix);
+    _worldMatrix[tech].push_back(matrixsCurrent_);
+  }
+  void Render::_addModel(ModelRenderTechnique tech, int modelIndex, XMFLOAT4X4* worldMatrix) {
+    _worldMatrix[tech][modelIndex].push_back(worldMatrix);
   }
   bool Render::createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff) {
     ID3D11Buffer* buf_;
@@ -326,8 +325,17 @@
     buff[0] = buf_;
     return true;
   }
-  void Render::_createDummy() {
-    TextureModel* dummy_ = new TextureModel();
+  bool Render::createTestTri(XMFLOAT4X4* worldMatrix) {
+    int mdlIndex_ = -1;
+    for(uint i = 0; i < _models[MRT_TEXTURE_MAP].size(); i++) {
+      if(_models[MRT_TEXTURE_MAP][i]->getName() == "testTri") {
+        mdlIndex_ = i;
+        break;
+      }
+    }
+    if(mdlIndex_ != -1)
+      _addModel(MRT_TEXTURE_MAP, mdlIndex_, worldMatrix);
+    TextureModel* dummy_ = new TextureModel("testTri");
     Vertex::Default vertexs_[] {
       Vertex::Default(XMFLOAT3(-5.0f, 0.0f, 0.0f), XMFLOAT2(0.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f)),
         Vertex::Default(XMFLOAT3(5.0f, 0.0f, 0.0f), XMFLOAT2(1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f)),
@@ -347,7 +355,7 @@
 
     ID3D11Buffer* vBuf_;
     ID3D11Buffer* iBuf;
-    createBuffer(&bd_, &initData_, &vBuf_);
+    CHECK_RESULT(createBuffer(&bd_, &initData_, &vBuf_), EDR_CREATE_BUFFER);
 
     ZeroMemory(&bd_, sizeof(bd_));
     bd_.Usage = D3D11_USAGE_DEFAULT;
@@ -355,10 +363,13 @@
     bd_.BindFlags = D3D11_BIND_INDEX_BUFFER;
     ZeroMemory(&initData_, sizeof(initData_));
     initData_.pSysMem = indexs_;
-    createBuffer(&bd_, &initData_, &iBuf);
+    CHECK_RESULT(createBuffer(&bd_, &initData_, &iBuf), EDR_CREATE_BUFFER);
 
     dummy_->setVertexBuffer(vBuf_);
     dummy_->setIndexBuffer(iBuf, indexCount_);
-    _addNewModel(dummy_);
+
+    _addNewModel(MRT_TEXTURE_MAP, dummy_, worldMatrix);
+
+    return true;
   }
 #pragma endregion

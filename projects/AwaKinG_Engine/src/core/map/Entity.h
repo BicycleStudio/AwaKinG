@@ -25,14 +25,20 @@ public:
   Player();
   ~Player();
   virtual void update();
+
+public:
+  void setTarger(Entity* entity);
+
+private:
+  Entity*     _target;
 };
-class FirstPersonPlayer : public Player {
+class FirstPersonPlayer : public Entity {
 public:
   FirstPersonPlayer();
   ~FirstPersonPlayer();
   void update();
 };
-class RedactorPlayer : public Player {
+class RedactorPlayer : public Entity {
 public:
   RedactorPlayer();
   ~RedactorPlayer();
