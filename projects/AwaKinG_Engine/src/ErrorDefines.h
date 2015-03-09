@@ -28,4 +28,18 @@
 #define EDR_CREATE_CSHADER "Creation of ComputeShader failed"
 #define EDR_CREATE_BUFFER "CreateBuffer failed"
 
+// Parser defines
+#define EDP_OPEN_STREAM "openStream error"
+#define EDP_CLOSE_STREAM "closeStream error"
+#define EDP_FILE "File "
+#define EDP_DOESNT_EXIST " does not exists!"
+
+// Input defines
+#define EDI_CREATE "Creation of direct input device failed"
+#define EDI_MOUSE_CREATE "Creation of direct input mouse failed"
+#define EDI_KEYBOARD_CREATE "Creation of direct input keyboard failed"
+#define EDI_SET_DATA_FORMAT "Setting data format direct input failed"
+#define EDI_SET_COOPERATIVE_LEVEL "Setting cooperaive level failed"
+#define EDI_ACQUIRE "acquire error"
+#define EDI_GET_DEVICE_STATE "GetDeviceState"
 #endif // __ERROR_DEFINES_H 

@@ -20,5 +20,7 @@ DLL_SPEC void setActive(bool value);
 DLL_SPEC void resizeBuffer(int sizeX, int sizeY);
 //  type { 0 = Player, 1 = FirstPerson, 2 = Redactor }
 DLL_SPEC void setCameraType(int type);  
+DLL_SPEC bool openMap(const char* fileName, int lenght);
+DLL_SPEC bool saveMap(const char* fileName, int lenght);
 
 #endif // __AWAKING_ENGINE_H 

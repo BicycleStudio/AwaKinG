@@ -48,4 +48,18 @@ void setCameraType(int type) {
     break;
   }
 }
+bool openMap(const char* fileName, int lenght) {
+  char* str = new char[lenght * 2];
+  for(int i = 0; i < lenght * 2; i++)
+    str[i] = fileName[i * 2];
+
+  return true;
+}
+bool saveMap(const char* fileName, int lenght) {
+  char* str = new char[lenght * 2];
+  for(int i = 0; i < lenght * 2; i++)
+    str[i] = fileName[i * 2];
+
+  return true;
+}
 #pragma warning(pop)
