@@ -10,8 +10,18 @@ using System.Windows.Forms;
 
 namespace AwaKinG_Editor {
   public partial class EditorForm : Form {
+    OpenFileDialog ofdMap = new OpenFileDialog();
+    SaveFileDialog sfdMap = new SaveFileDialog();
     public EditorForm() {
       InitializeComponent();
+      ofdMap.InitialDirectory = System.IO.Path.GetFullPath(@"..\..\..\..\resources\map");
+      ofdMap.Filter = "amp files (*.amp)|*.amp";
+      ofdMap.FilterIndex = 1;
+      ofdMap.RestoreDirectory = true;
+      ofdMap.InitialDirectory = System.IO.Path.GetFullPath(@"..\..\..\..\resources\map");
+      sfdMap.Filter = "amp files (*.amp)|*.amp";
+      sfdMap.FilterIndex = 1;
+      sfdMap.RestoreDirectory = true;
       Engine.GetInstance().Initialize(Handle, pnlRender.Handle); 
       Application.Idle += Application_Idle;
     }
@@ -43,22 +53,49 @@ namespace AwaKinG_Editor {
       else
         Engine.GetInstance().SetActive(true);
     }
-
     private void EditorForm_Activated(object sender, EventArgs e) {
       if (WindowState != FormWindowState.Minimized)
         Engine.GetInstance().SetActive(true);
     }
-
     private void EditorForm_Deactivate(object sender, EventArgs e) {
       Engine.GetInstance().SetActive(false);
     }
-
     private void CameraType_Click(object sender, EventArgs e) {
       int type_ = Convert.ToInt32(((ToolStripMenuItem)sender).Tag);
       EngineDll.SetCameraType(type_);
       foreach (ToolStripMenuItem ts in menuEditCamera.DropDownItems)
         ts.Checked = false;
       ((ToolStripMenuItem)sender).Checked = true;
+    }
+    private void menuFileCreateMap_Click(object sender, EventArgs e) {
+      DialogResult dr = MessageBox.Show("You sure? You may lost all your progress","Create new map", MessageBoxButtons.OKCancel);
+      if (dr == System.Windows.Forms.DialogResult.OK) {
+        EngineDll.newMap();
+      }
+    }
+    private void menuFileOpenMap_Click(object sender, EventArgs e) {
+      if (ofdMap.ShowDialog() == DialogResult.OK) {
+        try {
+          if (ofdMap.FileName != null) {
+            EngineDll.OpenMap(ofdMap.FileName, ofdMap.FileName.Length);
+          }
+        }
+        catch (Exception ex) {
+          MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+        }
+      }
+    }
+    private void menuFileSaveMap_Click(object sender, EventArgs e) {
+        if (sfdMap.ShowDialog() == DialogResult.OK) {
+        try {
+          if (sfdMap.FileName != null) {
+            EngineDll.SaveMap(sfdMap.FileName, sfdMap.FileName.Length);
+          }
+        }
+        catch (Exception ex) {
+          MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+        }
+      }
     }
   }
 }

@@ -53,13 +53,16 @@ bool openMap(const char* fileName, int lenght) {
   for(int i = 0; i < lenght * 2; i++)
     str[i] = fileName[i * 2];
 
-  return true;
+  return Map::getInstance().initialize(str);
 }
 bool saveMap(const char* fileName, int lenght) {
   char* str = new char[lenght * 2];
   for(int i = 0; i < lenght * 2; i++)
     str[i] = fileName[i * 2];
 
-  return true;
+  return Map::getInstance().save(str);
+}
+void newMap() {
+  Map::getInstance().initialize();
 }
 #pragma warning(pop)

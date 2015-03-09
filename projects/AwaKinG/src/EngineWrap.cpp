@@ -28,7 +28,7 @@ bool EngineWrap::initialize(HWND mainHwnd, HWND hwnd){
 		OUTPUT_ERROR(Input::getInstance(), ED_INPUT);
 	if(!Engine::getInstance().initialize()) 
 		OUTPUT_ERROR(Engine::getInstance(), ED_ENGINE);
-  if(!Map::getInstance().initializeTestScene1())
+  if(!Map::getInstance().initialize())
 		OUTPUT_ERROR(Map::getInstance(), ED_MAP);
 	_initialized = true;
 	_active = true;

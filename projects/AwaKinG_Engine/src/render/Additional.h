@@ -29,6 +29,14 @@ using namespace std;
 enum ModelRenderTechnique { MRT_TEXTURE_MAP = 0 };
 typedef unsigned int uint;
 
+struct int3 {
+  int3() {}
+  int3(int value) { x = value; y = value; z = value; }
+  int3(int x_, int y_, int z_) { x = x_; y = y_; z = z_; }
+  int x;
+  int y; 
+  int z;
+};
 namespace Vertex {
 	struct Default {
     Default() {}

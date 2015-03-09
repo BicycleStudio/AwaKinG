@@ -183,15 +183,7 @@
 		return true;
 	}
 	void Render::shutdown(){
-		for(int i = 0; i < 1; i++)  {
-			for(uint j = 0; j < _models[i].size(); j++) {
-				delete _models[i][j];
-
-				_worldMatrix[i][j].clear();
-			}
-			_worldMatrix[i].clear();
-			_models[i].clear();
-		}
+    clear();
 
 		_textureMap.release();
 		_rasterizerStates.release();
@@ -243,6 +235,17 @@
 #pragma endregion
 
 #pragma region additional methods
+  void Render::clear() {
+    for(int i = 0; i < 1; i++) {
+      for(uint j = 0; j < _models[i].size(); j++) {
+        delete _models[i][j];
+
+        _worldMatrix[i][j].clear();
+      }
+      _worldMatrix[i].clear();
+      _models[i].clear();
+    }
+  }
 	bool Render::resizeBuffer(int sizeX, int sizeY) {
 		_sizeX = sizeX; _sizeY = sizeY;
 		_immediateContext->ClearState();
@@ -354,7 +357,7 @@
     initData_.pSysMem = vertexs_;
 
     ID3D11Buffer* vBuf_;
-    ID3D11Buffer* iBuf;
+    ID3D11Buffer* iBuf_;
     CHECK_RESULT(createBuffer(&bd_, &initData_, &vBuf_), EDR_CREATE_BUFFER);
 
     ZeroMemory(&bd_, sizeof(bd_));
@@ -363,13 +366,149 @@
     bd_.BindFlags = D3D11_BIND_INDEX_BUFFER;
     ZeroMemory(&initData_, sizeof(initData_));
     initData_.pSysMem = indexs_;
-    CHECK_RESULT(createBuffer(&bd_, &initData_, &iBuf), EDR_CREATE_BUFFER);
+    CHECK_RESULT(createBuffer(&bd_, &initData_, &iBuf_), EDR_CREATE_BUFFER);
 
     dummy_->setVertexBuffer(vBuf_);
-    dummy_->setIndexBuffer(iBuf, indexCount_);
+    dummy_->setIndexBuffer(iBuf_, indexCount_);
 
     _addNewModel(MRT_TEXTURE_MAP, dummy_, worldMatrix);
 
     return true;
+  }
+  bool Render::addModel(string fileName, XMFLOAT4X4* worldMatrix) {
+    OPEN_STREAM(fileName, "r");
+    // TODO: Need to define the ModelRenderTechnique!! for now only one tech ^)
+    ModelRenderTechnique tech_ = MRT_TEXTURE_MAP;
+    CLOSE_STREAM();
+    int mdlIndex_ = -1;
+    for(uint i = 0; i < _models[tech_].size(); i++) {
+      if(_models[tech_][i]->getName() == fileName) {
+        mdlIndex_ = i;
+        break;
+      }
+    }
+    if(mdlIndex_ != -1)  {
+      _addModel(tech_, mdlIndex_, worldMatrix);
+      return true;
+    }
+
+    //TODO: switch for various techniques
+    TextureModel* mdl_ = new TextureModel(fileName);
+    OPEN_STREAM(fileName, "r");
+    int numV_ = 0;  int numF_ = 0; int numTV_ = 0;
+    READ_INT(&numV_); READ_INT(&numF_); READ_INT(&numTV_);
+    vector<XMFLOAT3> verts_;  vector<XMFLOAT2> tVerts_;   vector<XMFLOAT3> norms_;
+    vector<int3> vertFaces;   vector<int3> tVertFaces;
+    
+    for(int i = 0; i < numV_; i++) {
+      XMFLOAT3 float3_;
+      READ_FLOAT(&float3_.x); READ_FLOAT(&float3_.z); READ_FLOAT(&float3_.y);
+      verts_.push_back(float3_);
+      READ_FLOAT(&float3_.x); READ_FLOAT(&float3_.z); READ_FLOAT(&float3_.y);
+      norms_.push_back(float3_);
+    }
+
+    for(int i = 0; i < numF_; i++) {
+      int3 int3_;
+      READ_INT(&int3_.x);	READ_INT(&int3_.z);	READ_INT(&int3_.y);
+      vertFaces.push_back(int3_);
+    }
+    for(int i = 0; i < numTV_; i++) {
+      XMFLOAT2 float2_; float left_;
+      READ_FLOAT(&float2_.x); READ_FLOAT(&float2_.y); READ_FLOAT(&left_);
+      tVerts_.push_back(float2_);
+    }
+    for(int i = 0; i < numF_; i++) {
+      int3 int3_;
+      READ_INT(&int3_.x);	READ_INT(&int3_.z);	READ_INT(&int3_.y);
+      tVertFaces.push_back(int3_);
+    }
+    vector<Vertex::Default> simpleVerts_;
+    vector<Vertex::Default> optimizedVerts_;
+    unsigned int countInds_ = 0;
+    for(int i = 0; i < numF_; i++) {
+      simpleVerts_.push_back(Vertex::Default(verts_[vertFaces[i].x], tVerts_[tVertFaces[i].x], norms_[vertFaces[i].x]));
+      simpleVerts_.push_back(Vertex::Default(verts_[vertFaces[i].y], tVerts_[tVertFaces[i].y], norms_[vertFaces[i].y]));
+      simpleVerts_.push_back(Vertex::Default(verts_[vertFaces[i].z], tVerts_[tVertFaces[i].z], norms_[vertFaces[i].z]));
+    }
+    countInds_ = simpleVerts_.size();
+    verts_.clear();	tVerts_.clear();	norms_.clear();	vertFaces.clear();	tVertFaces.clear();
+    unsigned int* indsForIndexBuffer_ = new unsigned int[countInds_];
+
+    for(unsigned int i = 0; i < countInds_; i++) indsForIndexBuffer_[i] = i;
+    bool write = true;
+    optimizedVerts_.push_back(simpleVerts_[0]);
+    for(unsigned int i = 1; i < countInds_; i++) {
+      write = true;
+      for(unsigned int j = 0; j < optimizedVerts_.size(); j++) {
+        if(simpleVerts_[i].position.x == optimizedVerts_[j].position.x && simpleVerts_[i].texCoords.x == optimizedVerts_[j].texCoords.x &&
+          simpleVerts_[i].position.y == optimizedVerts_[j].position.y && simpleVerts_[i].texCoords.y == optimizedVerts_[j].texCoords.y &&
+          simpleVerts_[i].position.z == optimizedVerts_[j].position.z) {
+          write = false;
+          indsForIndexBuffer_[i] = j;
+        }
+      }
+      if(write) {
+        optimizedVerts_.push_back(simpleVerts_[i]);
+        indsForIndexBuffer_[i] = optimizedVerts_.size() - 1;
+      }
+    }
+    Vertex::Default* vertexs_ = new Vertex::Default[optimizedVerts_.size()];
+    for(unsigned int i = 0; i < optimizedVerts_.size(); i++) vertexs_[i] = optimizedVerts_[i];
+
+    CLOSE_STREAM();
+
+    D3D11_BUFFER_DESC bd_;
+    ZeroMemory(&bd_, sizeof(bd_));
+    bd_.Usage = D3D11_USAGE_DEFAULT;
+    bd_.ByteWidth = sizeof(Vertex::Default) * optimizedVerts_.size();
+    bd_.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    D3D11_SUBRESOURCE_DATA initData_;
+    ZeroMemory(&initData_, sizeof(initData_));
+    initData_.pSysMem = vertexs_;
+
+    ID3D11Buffer* vBuf_;
+    ID3D11Buffer* iBuf_;
+    CHECK_RESULT(createBuffer(&bd_, &initData_, &vBuf_), EDR_CREATE_BUFFER);
+
+    ZeroMemory(&bd_, sizeof(bd_));
+    bd_.Usage = D3D11_USAGE_DEFAULT;
+    bd_.ByteWidth = sizeof(UINT)* countInds_;
+    bd_.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    ZeroMemory(&initData_, sizeof(initData_));
+    initData_.pSysMem = indsForIndexBuffer_;
+    CHECK_RESULT(createBuffer(&bd_, &initData_, &iBuf_), EDR_CREATE_BUFFER);
+
+    mdl_->setVertexBuffer(vBuf_);
+    mdl_->setIndexBuffer(iBuf_, countInds_);
+
+    ID3D11ShaderResourceView* texture_;
+    if(!createTexture(fileName.substr(0, fileName.length() - 3) + "dds", &texture_))  {
+      errorMessage = "Texture create error";
+      return false;
+    }
+
+    mdl_->setDiffuseMap(texture_);
+
+    _addNewModel(tech_, mdl_, worldMatrix);
+
+    verts_.clear();  tVerts_.clear();  norms_.clear();
+    vertFaces.clear();  tVertFaces.clear();
+    simpleVerts_.clear();  optimizedVerts_.clear();
+
+    return true;
+  }
+  bool Render::createTexture(string fileName, ID3D11ShaderResourceView** texture) {
+    D3DX11_IMAGE_LOAD_INFO ILI;
+    HRESULT hr;
+    D3DX11CreateShaderResourceViewFromFile(_device, fileName.c_str(), NULL, NULL, &texture[0], &hr);
+    if(SUCCEEDED(hr))return true;
+    return false;
+  }
+  bool Render::createTexture(string fileName, D3DX11_IMAGE_LOAD_INFO* ili, ID3D11ShaderResourceView** texture) {
+    HRESULT hr;
+    D3DX11CreateShaderResourceViewFromFile(_device, fileName.c_str(), ili, NULL, &texture[0], &hr);
+    if(SUCCEEDED(hr))return true;
+    return false;
   }
 #pragma endregion

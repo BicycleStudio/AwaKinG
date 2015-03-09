@@ -22,5 +22,6 @@ DLL_SPEC void resizeBuffer(int sizeX, int sizeY);
 DLL_SPEC void setCameraType(int type);  
 DLL_SPEC bool openMap(const char* fileName, int lenght);
 DLL_SPEC bool saveMap(const char* fileName, int lenght);
+DLL_SPEC void newMap();
 
 #endif // __AWAKING_ENGINE_H 

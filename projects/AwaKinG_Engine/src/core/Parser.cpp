@@ -25,7 +25,7 @@ bool Parser::writeFloat(float var) {
   }
   return false;
 }
-bool Parser::writeString(char* var, int len) {
+bool Parser::writeString(const char* var, int len) {
   if(_fileStreams.size()) {
     fprintf_s(_fileStreams[_fileStreams.size() - 1], "%s ", var, len);
     return true;

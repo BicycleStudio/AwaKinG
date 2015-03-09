@@ -21,6 +21,8 @@ int	Model::getIndexCount() {
 ID3D11ShaderResourceView** Model::getDiffuseMap() {
 	return 0;
 }
+void Model::setDiffuseMap(ID3D11ShaderResourceView* srv) {
+}
 void Model::setVertexBuffer(ID3D11Buffer* buffer) {
   _vertexBuffer = buffer;
 }
@@ -46,5 +48,9 @@ TextureModel::~TextureModel() {
 }
 ID3D11ShaderResourceView** TextureModel::getDiffuseMap() {
 	return &_diffuseMap;
+}
+void TextureModel::setDiffuseMap(ID3D11ShaderResourceView* srv) {
+  SAFE_RELEASE(_diffuseMap);
+  _diffuseMap = srv;
 }
 #pragma endregion

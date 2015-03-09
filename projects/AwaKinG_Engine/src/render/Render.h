@@ -13,9 +13,13 @@ class Render {
 public:
   void update();
 	void shutdown();
+  void clear();
 	bool resizeBuffer(int sizeX, int sizeY);
 
   bool createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff);
+  bool createTexture(string fileName, ID3D11ShaderResourceView** texture);
+  bool createTexture(string fileName, D3DX11_IMAGE_LOAD_INFO* ili, ID3D11ShaderResourceView** texture);
+  bool addModel(string modelName, XMFLOAT4X4* worldMatrix);
 
 	string errorMessage;
 	bool initialize(HWND hwnd, int sizeX, int sizeY);

@@ -18,6 +18,7 @@ public:
   bool initializeTestScene1();
   bool initialize();
   bool initialize(string fileName);
+  bool save(string fileName);
   void addEntity(Entity* entity);
   void setCameraType(PlayerCameraType type);
 

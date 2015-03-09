@@ -47,7 +47,13 @@
       this.pnlEntityTransformation = new GUI_elements.Panel_Ex();
       this.btnEntTransfRotation = new System.Windows.Forms.Button();
       this.btnEntTransfScaling = new System.Windows.Forms.Button();
+      this.btnEntTransfObject = new System.Windows.Forms.Button();
       this.btnEntTransfPosition = new System.Windows.Forms.Button();
+      this.panel_Ex1 = new GUI_elements.Panel_Ex();
+      this.btnTerrainCreate = new GUI_elements.AWA_Button();
+      this.label1 = new System.Windows.Forms.Label();
+      this.vbtnTerrainSizeY = new GUI_elements.AWA_Value_Button();
+      this.vbtnTerrainSizeX = new GUI_elements.AWA_Value_Button();
       this.pnlRight = new System.Windows.Forms.FlowLayoutPanel();
       this.pnlRender = new System.Windows.Forms.Panel();
       this.pnlTop = new System.Windows.Forms.FlowLayoutPanel();
@@ -55,18 +61,12 @@
       this.btnTopWater = new System.Windows.Forms.Button();
       this.btnTopEntity = new System.Windows.Forms.Button();
       this.btnTopTerrain = new System.Windows.Forms.Button();
-      this.btnEntTransfObject = new System.Windows.Forms.Button();
-      this.panel_Ex1 = new GUI_elements.Panel_Ex();
-      this.vbtnTerrainSizeX = new GUI_elements.AWA_Value_Button();
-      this.vbtnTerrainSizeY = new GUI_elements.AWA_Value_Button();
-      this.label1 = new System.Windows.Forms.Label();
-      this.btnTerrainCreate = new GUI_elements.AWA_Button();
       this.menuMain.SuspendLayout();
       this.pnlLeft.SuspendLayout();
       this.pnlEntityTransformation.SuspendLayout();
+      this.panel_Ex1.SuspendLayout();
       this.pnlTop.SuspendLayout();
       this.pnlTopMain.SuspendLayout();
-      this.panel_Ex1.SuspendLayout();
       this.SuspendLayout();
       // 
       // menuMain
@@ -96,35 +96,38 @@
       // menuFileCreateMap
       // 
       this.menuFileCreateMap.Name = "menuFileCreateMap";
-      this.menuFileCreateMap.Size = new System.Drawing.Size(139, 22);
-      this.menuFileCreateMap.Text = "Create map";
+      this.menuFileCreateMap.Size = new System.Drawing.Size(152, 22);
+      this.menuFileCreateMap.Text = "New map";
+      this.menuFileCreateMap.Click += new System.EventHandler(this.menuFileCreateMap_Click);
       // 
       // menuFileOpenMap
       // 
       this.menuFileOpenMap.Name = "menuFileOpenMap";
-      this.menuFileOpenMap.Size = new System.Drawing.Size(139, 22);
+      this.menuFileOpenMap.Size = new System.Drawing.Size(152, 22);
       this.menuFileOpenMap.Text = "Open map...";
+      this.menuFileOpenMap.Click += new System.EventHandler(this.menuFileOpenMap_Click);
       // 
       // toolStripSeparator1
       // 
       this.toolStripSeparator1.Name = "toolStripSeparator1";
-      this.toolStripSeparator1.Size = new System.Drawing.Size(136, 6);
+      this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
       // 
       // menuFileSaveMap
       // 
       this.menuFileSaveMap.Name = "menuFileSaveMap";
-      this.menuFileSaveMap.Size = new System.Drawing.Size(139, 22);
+      this.menuFileSaveMap.Size = new System.Drawing.Size(152, 22);
       this.menuFileSaveMap.Text = "Save map...";
+      this.menuFileSaveMap.Click += new System.EventHandler(this.menuFileSaveMap_Click);
       // 
       // toolStripSeparator2
       // 
       this.toolStripSeparator2.Name = "toolStripSeparator2";
-      this.toolStripSeparator2.Size = new System.Drawing.Size(136, 6);
+      this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
       // 
       // menuFileExit
       // 
       this.menuFileExit.Name = "menuFileExit";
-      this.menuFileExit.Size = new System.Drawing.Size(139, 22);
+      this.menuFileExit.Size = new System.Drawing.Size(152, 22);
       this.menuFileExit.Text = "Exit";
       this.menuFileExit.Click += new System.EventHandler(this.menuFileExit_Click);
       // 
@@ -236,6 +239,18 @@
       this.btnEntTransfScaling.TabIndex = 1;
       this.btnEntTransfScaling.UseVisualStyleBackColor = false;
       // 
+      // btnEntTransfObject
+      // 
+      this.btnEntTransfObject.BackColor = System.Drawing.SystemColors.ControlLight;
+      this.btnEntTransfObject.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEntTransfObject.BackgroundImage")));
+      this.btnEntTransfObject.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+      this.btnEntTransfObject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnEntTransfObject.Location = new System.Drawing.Point(14, 31);
+      this.btnEntTransfObject.Name = "btnEntTransfObject";
+      this.btnEntTransfObject.Size = new System.Drawing.Size(32, 32);
+      this.btnEntTransfObject.TabIndex = 0;
+      this.btnEntTransfObject.UseVisualStyleBackColor = false;
+      // 
       // btnEntTransfPosition
       // 
       this.btnEntTransfPosition.BackColor = System.Drawing.SystemColors.ControlLight;
@@ -247,6 +262,93 @@
       this.btnEntTransfPosition.Size = new System.Drawing.Size(32, 32);
       this.btnEntTransfPosition.TabIndex = 0;
       this.btnEntTransfPosition.UseVisualStyleBackColor = false;
+      // 
+      // panel_Ex1
+      // 
+      this.panel_Ex1._Checked = false;
+      this.panel_Ex1.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.panel_Ex1.BORDERCOLOR = System.Drawing.Color.Black;
+      this.panel_Ex1.BORDERRADIUS = 5;
+      this.panel_Ex1.BORDERWIDTH = 1;
+      this.panel_Ex1.Controls.Add(this.btnTerrainCreate);
+      this.panel_Ex1.Controls.Add(this.label1);
+      this.panel_Ex1.Controls.Add(this.vbtnTerrainSizeY);
+      this.panel_Ex1.Controls.Add(this.vbtnTerrainSizeX);
+      this.panel_Ex1.Location = new System.Drawing.Point(3, 146);
+      this.panel_Ex1.Name = "panel_Ex1";
+      this.panel_Ex1.Size = new System.Drawing.Size(167, 104);
+      this.panel_Ex1.TabIndex = 1;
+      this.panel_Ex1.Text = "Terrain";
+      // 
+      // btnTerrainCreate
+      // 
+      this.btnTerrainCreate.BackColor = System.Drawing.Color.Transparent;
+      this.btnTerrainCreate.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.btnTerrainCreate.BORDERCOLOR = System.Drawing.Color.Black;
+      this.btnTerrainCreate.BORDERRADIUS = 5;
+      this.btnTerrainCreate.BORDERWIDTH = 1;
+      this.btnTerrainCreate.Image = null;
+      this.btnTerrainCreate.Location = new System.Drawing.Point(12, 71);
+      this.btnTerrainCreate.Name = "btnTerrainCreate";
+      this.btnTerrainCreate.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+      this.btnTerrainCreate.SCALEBORD = true;
+      this.btnTerrainCreate.Size = new System.Drawing.Size(143, 23);
+      this.btnTerrainCreate.TabIndex = 2;
+      this.btnTerrainCreate.Text = "Create";
+      this.btnTerrainCreate.UseVisualStyleBackColor = false;
+      // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(77, 42);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(14, 13);
+      this.label1.TabIndex = 1;
+      this.label1.Text = "X";
+      // 
+      // vbtnTerrainSizeY
+      // 
+      this.vbtnTerrainSizeY.ARROWHEIGHT = 0;
+      this.vbtnTerrainSizeY.ARROWTOOLSH = 1;
+      this.vbtnTerrainSizeY.ARRWIDTH = 20;
+      this.vbtnTerrainSizeY.BackColor = System.Drawing.Color.Transparent;
+      this.vbtnTerrainSizeY.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.vbtnTerrainSizeY.BORDERCOLOR = System.Drawing.Color.Black;
+      this.vbtnTerrainSizeY.BORDERRADIUS = 5;
+      this.vbtnTerrainSizeY.BORDERWIDTH = 1;
+      this.vbtnTerrainSizeY.Image = null;
+      this.vbtnTerrainSizeY.Location = new System.Drawing.Point(95, 29);
+      this.vbtnTerrainSizeY.MaxValue = 100F;
+      this.vbtnTerrainSizeY.MinValue = 1F;
+      this.vbtnTerrainSizeY.Name = "vbtnTerrainSizeY";
+      this.vbtnTerrainSizeY.Size = new System.Drawing.Size(60, 39);
+      this.vbtnTerrainSizeY.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
+      this.vbtnTerrainSizeY.TabIndex = 0;
+      this.vbtnTerrainSizeY.Text = "awA_Value_Button1";
+      this.vbtnTerrainSizeY.UseVisualStyleBackColor = false;
+      this.vbtnTerrainSizeY.VALUEV = 1F;
+      // 
+      // vbtnTerrainSizeX
+      // 
+      this.vbtnTerrainSizeX.ARROWHEIGHT = 0;
+      this.vbtnTerrainSizeX.ARROWTOOLSH = 1;
+      this.vbtnTerrainSizeX.ARRWIDTH = 20;
+      this.vbtnTerrainSizeX.BackColor = System.Drawing.Color.Transparent;
+      this.vbtnTerrainSizeX.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.vbtnTerrainSizeX.BORDERCOLOR = System.Drawing.Color.Black;
+      this.vbtnTerrainSizeX.BORDERRADIUS = 5;
+      this.vbtnTerrainSizeX.BORDERWIDTH = 1;
+      this.vbtnTerrainSizeX.Image = null;
+      this.vbtnTerrainSizeX.Location = new System.Drawing.Point(12, 29);
+      this.vbtnTerrainSizeX.MaxValue = 100F;
+      this.vbtnTerrainSizeX.MinValue = 1F;
+      this.vbtnTerrainSizeX.Name = "vbtnTerrainSizeX";
+      this.vbtnTerrainSizeX.Size = new System.Drawing.Size(60, 39);
+      this.vbtnTerrainSizeX.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
+      this.vbtnTerrainSizeX.TabIndex = 0;
+      this.vbtnTerrainSizeX.Text = "awA_Value_Button1";
+      this.vbtnTerrainSizeX.UseVisualStyleBackColor = false;
+      this.vbtnTerrainSizeX.VALUEV = 1F;
       // 
       // pnlRight
       // 
@@ -324,105 +426,6 @@
       this.btnTopTerrain.TabIndex = 0;
       this.btnTopTerrain.UseVisualStyleBackColor = false;
       // 
-      // btnEntTransfObject
-      // 
-      this.btnEntTransfObject.BackColor = System.Drawing.SystemColors.ControlLight;
-      this.btnEntTransfObject.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEntTransfObject.BackgroundImage")));
-      this.btnEntTransfObject.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.btnEntTransfObject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnEntTransfObject.Location = new System.Drawing.Point(14, 31);
-      this.btnEntTransfObject.Name = "btnEntTransfObject";
-      this.btnEntTransfObject.Size = new System.Drawing.Size(32, 32);
-      this.btnEntTransfObject.TabIndex = 0;
-      this.btnEntTransfObject.UseVisualStyleBackColor = false;
-      // 
-      // panel_Ex1
-      // 
-      this.panel_Ex1._Checked = false;
-      this.panel_Ex1.BACKCOLOR = System.Drawing.Color.Transparent;
-      this.panel_Ex1.BORDERCOLOR = System.Drawing.Color.Black;
-      this.panel_Ex1.BORDERRADIUS = 5;
-      this.panel_Ex1.BORDERWIDTH = 1;
-      this.panel_Ex1.Controls.Add(this.btnTerrainCreate);
-      this.panel_Ex1.Controls.Add(this.label1);
-      this.panel_Ex1.Controls.Add(this.vbtnTerrainSizeY);
-      this.panel_Ex1.Controls.Add(this.vbtnTerrainSizeX);
-      this.panel_Ex1.Location = new System.Drawing.Point(3, 146);
-      this.panel_Ex1.Name = "panel_Ex1";
-      this.panel_Ex1.Size = new System.Drawing.Size(167, 104);
-      this.panel_Ex1.TabIndex = 1;
-      this.panel_Ex1.Text = "Terrain";
-      // 
-      // vbtnTerrainSizeX
-      // 
-      this.vbtnTerrainSizeX.ARROWHEIGHT = 0;
-      this.vbtnTerrainSizeX.ARROWTOOLSH = 1;
-      this.vbtnTerrainSizeX.ARRWIDTH = 20;
-      this.vbtnTerrainSizeX.BackColor = System.Drawing.Color.Transparent;
-      this.vbtnTerrainSizeX.BACKCOLOR = System.Drawing.Color.Transparent;
-      this.vbtnTerrainSizeX.BORDERCOLOR = System.Drawing.Color.Black;
-      this.vbtnTerrainSizeX.BORDERRADIUS = 5;
-      this.vbtnTerrainSizeX.BORDERWIDTH = 1;
-      this.vbtnTerrainSizeX.Image = null;
-      this.vbtnTerrainSizeX.Location = new System.Drawing.Point(12, 29);
-      this.vbtnTerrainSizeX.MaxValue = 100F;
-      this.vbtnTerrainSizeX.MinValue = 1F;
-      this.vbtnTerrainSizeX.Name = "vbtnTerrainSizeX";
-      this.vbtnTerrainSizeX.Size = new System.Drawing.Size(60, 39);
-      this.vbtnTerrainSizeX.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
-      this.vbtnTerrainSizeX.TabIndex = 0;
-      this.vbtnTerrainSizeX.Text = "awA_Value_Button1";
-      this.vbtnTerrainSizeX.UseVisualStyleBackColor = false;
-      this.vbtnTerrainSizeX.VALUEV = 1F;
-      // 
-      // vbtnTerrainSizeY
-      // 
-      this.vbtnTerrainSizeY.ARROWHEIGHT = 0;
-      this.vbtnTerrainSizeY.ARROWTOOLSH = 1;
-      this.vbtnTerrainSizeY.ARRWIDTH = 20;
-      this.vbtnTerrainSizeY.BackColor = System.Drawing.Color.Transparent;
-      this.vbtnTerrainSizeY.BACKCOLOR = System.Drawing.Color.Transparent;
-      this.vbtnTerrainSizeY.BORDERCOLOR = System.Drawing.Color.Black;
-      this.vbtnTerrainSizeY.BORDERRADIUS = 5;
-      this.vbtnTerrainSizeY.BORDERWIDTH = 1;
-      this.vbtnTerrainSizeY.Image = null;
-      this.vbtnTerrainSizeY.Location = new System.Drawing.Point(95, 29);
-      this.vbtnTerrainSizeY.MaxValue = 100F;
-      this.vbtnTerrainSizeY.MinValue = 1F;
-      this.vbtnTerrainSizeY.Name = "vbtnTerrainSizeY";
-      this.vbtnTerrainSizeY.Size = new System.Drawing.Size(60, 39);
-      this.vbtnTerrainSizeY.SVC = GUI_elements.AWA_Value_Button.SpeedOfValueChanging.Normal;
-      this.vbtnTerrainSizeY.TabIndex = 0;
-      this.vbtnTerrainSizeY.Text = "awA_Value_Button1";
-      this.vbtnTerrainSizeY.UseVisualStyleBackColor = false;
-      this.vbtnTerrainSizeY.VALUEV = 1F;
-      // 
-      // label1
-      // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(77, 42);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(14, 13);
-      this.label1.TabIndex = 1;
-      this.label1.Text = "X";
-      // 
-      // btnTerrainCreate
-      // 
-      this.btnTerrainCreate.BackColor = System.Drawing.Color.Transparent;
-      this.btnTerrainCreate.BACKCOLOR = System.Drawing.Color.Transparent;
-      this.btnTerrainCreate.BORDERCOLOR = System.Drawing.Color.Black;
-      this.btnTerrainCreate.BORDERRADIUS = 5;
-      this.btnTerrainCreate.BORDERWIDTH = 1;
-      this.btnTerrainCreate.Image = null;
-      this.btnTerrainCreate.Location = new System.Drawing.Point(12, 71);
-      this.btnTerrainCreate.Name = "btnTerrainCreate";
-      this.btnTerrainCreate.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-      this.btnTerrainCreate.SCALEBORD = true;
-      this.btnTerrainCreate.Size = new System.Drawing.Size(143, 23);
-      this.btnTerrainCreate.TabIndex = 2;
-      this.btnTerrainCreate.Text = "Create";
-      this.btnTerrainCreate.UseVisualStyleBackColor = false;
-      // 
       // EditorForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -449,10 +452,10 @@
       this.menuMain.PerformLayout();
       this.pnlLeft.ResumeLayout(false);
       this.pnlEntityTransformation.ResumeLayout(false);
-      this.pnlTop.ResumeLayout(false);
-      this.pnlTopMain.ResumeLayout(false);
       this.panel_Ex1.ResumeLayout(false);
       this.panel_Ex1.PerformLayout();
+      this.pnlTop.ResumeLayout(false);
+      this.pnlTopMain.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 

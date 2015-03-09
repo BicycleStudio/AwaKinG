@@ -8,13 +8,18 @@
     _position = XMFLOAT3(0.0f, 0.0f, 0.0f);
     _scaling = XMFLOAT3(1.0f, 1.0f, 1.0f);
     _rotation = XMFLOAT3(0.0f, 0.0f, 0.0f);
+    _modelName = "";
   }
   Entity::~Entity() {
     delete _worldMatrix;
   }
+  void Entity::setModelName(string name) {
+    _modelName = name;
+  }
+  string& Entity::getModelName() {
+    return _modelName;
+  }
   void Entity::update() {
-    _position.x += 0.1f;
-    updateTransform();
   }
   void Entity::updateTransform() {
     XMStoreFloat4x4(_worldMatrix, XMMatrixMultiply(XMMatrixMultiply(
@@ -34,11 +39,21 @@
   XMFLOAT4X4* Entity::getWorldMatrix() {
     return _worldMatrix;
   }
+  XMFLOAT3* Entity::getPosition() {
+    return &_position;
+  }
+  XMFLOAT3* Entity::getScale() {
+    return &_scaling;
+  }
+  XMFLOAT3* Entity::getRotation() {
+    return &_rotation;
+  }
 #pragma endregion
 #pragma region Player
   Player::Player() {
     // TODO: smooth transition to new cameraStyle
-    _target = 0;
+    _speed = 1.0f;
+    _target = 0; 
   }
   Player::~Player() {
 
@@ -48,18 +63,19 @@
   }
   FirstPersonPlayer::FirstPersonPlayer() {
     // TODO: smooth transition to new cameraStyle
+    _speed = 1.0f;
   }
   FirstPersonPlayer::~FirstPersonPlayer() {
 
   }
   RedactorPlayer::RedactorPlayer() {
     // TODO: smooth transition to new cameraStyle
+    _speed = 1.0f;
   }
   RedactorPlayer::~RedactorPlayer() {
 
   }
   void Player::update() {
-    // TODO: When inputClass will be exist - write this code
     // TODO: When TerrainManager will be exist - rewrite this code
     // WASD walk&strafe on terrainHeight & camera goes to look at player
     // update _worldMatrix, mouseDrug - cameraMove, leftMouseClick - create point to go on terrain
@@ -71,14 +87,22 @@
     }
   }
   void FirstPersonPlayer::update() {
-    // TODO: When inputClass will be exist - rewrite this code
-    // WASD walk&strafe, mouseDrug - look around.
-    Camera::getInstance().walk(0.1f);
+    float delta = _speed;
+    if(Input::getInstance().LShift()) delta *= 4.0f;
+    if(Input::getInstance().W()) Camera::getInstance().walk(1.1f * delta);
+    if(Input::getInstance().S()) Camera::getInstance().walk(-1.1f * delta);
+    if(Input::getInstance().D()) Camera::getInstance().strafe(1.1f * delta);
+    if(Input::getInstance().A()) Camera::getInstance().strafe(-1.1f * delta);
+    Camera::getInstance().yaw(Input::getInstance().MouseX());
+    Camera::getInstance().pitch(Input::getInstance().MouseY());
   }
   void RedactorPlayer::update() {
-    // TODO: When inputClass will be exist - rewrite this code
-    // MouseWheele walk, no strafe, LeftCTRL+mouseDrug - look around.
-    // MouseWheele click and mouseDrug - rotation around point
-    Camera::getInstance().walk(-0.1f);
+    float delta = _speed;
+    if(Input::getInstance().LShift()) delta *= 8.0f;
+    if(Input::getInstance().LControl()) {
+      Camera::getInstance().yaw(Input::getInstance().MouseX());
+      Camera::getInstance().pitch(Input::getInstance().MouseY());
+    }
+    Camera::getInstance().walk(Input::getInstance().MouseZ() * delta);
   }
 #pragma endregion
