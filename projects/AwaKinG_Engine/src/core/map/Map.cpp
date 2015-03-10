@@ -60,6 +60,8 @@ bool Map::initializeTestScene1() {
   _cameraManager = new RedactorPlayer();
   Entity *ent = new Entity();
   _entities.push_back(ent);
+  ent->setPosition(XMFLOAT3(0.0f, 5.0f, 0.0f));
+  ent->updateTransform();
   if(!Render::getInstance().createTestTri(ent->getWorldMatrix())) return false; 
 
   Player* player_ = new Player();
@@ -68,7 +70,7 @@ bool Map::initializeTestScene1() {
   _cameraManager = player_;
 
   Entity *ent2 = new Entity();
-  ent2->setPosition(XMFLOAT3(-10.0f,0.0f,0.0f));
+  ent2->setPosition(XMFLOAT3(-10.0f,5.0f,0.0f));
   ent2->updateTransform();
   _entities.push_back(ent2);
   return Render::getInstance().createTestTri(ent2->getWorldMatrix());
@@ -78,6 +80,10 @@ void Map::addEntity(Entity* entity) {
 }
 void Map::setCameraType(PlayerCameraType type) {
   switch(type) {
+  case PCT_FIRST_PERSON_FREE:
+    delete _cameraManager;
+    _cameraManager = new FirstPersonFreePlayer();
+    break;
   case PCT_FIRST_PERSON:
     delete _cameraManager;
     _cameraManager = new FirstPersonPlayer();
@@ -113,6 +119,8 @@ bool Map::save(string fileName) {
     Parser::getInstance().newLine();
   }
   CLOSE_STREAM();
+
+  Terrain::getInstance().save(fileName);
 
   return true;
 }

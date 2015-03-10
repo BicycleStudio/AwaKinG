@@ -12,10 +12,10 @@ Terrain::Terrain() {
   _numTiles = 0;
   _initialized = false;
 #ifdef _DLL_EXPORT
-  _2048dds = "../../../../media/_2048.dds";
+  _2048dds = "../../../../media/_2048_3.dds";
 #endif
 #ifdef _LIB_EXPORT
-  _2048dds = "../../media/_2048.dds";
+  _2048dds = "../../media/_2048_3.dds";
 #endif
 }
 void Terrain::shutdown() {
@@ -56,6 +56,8 @@ void Terrain::_generateHeightMap() {
   _numTiles = _sizeX * _sizeY;
   _numVertsInRaw = _sizeX * _numQuads + 1;
   _numVertsInCol = _sizeY * _numQuads + 1;
+  _halfSpaceRaw = 0.5f*(_numVertsInRaw-1)*CELL_SPACE;
+  _halfSpaceCol = 0.5f*(_numVertsInCol-1)*CELL_SPACE;
   _maxId = _numVertsInRaw * _numVertsInCol;
   _heightMapToTerrain = new int*[_maxId];
   _pickToHeightMap = new int*[_numTiles];
@@ -143,7 +145,9 @@ void Terrain::_generateHeightMap() {
   _normalMap = new XMFLOAT3[_maxId];
   for(int i = 0; i < _numVertsInCol; i++) {
     for(int j = 0; j < _numVertsInRaw; j++) {
-      _heightMap[i*_numVertsInCol + j] = XMFLOAT3(CELL_SPACE * i - halfHeight_, 0.0f, CELL_SPACE * j - halfWidth_);
+      //TODO: height?
+      float height_ = i + j;// +(rand() % 100) / 5.0f;
+      _heightMap[i*_numVertsInCol + j] = XMFLOAT3(CELL_SPACE * i - halfHeight_, height_, CELL_SPACE * j - halfWidth_);
       _normalMap[i*_numVertsInCol + j] = XMFLOAT3(0.0f, 1.0f, 0.0f);
     }
   }
@@ -185,7 +189,7 @@ bool Terrain::_generateGeometry() {
   D3DX11_IMAGE_LOAD_INFO ili_;
   //ili_.MipLevels = 0;
   ili_.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-  ili_.Width = 512; ili_.Height = 512;
+  ili_.Width = 1024; ili_.Height = 1024;
   ili_.BindFlags = D3D11_BIND_SHADER_RESOURCE;
   ili_.CpuAccessFlags = 0;
   ili_.MipFilter = D3D11_FILTER_TYPE_LINEAR;
@@ -255,4 +259,50 @@ int Terrain::getIndexCount() {
 }
 bool Terrain::getInitialized() {
   return _initialized;
+}
+bool Terrain::save(string fileName) {
+  OPEN_STREAM(fileName, "w+");
+  WRITE_INT(_sizeX); WRITE_INT(_sizeX);
+  Parser::getInstance().newLine();
+  for(int tile = 0; tile < _numTiles; tile++)  {
+    for(int i = 0; i < _numTileVerts; i++) {
+      for(int j = 0; j < _numTileVerts; j++) {
+        WRITE_FLOAT(_heightMap[_pickToHeightMap[tile][i*_numTileVerts + j]].y);
+      }
+    }
+    Parser::getInstance().newLine();
+
+  }
+  CLOSE_STREAM();
+  return true;
+}
+float Terrain::getHeight(float x, float z) {
+  if(x<_heightMap[0].x || x>_heightMap[_maxId - 1].x ||
+    z<_heightMap[0].z || z>_heightMap[_maxId - 1].z)
+    return 100.0f;
+
+  float c_ = (x + _halfSpaceRaw) / CELL_SPACE;
+  float d_ = (z + _halfSpaceCol) / CELL_SPACE;
+
+  int row_ = (int)floorf(d_);
+  int col_ = (int)floorf(c_);
+
+  float A = _heightMap[row_*_numVertsInRaw + col_].y;
+  float B = _heightMap[row_*_numVertsInRaw + col_+1].y;
+  float C = _heightMap[(row_+1)*_numVertsInRaw + col_].y;
+  float D = _heightMap[(row_+1)*_numVertsInRaw + col_+1].y;
+
+  float s_ = c_ - (float)col_;
+  float t_ = d_ - (float)row_;
+
+  if(s_ + t_ <= 1.0f) {   //  Upper tri
+    float uy_ = B - A;
+    float vy_ = C - A;
+    return A + s_*uy_ + t_*vy_ ;
+  }
+  else {   //  Lower tri
+    float uy_ = C - D;
+    float vy_ = B - D;
+    return D + (1.0f - s_)*uy_ + (1.0f - t_)*vy_;
+  }
 }

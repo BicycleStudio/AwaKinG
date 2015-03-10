@@ -88,6 +88,10 @@
       this.btnTexturingQuad = new System.Windows.Forms.Button();
       this.btnTexturingRhomb = new System.Windows.Forms.Button();
       this.pnlTerrainTexturePacks = new GUI_elements.Panel_Ex();
+      this.btnTerrainTexturePacksDel = new GUI_elements.AWA_Button();
+      this.btnTerrainTexturePacksAdd = new GUI_elements.AWA_Button();
+      this.tbxTerrainTexturePacks = new System.Windows.Forms.TextBox();
+      this.lbxTerrainTexturePacks = new System.Windows.Forms.ListBox();
       this.pnlRight = new System.Windows.Forms.FlowLayoutPanel();
       this.pnlRender = new System.Windows.Forms.Panel();
       this.pnlTop = new System.Windows.Forms.FlowLayoutPanel();
@@ -103,17 +107,14 @@
       this.btnEntityObject = new System.Windows.Forms.Button();
       this.btnEntityPos = new System.Windows.Forms.Button();
       this.pnlEntityPacks = new GUI_elements.Panel_Ex();
+      this.awA_Button2 = new GUI_elements.AWA_Button();
+      this.textBox1 = new System.Windows.Forms.TextBox();
+      this.awA_Button1 = new GUI_elements.AWA_Button();
+      this.listBox1 = new System.Windows.Forms.ListBox();
       this.pnlLeftWater = new System.Windows.Forms.FlowLayoutPanel();
       this.cmsEntity = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.transformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.lbxTerrainTexturePacks = new System.Windows.Forms.ListBox();
-      this.tbxTerrainTexturePacks = new System.Windows.Forms.TextBox();
-      this.btnTerrainTexturePacksAdd = new GUI_elements.AWA_Button();
-      this.btnTerrainTexturePacksDel = new GUI_elements.AWA_Button();
-      this.listBox1 = new System.Windows.Forms.ListBox();
-      this.textBox1 = new System.Windows.Forms.TextBox();
-      this.awA_Button1 = new GUI_elements.AWA_Button();
-      this.awA_Button2 = new GUI_elements.AWA_Button();
+      this.firstPersonFreeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.menuMain.SuspendLayout();
       this.pnlLeftTerrain.SuspendLayout();
       this.pnlTerrainMain.SuspendLayout();
@@ -216,9 +217,10 @@
       this.menuEditCamera.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuEditCameraFirstPerson,
             this.menuEditCameraRedactor,
-            this.menuEditCameraLinked});
+            this.menuEditCameraLinked,
+            this.firstPersonFreeToolStripMenuItem});
       this.menuEditCamera.Name = "menuEditCamera";
-      this.menuEditCamera.Size = new System.Drawing.Size(115, 22);
+      this.menuEditCamera.Size = new System.Drawing.Size(152, 22);
       this.menuEditCamera.Text = "Camera";
       // 
       // menuEditCameraFirstPerson
@@ -227,7 +229,7 @@
       this.menuEditCameraFirstPerson.CheckState = System.Windows.Forms.CheckState.Checked;
       this.menuEditCameraFirstPerson.Name = "menuEditCameraFirstPerson";
       this.menuEditCameraFirstPerson.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-      this.menuEditCameraFirstPerson.Size = new System.Drawing.Size(175, 22);
+      this.menuEditCameraFirstPerson.Size = new System.Drawing.Size(200, 22);
       this.menuEditCameraFirstPerson.Tag = "1";
       this.menuEditCameraFirstPerson.Text = "First person";
       this.menuEditCameraFirstPerson.Click += new System.EventHandler(this.CameraType_Click);
@@ -236,7 +238,7 @@
       // 
       this.menuEditCameraRedactor.Name = "menuEditCameraRedactor";
       this.menuEditCameraRedactor.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-      this.menuEditCameraRedactor.Size = new System.Drawing.Size(175, 22);
+      this.menuEditCameraRedactor.Size = new System.Drawing.Size(200, 22);
       this.menuEditCameraRedactor.Tag = "2";
       this.menuEditCameraRedactor.Text = "Redactor";
       this.menuEditCameraRedactor.Click += new System.EventHandler(this.CameraType_Click);
@@ -245,7 +247,7 @@
       // 
       this.menuEditCameraLinked.Name = "menuEditCameraLinked";
       this.menuEditCameraLinked.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-      this.menuEditCameraLinked.Size = new System.Drawing.Size(175, 22);
+      this.menuEditCameraLinked.Size = new System.Drawing.Size(200, 22);
       this.menuEditCameraLinked.Tag = "0";
       this.menuEditCameraLinked.Text = "Linked";
       this.menuEditCameraLinked.Click += new System.EventHandler(this.CameraType_Click);
@@ -889,6 +891,60 @@
       this.pnlTerrainTexturePacks.Text = "Texture packs";
       this.pnlTerrainTexturePacks.Visible = false;
       // 
+      // btnTerrainTexturePacksDel
+      // 
+      this.btnTerrainTexturePacksDel.BackColor = System.Drawing.Color.Transparent;
+      this.btnTerrainTexturePacksDel.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.btnTerrainTexturePacksDel.BORDERCOLOR = System.Drawing.Color.Red;
+      this.btnTerrainTexturePacksDel.BORDERRADIUS = 5;
+      this.btnTerrainTexturePacksDel.BORDERWIDTH = 1;
+      this.btnTerrainTexturePacksDel.Font = new System.Drawing.Font("Bauhaus 93", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.btnTerrainTexturePacksDel.ForeColor = System.Drawing.Color.Red;
+      this.btnTerrainTexturePacksDel.Image = null;
+      this.btnTerrainTexturePacksDel.Location = new System.Drawing.Point(143, 53);
+      this.btnTerrainTexturePacksDel.Name = "btnTerrainTexturePacksDel";
+      this.btnTerrainTexturePacksDel.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+      this.btnTerrainTexturePacksDel.SCALEBORD = true;
+      this.btnTerrainTexturePacksDel.Size = new System.Drawing.Size(20, 20);
+      this.btnTerrainTexturePacksDel.TabIndex = 3;
+      this.btnTerrainTexturePacksDel.Text = "-";
+      this.btnTerrainTexturePacksDel.UseVisualStyleBackColor = false;
+      // 
+      // btnTerrainTexturePacksAdd
+      // 
+      this.btnTerrainTexturePacksAdd.BackColor = System.Drawing.Color.Transparent;
+      this.btnTerrainTexturePacksAdd.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.btnTerrainTexturePacksAdd.BORDERCOLOR = System.Drawing.Color.Green;
+      this.btnTerrainTexturePacksAdd.BORDERRADIUS = 5;
+      this.btnTerrainTexturePacksAdd.BORDERWIDTH = 1;
+      this.btnTerrainTexturePacksAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      this.btnTerrainTexturePacksAdd.ForeColor = System.Drawing.Color.Green;
+      this.btnTerrainTexturePacksAdd.Image = null;
+      this.btnTerrainTexturePacksAdd.Location = new System.Drawing.Point(143, 31);
+      this.btnTerrainTexturePacksAdd.Name = "btnTerrainTexturePacksAdd";
+      this.btnTerrainTexturePacksAdd.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+      this.btnTerrainTexturePacksAdd.SCALEBORD = true;
+      this.btnTerrainTexturePacksAdd.Size = new System.Drawing.Size(20, 20);
+      this.btnTerrainTexturePacksAdd.TabIndex = 2;
+      this.btnTerrainTexturePacksAdd.Text = "+";
+      this.btnTerrainTexturePacksAdd.UseVisualStyleBackColor = false;
+      // 
+      // tbxTerrainTexturePacks
+      // 
+      this.tbxTerrainTexturePacks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.tbxTerrainTexturePacks.Location = new System.Drawing.Point(5, 31);
+      this.tbxTerrainTexturePacks.Name = "tbxTerrainTexturePacks";
+      this.tbxTerrainTexturePacks.Size = new System.Drawing.Size(135, 20);
+      this.tbxTerrainTexturePacks.TabIndex = 1;
+      // 
+      // lbxTerrainTexturePacks
+      // 
+      this.lbxTerrainTexturePacks.FormattingEnabled = true;
+      this.lbxTerrainTexturePacks.Location = new System.Drawing.Point(5, 53);
+      this.lbxTerrainTexturePacks.Name = "lbxTerrainTexturePacks";
+      this.lbxTerrainTexturePacks.Size = new System.Drawing.Size(135, 108);
+      this.lbxTerrainTexturePacks.TabIndex = 0;
+      // 
       // pnlRight
       // 
       this.pnlRight.BackColor = System.Drawing.SystemColors.InactiveBorder;
@@ -1095,90 +1151,24 @@
       this.pnlEntityPacks.TabIndex = 1;
       this.pnlEntityPacks.Text = "Packs";
       // 
-      // pnlLeftWater
+      // awA_Button2
       // 
-      this.pnlLeftWater.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-      this.pnlLeftWater.Dock = System.Windows.Forms.DockStyle.Left;
-      this.pnlLeftWater.Location = new System.Drawing.Point(350, 66);
-      this.pnlLeftWater.Name = "pnlLeftWater";
-      this.pnlLeftWater.Size = new System.Drawing.Size(175, 650);
-      this.pnlLeftWater.TabIndex = 7;
-      this.pnlLeftWater.Visible = false;
-      // 
-      // cmsEntity
-      // 
-      this.cmsEntity.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.transformationToolStripMenuItem});
-      this.cmsEntity.Name = "cmsEntity";
-      this.cmsEntity.Size = new System.Drawing.Size(166, 26);
-      // 
-      // transformationToolStripMenuItem
-      // 
-      this.transformationToolStripMenuItem.Name = "transformationToolStripMenuItem";
-      this.transformationToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-      this.transformationToolStripMenuItem.Text = "Transformation...";
-      // 
-      // lbxTerrainTexturePacks
-      // 
-      this.lbxTerrainTexturePacks.FormattingEnabled = true;
-      this.lbxTerrainTexturePacks.Location = new System.Drawing.Point(5, 53);
-      this.lbxTerrainTexturePacks.Name = "lbxTerrainTexturePacks";
-      this.lbxTerrainTexturePacks.Size = new System.Drawing.Size(135, 108);
-      this.lbxTerrainTexturePacks.TabIndex = 0;
-      // 
-      // tbxTerrainTexturePacks
-      // 
-      this.tbxTerrainTexturePacks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.tbxTerrainTexturePacks.Location = new System.Drawing.Point(5, 31);
-      this.tbxTerrainTexturePacks.Name = "tbxTerrainTexturePacks";
-      this.tbxTerrainTexturePacks.Size = new System.Drawing.Size(135, 20);
-      this.tbxTerrainTexturePacks.TabIndex = 1;
-      // 
-      // btnTerrainTexturePacksAdd
-      // 
-      this.btnTerrainTexturePacksAdd.BackColor = System.Drawing.Color.Transparent;
-      this.btnTerrainTexturePacksAdd.BACKCOLOR = System.Drawing.Color.Transparent;
-      this.btnTerrainTexturePacksAdd.BORDERCOLOR = System.Drawing.Color.Green;
-      this.btnTerrainTexturePacksAdd.BORDERRADIUS = 5;
-      this.btnTerrainTexturePacksAdd.BORDERWIDTH = 1;
-      this.btnTerrainTexturePacksAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      this.btnTerrainTexturePacksAdd.ForeColor = System.Drawing.Color.Green;
-      this.btnTerrainTexturePacksAdd.Image = null;
-      this.btnTerrainTexturePacksAdd.Location = new System.Drawing.Point(143, 31);
-      this.btnTerrainTexturePacksAdd.Name = "btnTerrainTexturePacksAdd";
-      this.btnTerrainTexturePacksAdd.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-      this.btnTerrainTexturePacksAdd.SCALEBORD = true;
-      this.btnTerrainTexturePacksAdd.Size = new System.Drawing.Size(20, 20);
-      this.btnTerrainTexturePacksAdd.TabIndex = 2;
-      this.btnTerrainTexturePacksAdd.Text = "+";
-      this.btnTerrainTexturePacksAdd.UseVisualStyleBackColor = false;
-      // 
-      // btnTerrainTexturePacksDel
-      // 
-      this.btnTerrainTexturePacksDel.BackColor = System.Drawing.Color.Transparent;
-      this.btnTerrainTexturePacksDel.BACKCOLOR = System.Drawing.Color.Transparent;
-      this.btnTerrainTexturePacksDel.BORDERCOLOR = System.Drawing.Color.Red;
-      this.btnTerrainTexturePacksDel.BORDERRADIUS = 5;
-      this.btnTerrainTexturePacksDel.BORDERWIDTH = 1;
-      this.btnTerrainTexturePacksDel.Font = new System.Drawing.Font("Bauhaus 93", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.btnTerrainTexturePacksDel.ForeColor = System.Drawing.Color.Red;
-      this.btnTerrainTexturePacksDel.Image = null;
-      this.btnTerrainTexturePacksDel.Location = new System.Drawing.Point(143, 53);
-      this.btnTerrainTexturePacksDel.Name = "btnTerrainTexturePacksDel";
-      this.btnTerrainTexturePacksDel.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-      this.btnTerrainTexturePacksDel.SCALEBORD = true;
-      this.btnTerrainTexturePacksDel.Size = new System.Drawing.Size(20, 20);
-      this.btnTerrainTexturePacksDel.TabIndex = 3;
-      this.btnTerrainTexturePacksDel.Text = "-";
-      this.btnTerrainTexturePacksDel.UseVisualStyleBackColor = false;
-      // 
-      // listBox1
-      // 
-      this.listBox1.FormattingEnabled = true;
-      this.listBox1.Location = new System.Drawing.Point(3, 53);
-      this.listBox1.Name = "listBox1";
-      this.listBox1.Size = new System.Drawing.Size(135, 108);
-      this.listBox1.TabIndex = 0;
+      this.awA_Button2.BackColor = System.Drawing.Color.Transparent;
+      this.awA_Button2.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.awA_Button2.BORDERCOLOR = System.Drawing.Color.Red;
+      this.awA_Button2.BORDERRADIUS = 5;
+      this.awA_Button2.BORDERWIDTH = 1;
+      this.awA_Button2.Font = new System.Drawing.Font("Bauhaus 93", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.awA_Button2.ForeColor = System.Drawing.Color.Red;
+      this.awA_Button2.Image = null;
+      this.awA_Button2.Location = new System.Drawing.Point(141, 53);
+      this.awA_Button2.Name = "awA_Button2";
+      this.awA_Button2.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+      this.awA_Button2.SCALEBORD = true;
+      this.awA_Button2.Size = new System.Drawing.Size(20, 20);
+      this.awA_Button2.TabIndex = 3;
+      this.awA_Button2.Text = "-";
+      this.awA_Button2.UseVisualStyleBackColor = false;
       // 
       // textBox1
       // 
@@ -1207,24 +1197,45 @@
       this.awA_Button1.Text = "+";
       this.awA_Button1.UseVisualStyleBackColor = false;
       // 
-      // awA_Button2
+      // listBox1
       // 
-      this.awA_Button2.BackColor = System.Drawing.Color.Transparent;
-      this.awA_Button2.BACKCOLOR = System.Drawing.Color.Transparent;
-      this.awA_Button2.BORDERCOLOR = System.Drawing.Color.Red;
-      this.awA_Button2.BORDERRADIUS = 5;
-      this.awA_Button2.BORDERWIDTH = 1;
-      this.awA_Button2.Font = new System.Drawing.Font("Bauhaus 93", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.awA_Button2.ForeColor = System.Drawing.Color.Red;
-      this.awA_Button2.Image = null;
-      this.awA_Button2.Location = new System.Drawing.Point(141, 53);
-      this.awA_Button2.Name = "awA_Button2";
-      this.awA_Button2.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-      this.awA_Button2.SCALEBORD = true;
-      this.awA_Button2.Size = new System.Drawing.Size(20, 20);
-      this.awA_Button2.TabIndex = 3;
-      this.awA_Button2.Text = "-";
-      this.awA_Button2.UseVisualStyleBackColor = false;
+      this.listBox1.FormattingEnabled = true;
+      this.listBox1.Location = new System.Drawing.Point(3, 53);
+      this.listBox1.Name = "listBox1";
+      this.listBox1.Size = new System.Drawing.Size(135, 108);
+      this.listBox1.TabIndex = 0;
+      // 
+      // pnlLeftWater
+      // 
+      this.pnlLeftWater.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+      this.pnlLeftWater.Dock = System.Windows.Forms.DockStyle.Left;
+      this.pnlLeftWater.Location = new System.Drawing.Point(350, 66);
+      this.pnlLeftWater.Name = "pnlLeftWater";
+      this.pnlLeftWater.Size = new System.Drawing.Size(175, 650);
+      this.pnlLeftWater.TabIndex = 7;
+      this.pnlLeftWater.Visible = false;
+      // 
+      // cmsEntity
+      // 
+      this.cmsEntity.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.transformationToolStripMenuItem});
+      this.cmsEntity.Name = "cmsEntity";
+      this.cmsEntity.Size = new System.Drawing.Size(166, 26);
+      // 
+      // transformationToolStripMenuItem
+      // 
+      this.transformationToolStripMenuItem.Name = "transformationToolStripMenuItem";
+      this.transformationToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+      this.transformationToolStripMenuItem.Text = "Transformation...";
+      // 
+      // firstPersonFreeToolStripMenuItem
+      // 
+      this.firstPersonFreeToolStripMenuItem.Name = "firstPersonFreeToolStripMenuItem";
+      this.firstPersonFreeToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+      this.firstPersonFreeToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+      this.firstPersonFreeToolStripMenuItem.Tag = "3";
+      this.firstPersonFreeToolStripMenuItem.Text = "First person free";
+      this.firstPersonFreeToolStripMenuItem.Click += new System.EventHandler(this.CameraType_Click);
       // 
       // EditorForm
       // 
@@ -1378,5 +1389,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private GUI_elements.AWA_Button awA_Button1;
         private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ToolStripMenuItem firstPersonFreeToolStripMenuItem;
     }
 }

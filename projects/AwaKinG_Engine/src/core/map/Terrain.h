@@ -1,7 +1,9 @@
 #pragma once
 #include "Entity.h"
-#define CELL_SPACE 25.0f
-#define NUM_VERTS 65
+#include "../Parser.h"
+
+#define CELL_SPACE 10.0f
+#define NUM_VERTS 64
 class Terrain {
 public:
   string errorMessage;
@@ -16,6 +18,7 @@ public:
   ID3D11Buffer** getVertexBuffer(int index);
   ID3D11Buffer* getIndexBuffer();
   XMFLOAT4X4* getWorldMatrix();
+  bool save(string fileName);
 
 private:
   Terrain();
@@ -36,6 +39,8 @@ private:
   int		_numQuads;
   int		_numIndexs;
 
+  float   _halfSpaceRaw;
+  float   _halfSpaceCol;
   XMFLOAT4X4                  _worldMatrix;
 
   XMFLOAT3*	                  _normalMap;

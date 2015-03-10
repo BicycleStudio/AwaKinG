@@ -1,9 +1,11 @@
 #pragma once
 #include "Entity.h"
+#include "Terrain.h"
 #include "../../ErrorDefines.h"
 #include "../Parser.h"
 #include "../../render/Render.h"
 enum PlayerCameraType {
+  PCT_FIRST_PERSON_FREE,
   PCT_FIRST_PERSON,
   PCT_REDACTOR,
   PCT_GAME

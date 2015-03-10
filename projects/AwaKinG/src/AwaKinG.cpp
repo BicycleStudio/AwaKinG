@@ -20,8 +20,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 	}
   EngineWrap::getInstance().resizeBuffer(Window::getInstance().getWidth(), Window::getInstance().getHeight());
   Map::getInstance().initialize("../../resources/map/testMap2.amp");
-  Terrain::getInstance().create(1,1);
-
+  Map::getInstance().setCameraType(PCT_GAME);
+  Terrain::getInstance().create(1, 1);
+  Terrain::getInstance().getHeight(1, 1);
   messageLoop();
 
 	shutdown();
