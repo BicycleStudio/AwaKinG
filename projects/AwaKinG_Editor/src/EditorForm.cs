@@ -10,6 +10,11 @@ using System.Windows.Forms;
 
 namespace AwaKinG_Editor {
   public partial class EditorForm : Form {
+    bool[] btnsTop = new bool[3];
+    bool[] btnsTransform = new bool[4];
+    bool[] btnsTexturing = new bool[4];
+    Color setColor = SystemColors.GradientActiveCaption;
+    Color defaultColor = SystemColors.ControlLightLight;
     OpenFileDialog ofdMap = new OpenFileDialog();
     SaveFileDialog sfdMap = new SaveFileDialog();
     public EditorForm() {
@@ -26,6 +31,7 @@ namespace AwaKinG_Editor {
       Application.Idle += Application_Idle;
     }
     void Application_Idle(object sender, EventArgs e) {
+      pnlRender_SizeChanged(sender,e);
       while (!Engine.GetInstance().Done) {
         Engine.GetInstance().Update();
         Application.DoEvents();
@@ -95,6 +101,114 @@ namespace AwaKinG_Editor {
         catch (Exception ex) {
           MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
         }
+      }
+    }
+    private void btnTopMain_Click(object sender, EventArgs e) {
+      switch (Convert.ToInt32(((Button)sender).Tag)) {
+        case 0:
+        btnsTop[0] = !btnsTop[0];
+        btnsTop[1] = false; 
+        btnsTop[2] = false;
+        SetTopBtns();
+        break;
+        case 1:
+        btnsTop[0] = false;
+        btnsTop[1] = !btnsTop[1];
+        btnsTop[2] = false;
+        SetTopBtns();
+        break;
+        case 2:
+        btnsTop[0] = false;
+        btnsTop[1] = false;
+        btnsTop[2] = !btnsTop[2];
+        SetTopBtns();
+        break;
+      }
+    }
+    private void SetTopBtns() {
+      if (btnsTop[0]) {
+        btnTopTerrain.BackColor = setColor;
+        pnlLeftTerrain.Visible = true;
+      }
+      else {
+        btnTopTerrain.BackColor = defaultColor;
+        pnlLeftTerrain.Visible = false;
+      }
+      if (btnsTop[1]) {
+        btnTopEntity.BackColor = setColor;
+        pnlLeftEntity.Visible = true;
+      }
+      else {
+        btnTopEntity.BackColor = defaultColor;
+        pnlLeftEntity.Visible = false;
+      }
+      if (btnsTop[2]) {
+        btnTopWater.BackColor = setColor;
+        pnlLeftWater.Visible = true;
+      }
+      else {
+        btnTopWater.BackColor = defaultColor;
+        pnlLeftWater.Visible = false;
+      }
+    }
+    private void SetTerrainTexturingBtns() {
+      if (btnsTexturing[0]) btnTexturingQuad.BackColor = setColor;
+      else btnTexturingQuad.BackColor = defaultColor;
+      if (btnsTexturing[1]) btnTexturingCirc.BackColor = setColor;
+      else btnTexturingCirc.BackColor = defaultColor;
+      if (btnsTexturing[2]) btnTexturingRhomb.BackColor = setColor;
+      else btnTexturingRhomb.BackColor = defaultColor;
+      if (btnsTexturing[3]) btnTexturingCustom.BackColor = setColor;
+      else btnTexturingCustom.BackColor = defaultColor;
+    }
+    private void SetEntityTransformBtns() {
+      if (btnsTransform[0]) btnEntityObject.BackColor = setColor;
+      else btnEntityObject.BackColor = defaultColor;
+      if (btnsTransform[1]) btnEntityPos.BackColor = setColor;
+      else btnEntityPos.BackColor = defaultColor;
+      if (btnsTransform[2]) btnEntityScl.BackColor = setColor;
+      else btnEntityScl.BackColor = defaultColor;
+      if (btnsTransform[3]) btnEntityRot.BackColor = setColor;
+      else btnEntityRot.BackColor = defaultColor;
+    }
+    private void btnEntityTransform_Click(object sender, EventArgs e) {
+      switch (Convert.ToInt32(((Button)sender).Tag)) {
+        case 0:
+        btnsTransform[0] = !btnsTransform[0]; btnsTransform[1] = false; btnsTransform[2] = false; btnsTransform[3] = false;
+        SetEntityTransformBtns();
+        break;
+        case 1:
+        btnsTransform[0] = false; btnsTransform[1] = !btnsTransform[1]; btnsTransform[2] = false; btnsTransform[3] = false;
+        SetEntityTransformBtns();
+        break;
+        case 2:
+        btnsTransform[0] = false; btnsTransform[1] = false; btnsTransform[2] = !btnsTransform[2]; btnsTransform[3] = false;
+        SetEntityTransformBtns();
+        break;
+        case 3:
+        btnsTransform[0] = false; btnsTransform[1] = false; btnsTransform[2] = false;btnsTransform[3] = !btnsTransform[3]; 
+        SetEntityTransformBtns();
+        break;
+      }
+    }
+    private void btnTerrainTexturingBtns_Click(object sender, EventArgs e) {
+      switch (Convert.ToInt32(((Button)sender).Tag)) {
+        case 0:
+        btnsTexturing[0] = !btnsTexturing[0]; btnsTexturing[1] = false; btnsTexturing[2] = false; btnsTexturing[3] = false;
+        SetTerrainTexturingBtns();
+        break;
+        case 1:
+        btnsTexturing[0] = false; btnsTexturing[1] = !btnsTexturing[1]; btnsTexturing[2] = false; btnsTexturing[3] = false;
+        SetTerrainTexturingBtns();
+        break;
+        case 2:
+        btnsTexturing[0] = false; btnsTexturing[1] = false; btnsTexturing[2] = !btnsTexturing[2]; btnsTexturing[3] = false;
+        SetTerrainTexturingBtns();
+        break;
+        case 3:
+        btnsTexturing[0] = false; btnsTexturing[1] = false; btnsTexturing[2] = false; btnsTexturing[3] = !btnsTexturing[3];
+        SetTerrainTexturingBtns();
+        break;
       }
     }
   }
