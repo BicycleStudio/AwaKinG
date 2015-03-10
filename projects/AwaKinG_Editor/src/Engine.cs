@@ -20,14 +20,17 @@ namespace AwaKinG_Editor {
     public extern static void ResizeBuffer(int sizeX, int sizeY);
     [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl, EntryPoint = "setCameraType")]
     public extern static bool SetCameraType(int type);
-
     [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl, EntryPoint = "openMap")]
     public extern static bool OpenMap(String fileName, int lenght);
     [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl, EntryPoint = "saveMap")]
     public extern static bool SaveMap(String fileName, int lenght);
     [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl, EntryPoint = "newMap")]
     public extern static void newMap();
-    
+  }
+  public static class TerrainDll {
+    const String _dllPath = "../../../../dll/AwaKinG_Engine.dll";
+    [DllImport(_dllPath, CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl, EntryPoint = "createTerrain")]
+    public extern static int createTerrain(int sizeX, int sizeY);
   }
   public class Engine {
     public bool Done { get { return _done; } set { _done = value; if (_done) EngineDll.Release(); } }

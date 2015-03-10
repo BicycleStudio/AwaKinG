@@ -42,6 +42,9 @@
     <ClCompile Include="src\core\Parser.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\map\Terrain.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AwaKinG_Engine.h">
@@ -75,6 +78,9 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="src\core\Parser.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\map\Terrain.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>

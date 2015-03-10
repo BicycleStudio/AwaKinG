@@ -65,4 +65,10 @@ bool saveMap(const char* fileName, int lenght) {
 void newMap() {
   Map::getInstance().initialize();
 }
+int createTerrain(int sizeX, int sizeY) {
+  if(!Terrain::getInstance().create(sizeX, sizeY)) 
+    return -1;
+  return 0;
+}
+
 #pragma warning(pop)

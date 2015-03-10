@@ -211,5 +211,14 @@ namespace AwaKinG_Editor {
         break;
       }
     }
+    private void btnTerrainCreate_Click(object sender, EventArgs e) {
+      if (TerrainDll.createTerrain((int)vbtnTerrainSizeX.Value, (int)vbtnTerrainSizeY.Value) == -1) {
+        MessageBox.Show("Engine does't support Terrain. Try another day :)","Terrain error", MessageBoxButtons.OK);
+        return;
+      }
+      pnlTerrainTerraforming.Visible = true;
+      pnlTerrainTexturing.Visible = true;
+      pnlTerrainTexturePacks.Visible = true;
+    }
   }
 }

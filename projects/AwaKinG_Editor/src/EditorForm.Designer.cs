@@ -63,6 +63,7 @@
       this.label6 = new System.Windows.Forms.Label();
       this.vbtnTerraformingShiftHeight = new GUI_elements.AWA_Value_Button();
       this.panel5 = new System.Windows.Forms.Panel();
+      this.label5 = new System.Windows.Forms.Label();
       this.vbtnTerraformingAltHard = new GUI_elements.AWA_Value_Button();
       this.panel4 = new System.Windows.Forms.Panel();
       this.label4 = new System.Windows.Forms.Label();
@@ -73,6 +74,20 @@
       this.panel2 = new System.Windows.Forms.Panel();
       this.label2 = new System.Windows.Forms.Label();
       this.vbtnTerraformingSizeIn = new GUI_elements.AWA_Value_Button();
+      this.pnlTerrainTexturing = new GUI_elements.Panel_Ex();
+      this.pnlTerrainTexturingDummy = new System.Windows.Forms.Panel();
+      this.panel15 = new System.Windows.Forms.Panel();
+      this.label11 = new System.Windows.Forms.Label();
+      this.vbtnTexturingHard = new GUI_elements.AWA_Value_Button();
+      this.panel17 = new System.Windows.Forms.Panel();
+      this.label13 = new System.Windows.Forms.Label();
+      this.vbtnTexturingSize = new GUI_elements.AWA_Value_Button();
+      this.panel12 = new System.Windows.Forms.Panel();
+      this.btnTexturingCirc = new System.Windows.Forms.Button();
+      this.btnTexturingCustom = new System.Windows.Forms.Button();
+      this.btnTexturingQuad = new System.Windows.Forms.Button();
+      this.btnTexturingRhomb = new System.Windows.Forms.Button();
+      this.pnlTerrainTexturePacks = new GUI_elements.Panel_Ex();
       this.pnlRight = new System.Windows.Forms.FlowLayoutPanel();
       this.pnlRender = new System.Windows.Forms.Panel();
       this.pnlTop = new System.Windows.Forms.FlowLayoutPanel();
@@ -87,25 +102,18 @@
       this.btnEntityScl = new System.Windows.Forms.Button();
       this.btnEntityObject = new System.Windows.Forms.Button();
       this.btnEntityPos = new System.Windows.Forms.Button();
-      this.panel_Ex1 = new GUI_elements.Panel_Ex();
+      this.pnlEntityPacks = new GUI_elements.Panel_Ex();
       this.pnlLeftWater = new System.Windows.Forms.FlowLayoutPanel();
       this.cmsEntity = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.transformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-      this.pnlTerrainTexturing = new GUI_elements.Panel_Ex();
-      this.pnlTerrainTexturingDummy = new System.Windows.Forms.Panel();
-      this.panel15 = new System.Windows.Forms.Panel();
-      this.label11 = new System.Windows.Forms.Label();
-      this.vbtnTexturingHard = new GUI_elements.AWA_Value_Button();
-      this.panel17 = new System.Windows.Forms.Panel();
-      this.label13 = new System.Windows.Forms.Label();
-      this.vbtnTexturingSize = new GUI_elements.AWA_Value_Button();
-      this.panel12 = new System.Windows.Forms.Panel();
-      this.label5 = new System.Windows.Forms.Label();
-      this.btnTexturingCirc = new System.Windows.Forms.Button();
-      this.btnTexturingQuad = new System.Windows.Forms.Button();
-      this.btnTexturingRhomb = new System.Windows.Forms.Button();
-      this.btnTexturingCustom = new System.Windows.Forms.Button();
-      this.panel_Ex2 = new GUI_elements.Panel_Ex();
+      this.lbxTerrainTexturePacks = new System.Windows.Forms.ListBox();
+      this.tbxTerrainTexturePacks = new System.Windows.Forms.TextBox();
+      this.btnTerrainTexturePacksAdd = new GUI_elements.AWA_Button();
+      this.btnTerrainTexturePacksDel = new GUI_elements.AWA_Button();
+      this.listBox1 = new System.Windows.Forms.ListBox();
+      this.textBox1 = new System.Windows.Forms.TextBox();
+      this.awA_Button1 = new GUI_elements.AWA_Button();
+      this.awA_Button2 = new GUI_elements.AWA_Button();
       this.menuMain.SuspendLayout();
       this.pnlLeftTerrain.SuspendLayout();
       this.pnlTerrainMain.SuspendLayout();
@@ -119,16 +127,18 @@
       this.panel4.SuspendLayout();
       this.panel3.SuspendLayout();
       this.panel2.SuspendLayout();
-      this.pnlTop.SuspendLayout();
-      this.pnlTopMain.SuspendLayout();
-      this.pnlLeftEntity.SuspendLayout();
-      this.pnlEntityTransformation.SuspendLayout();
-      this.cmsEntity.SuspendLayout();
       this.pnlTerrainTexturing.SuspendLayout();
       this.pnlTerrainTexturingDummy.SuspendLayout();
       this.panel15.SuspendLayout();
       this.panel17.SuspendLayout();
       this.panel12.SuspendLayout();
+      this.pnlTerrainTexturePacks.SuspendLayout();
+      this.pnlTop.SuspendLayout();
+      this.pnlTopMain.SuspendLayout();
+      this.pnlLeftEntity.SuspendLayout();
+      this.pnlEntityTransformation.SuspendLayout();
+      this.pnlEntityPacks.SuspendLayout();
+      this.cmsEntity.SuspendLayout();
       this.SuspendLayout();
       // 
       // menuMain
@@ -256,7 +266,7 @@
       this.pnlLeftTerrain.Controls.Add(this.pnlTerrainMain);
       this.pnlLeftTerrain.Controls.Add(this.pnlTerrainTerraforming);
       this.pnlLeftTerrain.Controls.Add(this.pnlTerrainTexturing);
-      this.pnlLeftTerrain.Controls.Add(this.panel_Ex2);
+      this.pnlLeftTerrain.Controls.Add(this.pnlTerrainTexturePacks);
       this.pnlLeftTerrain.Dock = System.Windows.Forms.DockStyle.Left;
       this.pnlLeftTerrain.Location = new System.Drawing.Point(0, 66);
       this.pnlLeftTerrain.Name = "pnlLeftTerrain";
@@ -290,7 +300,7 @@
       this.btnTerrainCreate.BORDERRADIUS = 5;
       this.btnTerrainCreate.BORDERWIDTH = 1;
       this.btnTerrainCreate.Image = null;
-      this.btnTerrainCreate.Location = new System.Drawing.Point(12, 71);
+      this.btnTerrainCreate.Location = new System.Drawing.Point(12, 74);
       this.btnTerrainCreate.Name = "btnTerrainCreate";
       this.btnTerrainCreate.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
       this.btnTerrainCreate.SCALEBORD = true;
@@ -298,6 +308,7 @@
       this.btnTerrainCreate.TabIndex = 2;
       this.btnTerrainCreate.Text = "Create";
       this.btnTerrainCreate.UseVisualStyleBackColor = false;
+      this.btnTerrainCreate.Click += new System.EventHandler(this.btnTerrainCreate_Click);
       // 
       // label1
       // 
@@ -366,6 +377,7 @@
       this.pnlTerrainTerraforming.Size = new System.Drawing.Size(167, 201);
       this.pnlTerrainTerraforming.TabIndex = 2;
       this.pnlTerrainTerraforming.Text = "Terraforming";
+      this.pnlTerrainTerraforming.Visible = false;
       // 
       // pnlTerrainTerraformingDummy
       // 
@@ -528,6 +540,15 @@
       this.panel5.Size = new System.Drawing.Size(161, 21);
       this.panel5.TabIndex = 3;
       // 
+      // label5
+      // 
+      this.label5.AutoSize = true;
+      this.label5.Location = new System.Drawing.Point(30, 4);
+      this.label5.Name = "label5";
+      this.label5.Size = new System.Drawing.Size(46, 13);
+      this.label5.TabIndex = 1;
+      this.label5.Text = "Alt-hard:";
+      // 
       // vbtnTerraformingAltHard
       // 
       this.vbtnTerraformingAltHard.ARROWHEIGHT = 1;
@@ -673,231 +694,6 @@
       this.vbtnTerraformingSizeIn.UseVisualStyleBackColor = false;
       this.vbtnTerraformingSizeIn.VALUEV = 1F;
       // 
-      // pnlRight
-      // 
-      this.pnlRight.BackColor = System.Drawing.SystemColors.InactiveBorder;
-      this.pnlRight.Dock = System.Windows.Forms.DockStyle.Right;
-      this.pnlRight.Location = new System.Drawing.Point(846, 66);
-      this.pnlRight.Name = "pnlRight";
-      this.pnlRight.Size = new System.Drawing.Size(174, 650);
-      this.pnlRight.TabIndex = 3;
-      this.pnlRight.Visible = false;
-      // 
-      // pnlRender
-      // 
-      this.pnlRender.BackColor = System.Drawing.Color.RoyalBlue;
-      this.pnlRender.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.pnlRender.Location = new System.Drawing.Point(525, 66);
-      this.pnlRender.Name = "pnlRender";
-      this.pnlRender.Size = new System.Drawing.Size(321, 650);
-      this.pnlRender.TabIndex = 4;
-      this.pnlRender.SizeChanged += new System.EventHandler(this.pnlRender_SizeChanged);
-      // 
-      // pnlTop
-      // 
-      this.pnlTop.BackColor = System.Drawing.SystemColors.ButtonFace;
-      this.pnlTop.Controls.Add(this.pnlTopMain);
-      this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
-      this.pnlTop.Location = new System.Drawing.Point(0, 24);
-      this.pnlTop.Name = "pnlTop";
-      this.pnlTop.Size = new System.Drawing.Size(1020, 42);
-      this.pnlTop.TabIndex = 5;
-      // 
-      // pnlTopMain
-      // 
-      this.pnlTopMain.Controls.Add(this.btnTopWater);
-      this.pnlTopMain.Controls.Add(this.btnTopEntity);
-      this.pnlTopMain.Controls.Add(this.btnTopTerrain);
-      this.pnlTopMain.Location = new System.Drawing.Point(0, 0);
-      this.pnlTopMain.Margin = new System.Windows.Forms.Padding(0);
-      this.pnlTopMain.Name = "pnlTopMain";
-      this.pnlTopMain.Size = new System.Drawing.Size(176, 42);
-      this.pnlTopMain.TabIndex = 0;
-      // 
-      // btnTopWater
-      // 
-      this.btnTopWater.BackColor = System.Drawing.SystemColors.ControlLightLight;
-      this.btnTopWater.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnTopWater.BackgroundImage")));
-      this.btnTopWater.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.btnTopWater.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnTopWater.Location = new System.Drawing.Point(82, 2);
-      this.btnTopWater.Name = "btnTopWater";
-      this.btnTopWater.Size = new System.Drawing.Size(38, 38);
-      this.btnTopWater.TabIndex = 2;
-      this.btnTopWater.Tag = "2";
-      this.btnTopWater.UseVisualStyleBackColor = false;
-      this.btnTopWater.Click += new System.EventHandler(this.btnTopMain_Click);
-      // 
-      // btnTopEntity
-      // 
-      this.btnTopEntity.BackColor = System.Drawing.SystemColors.ControlLightLight;
-      this.btnTopEntity.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnTopEntity.BackgroundImage")));
-      this.btnTopEntity.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.btnTopEntity.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnTopEntity.Location = new System.Drawing.Point(42, 2);
-      this.btnTopEntity.Name = "btnTopEntity";
-      this.btnTopEntity.Size = new System.Drawing.Size(38, 38);
-      this.btnTopEntity.TabIndex = 1;
-      this.btnTopEntity.Tag = "1";
-      this.btnTopEntity.UseVisualStyleBackColor = false;
-      this.btnTopEntity.Click += new System.EventHandler(this.btnTopMain_Click);
-      // 
-      // btnTopTerrain
-      // 
-      this.btnTopTerrain.BackColor = System.Drawing.SystemColors.ControlLightLight;
-      this.btnTopTerrain.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnTopTerrain.BackgroundImage")));
-      this.btnTopTerrain.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.btnTopTerrain.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnTopTerrain.Location = new System.Drawing.Point(2, 2);
-      this.btnTopTerrain.Name = "btnTopTerrain";
-      this.btnTopTerrain.Size = new System.Drawing.Size(38, 38);
-      this.btnTopTerrain.TabIndex = 0;
-      this.btnTopTerrain.Tag = "0";
-      this.btnTopTerrain.UseVisualStyleBackColor = false;
-      this.btnTopTerrain.Click += new System.EventHandler(this.btnTopMain_Click);
-      // 
-      // pnlLeftEntity
-      // 
-      this.pnlLeftEntity.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-      this.pnlLeftEntity.Controls.Add(this.pnlEntityTransformation);
-      this.pnlLeftEntity.Controls.Add(this.panel_Ex1);
-      this.pnlLeftEntity.Dock = System.Windows.Forms.DockStyle.Left;
-      this.pnlLeftEntity.Location = new System.Drawing.Point(175, 66);
-      this.pnlLeftEntity.Name = "pnlLeftEntity";
-      this.pnlLeftEntity.Size = new System.Drawing.Size(175, 650);
-      this.pnlLeftEntity.TabIndex = 6;
-      this.pnlLeftEntity.Visible = false;
-      // 
-      // pnlEntityTransformation
-      // 
-      this.pnlEntityTransformation._Checked = false;
-      this.pnlEntityTransformation.BACKCOLOR = System.Drawing.Color.Transparent;
-      this.pnlEntityTransformation.BORDERCOLOR = System.Drawing.Color.Black;
-      this.pnlEntityTransformation.BORDERRADIUS = 5;
-      this.pnlEntityTransformation.BORDERWIDTH = 1;
-      this.pnlEntityTransformation.Controls.Add(this.btnEntityStickToTerrain);
-      this.pnlEntityTransformation.Controls.Add(this.btnEntityRot);
-      this.pnlEntityTransformation.Controls.Add(this.btnEntityScl);
-      this.pnlEntityTransformation.Controls.Add(this.btnEntityObject);
-      this.pnlEntityTransformation.Controls.Add(this.btnEntityPos);
-      this.pnlEntityTransformation.Location = new System.Drawing.Point(3, 2);
-      this.pnlEntityTransformation.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
-      this.pnlEntityTransformation.Name = "pnlEntityTransformation";
-      this.pnlEntityTransformation.Size = new System.Drawing.Size(167, 108);
-      this.pnlEntityTransformation.TabIndex = 0;
-      this.pnlEntityTransformation.Text = "Transformation";
-      // 
-      // btnEntityStickToTerrain
-      // 
-      this.btnEntityStickToTerrain.BackColor = System.Drawing.Color.Transparent;
-      this.btnEntityStickToTerrain.BACKCOLOR = System.Drawing.Color.Transparent;
-      this.btnEntityStickToTerrain.BORDERCOLOR = System.Drawing.Color.Black;
-      this.btnEntityStickToTerrain.BORDERRADIUS = 5;
-      this.btnEntityStickToTerrain.BORDERWIDTH = 0;
-      this.btnEntityStickToTerrain.CHECKABLE = true;
-      this.btnEntityStickToTerrain.Image = null;
-      this.btnEntityStickToTerrain.Location = new System.Drawing.Point(14, 75);
-      this.btnEntityStickToTerrain.Name = "btnEntityStickToTerrain";
-      this.btnEntityStickToTerrain.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
-      this.btnEntityStickToTerrain.SCALEBORD = true;
-      this.btnEntityStickToTerrain.Size = new System.Drawing.Size(141, 20);
-      this.btnEntityStickToTerrain.TabIndex = 3;
-      this.btnEntityStickToTerrain.Text = "Stick to terrain";
-      this.btnEntityStickToTerrain.UseVisualStyleBackColor = false;
-      // 
-      // btnEntityRot
-      // 
-      this.btnEntityRot.BackColor = System.Drawing.SystemColors.ControlLightLight;
-      this.btnEntityRot.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEntityRot.BackgroundImage")));
-      this.btnEntityRot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.btnEntityRot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnEntityRot.Location = new System.Drawing.Point(123, 31);
-      this.btnEntityRot.Name = "btnEntityRot";
-      this.btnEntityRot.Size = new System.Drawing.Size(32, 32);
-      this.btnEntityRot.TabIndex = 2;
-      this.btnEntityRot.Tag = "3";
-      this.btnEntityRot.UseVisualStyleBackColor = false;
-      this.btnEntityRot.Click += new System.EventHandler(this.btnEntityTransform_Click);
-      // 
-      // btnEntityScl
-      // 
-      this.btnEntityScl.BackColor = System.Drawing.SystemColors.ControlLightLight;
-      this.btnEntityScl.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEntityScl.BackgroundImage")));
-      this.btnEntityScl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.btnEntityScl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnEntityScl.Location = new System.Drawing.Point(87, 31);
-      this.btnEntityScl.Name = "btnEntityScl";
-      this.btnEntityScl.Size = new System.Drawing.Size(32, 32);
-      this.btnEntityScl.TabIndex = 1;
-      this.btnEntityScl.Tag = "2";
-      this.btnEntityScl.UseVisualStyleBackColor = false;
-      this.btnEntityScl.Click += new System.EventHandler(this.btnEntityTransform_Click);
-      // 
-      // btnEntityObject
-      // 
-      this.btnEntityObject.BackColor = System.Drawing.SystemColors.ControlLightLight;
-      this.btnEntityObject.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEntityObject.BackgroundImage")));
-      this.btnEntityObject.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.btnEntityObject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnEntityObject.Location = new System.Drawing.Point(14, 31);
-      this.btnEntityObject.Name = "btnEntityObject";
-      this.btnEntityObject.Size = new System.Drawing.Size(32, 32);
-      this.btnEntityObject.TabIndex = 0;
-      this.btnEntityObject.Tag = "0";
-      this.btnEntityObject.UseVisualStyleBackColor = false;
-      this.btnEntityObject.Click += new System.EventHandler(this.btnEntityTransform_Click);
-      // 
-      // btnEntityPos
-      // 
-      this.btnEntityPos.BackColor = System.Drawing.SystemColors.ControlLightLight;
-      this.btnEntityPos.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEntityPos.BackgroundImage")));
-      this.btnEntityPos.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.btnEntityPos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnEntityPos.Location = new System.Drawing.Point(51, 31);
-      this.btnEntityPos.Name = "btnEntityPos";
-      this.btnEntityPos.Size = new System.Drawing.Size(32, 32);
-      this.btnEntityPos.TabIndex = 0;
-      this.btnEntityPos.Tag = "1";
-      this.btnEntityPos.UseVisualStyleBackColor = false;
-      this.btnEntityPos.Click += new System.EventHandler(this.btnEntityTransform_Click);
-      // 
-      // panel_Ex1
-      // 
-      this.panel_Ex1._Checked = false;
-      this.panel_Ex1.BACKCOLOR = System.Drawing.Color.Transparent;
-      this.panel_Ex1.BORDERCOLOR = System.Drawing.Color.Black;
-      this.panel_Ex1.BORDERRADIUS = 5;
-      this.panel_Ex1.BORDERWIDTH = 1;
-      this.panel_Ex1.Location = new System.Drawing.Point(3, 112);
-      this.panel_Ex1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
-      this.panel_Ex1.Name = "panel_Ex1";
-      this.panel_Ex1.Size = new System.Drawing.Size(167, 139);
-      this.panel_Ex1.TabIndex = 1;
-      this.panel_Ex1.Text = "Packs";
-      // 
-      // pnlLeftWater
-      // 
-      this.pnlLeftWater.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-      this.pnlLeftWater.Dock = System.Windows.Forms.DockStyle.Left;
-      this.pnlLeftWater.Location = new System.Drawing.Point(350, 66);
-      this.pnlLeftWater.Name = "pnlLeftWater";
-      this.pnlLeftWater.Size = new System.Drawing.Size(175, 650);
-      this.pnlLeftWater.TabIndex = 7;
-      this.pnlLeftWater.Visible = false;
-      // 
-      // cmsEntity
-      // 
-      this.cmsEntity.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.transformationToolStripMenuItem});
-      this.cmsEntity.Name = "cmsEntity";
-      this.cmsEntity.Size = new System.Drawing.Size(166, 26);
-      // 
-      // transformationToolStripMenuItem
-      // 
-      this.transformationToolStripMenuItem.Name = "transformationToolStripMenuItem";
-      this.transformationToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-      this.transformationToolStripMenuItem.Text = "Transformation...";
-      // 
       // pnlTerrainTexturing
       // 
       this.pnlTerrainTexturing._Checked = false;
@@ -912,6 +708,7 @@
       this.pnlTerrainTexturing.Size = new System.Drawing.Size(167, 110);
       this.pnlTerrainTexturing.TabIndex = 3;
       this.pnlTerrainTexturing.Text = "Texturing";
+      this.pnlTerrainTexturing.Visible = false;
       // 
       // pnlTerrainTexturingDummy
       // 
@@ -1017,15 +814,6 @@
       this.panel12.Size = new System.Drawing.Size(161, 39);
       this.panel12.TabIndex = 5;
       // 
-      // label5
-      // 
-      this.label5.AutoSize = true;
-      this.label5.Location = new System.Drawing.Point(30, 4);
-      this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(46, 13);
-      this.label5.TabIndex = 1;
-      this.label5.Text = "Alt-hard:";
-      // 
       // btnTexturingCirc
       // 
       this.btnTexturingCirc.BackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -1039,6 +827,20 @@
       this.btnTexturingCirc.Text = "C";
       this.btnTexturingCirc.UseVisualStyleBackColor = false;
       this.btnTexturingCirc.Click += new System.EventHandler(this.btnTerrainTexturingBtns_Click);
+      // 
+      // btnTexturingCustom
+      // 
+      this.btnTexturingCustom.BackColor = System.Drawing.SystemColors.ControlLightLight;
+      this.btnTexturingCustom.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+      this.btnTexturingCustom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnTexturingCustom.Location = new System.Drawing.Point(118, 3);
+      this.btnTexturingCustom.Name = "btnTexturingCustom";
+      this.btnTexturingCustom.Size = new System.Drawing.Size(32, 32);
+      this.btnTexturingCustom.TabIndex = 2;
+      this.btnTexturingCustom.Tag = "3";
+      this.btnTexturingCustom.Text = "...";
+      this.btnTexturingCustom.UseVisualStyleBackColor = false;
+      this.btnTexturingCustom.Click += new System.EventHandler(this.btnTerrainTexturingBtns_Click);
       // 
       // btnTexturingQuad
       // 
@@ -1068,33 +870,361 @@
       this.btnTexturingRhomb.UseVisualStyleBackColor = false;
       this.btnTexturingRhomb.Click += new System.EventHandler(this.btnTerrainTexturingBtns_Click);
       // 
-      // btnTexturingCustom
+      // pnlTerrainTexturePacks
       // 
-      this.btnTexturingCustom.BackColor = System.Drawing.SystemColors.ControlLightLight;
-      this.btnTexturingCustom.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-      this.btnTexturingCustom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnTexturingCustom.Location = new System.Drawing.Point(118, 3);
-      this.btnTexturingCustom.Name = "btnTexturingCustom";
-      this.btnTexturingCustom.Size = new System.Drawing.Size(32, 32);
-      this.btnTexturingCustom.TabIndex = 2;
-      this.btnTexturingCustom.Tag = "3";
-      this.btnTexturingCustom.Text = "...";
-      this.btnTexturingCustom.UseVisualStyleBackColor = false;
-      this.btnTexturingCustom.Click += new System.EventHandler(this.btnTerrainTexturingBtns_Click);
+      this.pnlTerrainTexturePacks._Checked = false;
+      this.pnlTerrainTexturePacks.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.pnlTerrainTexturePacks.BORDERCOLOR = System.Drawing.Color.Black;
+      this.pnlTerrainTexturePacks.BORDERRADIUS = 5;
+      this.pnlTerrainTexturePacks.BORDERWIDTH = 1;
+      this.pnlTerrainTexturePacks.Controls.Add(this.btnTerrainTexturePacksDel);
+      this.pnlTerrainTexturePacks.Controls.Add(this.btnTerrainTexturePacksAdd);
+      this.pnlTerrainTexturePacks.Controls.Add(this.tbxTerrainTexturePacks);
+      this.pnlTerrainTexturePacks.Controls.Add(this.lbxTerrainTexturePacks);
+      this.pnlTerrainTexturePacks.Location = new System.Drawing.Point(3, 423);
+      this.pnlTerrainTexturePacks.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
+      this.pnlTerrainTexturePacks.Name = "pnlTerrainTexturePacks";
+      this.pnlTerrainTexturePacks.Size = new System.Drawing.Size(167, 167);
+      this.pnlTerrainTexturePacks.TabIndex = 4;
+      this.pnlTerrainTexturePacks.Text = "Texture packs";
+      this.pnlTerrainTexturePacks.Visible = false;
       // 
-      // panel_Ex2
+      // pnlRight
       // 
-      this.panel_Ex2._Checked = false;
-      this.panel_Ex2.BACKCOLOR = System.Drawing.Color.Transparent;
-      this.panel_Ex2.BORDERCOLOR = System.Drawing.Color.Black;
-      this.panel_Ex2.BORDERRADIUS = 5;
-      this.panel_Ex2.BORDERWIDTH = 1;
-      this.panel_Ex2.Location = new System.Drawing.Point(3, 423);
-      this.panel_Ex2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
-      this.panel_Ex2.Name = "panel_Ex2";
-      this.panel_Ex2.Size = new System.Drawing.Size(167, 72);
-      this.panel_Ex2.TabIndex = 4;
-      this.panel_Ex2.Text = "Texture packs";
+      this.pnlRight.BackColor = System.Drawing.SystemColors.InactiveBorder;
+      this.pnlRight.Dock = System.Windows.Forms.DockStyle.Right;
+      this.pnlRight.Location = new System.Drawing.Point(846, 66);
+      this.pnlRight.Name = "pnlRight";
+      this.pnlRight.Size = new System.Drawing.Size(174, 650);
+      this.pnlRight.TabIndex = 3;
+      this.pnlRight.Visible = false;
+      // 
+      // pnlRender
+      // 
+      this.pnlRender.BackColor = System.Drawing.Color.RoyalBlue;
+      this.pnlRender.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.pnlRender.Location = new System.Drawing.Point(525, 66);
+      this.pnlRender.Name = "pnlRender";
+      this.pnlRender.Size = new System.Drawing.Size(321, 650);
+      this.pnlRender.TabIndex = 4;
+      this.pnlRender.SizeChanged += new System.EventHandler(this.pnlRender_SizeChanged);
+      // 
+      // pnlTop
+      // 
+      this.pnlTop.BackColor = System.Drawing.SystemColors.ButtonFace;
+      this.pnlTop.Controls.Add(this.pnlTopMain);
+      this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
+      this.pnlTop.Location = new System.Drawing.Point(0, 24);
+      this.pnlTop.Name = "pnlTop";
+      this.pnlTop.Size = new System.Drawing.Size(1020, 42);
+      this.pnlTop.TabIndex = 5;
+      // 
+      // pnlTopMain
+      // 
+      this.pnlTopMain.Controls.Add(this.btnTopWater);
+      this.pnlTopMain.Controls.Add(this.btnTopEntity);
+      this.pnlTopMain.Controls.Add(this.btnTopTerrain);
+      this.pnlTopMain.Location = new System.Drawing.Point(0, 0);
+      this.pnlTopMain.Margin = new System.Windows.Forms.Padding(0);
+      this.pnlTopMain.Name = "pnlTopMain";
+      this.pnlTopMain.Size = new System.Drawing.Size(176, 42);
+      this.pnlTopMain.TabIndex = 0;
+      // 
+      // btnTopWater
+      // 
+      this.btnTopWater.BackColor = System.Drawing.SystemColors.ControlLightLight;
+      this.btnTopWater.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnTopWater.BackgroundImage")));
+      this.btnTopWater.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+      this.btnTopWater.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnTopWater.Location = new System.Drawing.Point(82, 2);
+      this.btnTopWater.Name = "btnTopWater";
+      this.btnTopWater.Size = new System.Drawing.Size(38, 38);
+      this.btnTopWater.TabIndex = 2;
+      this.btnTopWater.Tag = "2";
+      this.btnTopWater.UseVisualStyleBackColor = false;
+      this.btnTopWater.Click += new System.EventHandler(this.btnTopMain_Click);
+      // 
+      // btnTopEntity
+      // 
+      this.btnTopEntity.BackColor = System.Drawing.SystemColors.ControlLightLight;
+      this.btnTopEntity.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnTopEntity.BackgroundImage")));
+      this.btnTopEntity.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+      this.btnTopEntity.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnTopEntity.Location = new System.Drawing.Point(42, 2);
+      this.btnTopEntity.Name = "btnTopEntity";
+      this.btnTopEntity.Size = new System.Drawing.Size(38, 38);
+      this.btnTopEntity.TabIndex = 1;
+      this.btnTopEntity.Tag = "1";
+      this.btnTopEntity.UseVisualStyleBackColor = false;
+      this.btnTopEntity.Click += new System.EventHandler(this.btnTopMain_Click);
+      // 
+      // btnTopTerrain
+      // 
+      this.btnTopTerrain.BackColor = System.Drawing.SystemColors.ControlLightLight;
+      this.btnTopTerrain.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnTopTerrain.BackgroundImage")));
+      this.btnTopTerrain.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+      this.btnTopTerrain.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnTopTerrain.Location = new System.Drawing.Point(2, 2);
+      this.btnTopTerrain.Name = "btnTopTerrain";
+      this.btnTopTerrain.Size = new System.Drawing.Size(38, 38);
+      this.btnTopTerrain.TabIndex = 0;
+      this.btnTopTerrain.Tag = "0";
+      this.btnTopTerrain.UseVisualStyleBackColor = false;
+      this.btnTopTerrain.Click += new System.EventHandler(this.btnTopMain_Click);
+      // 
+      // pnlLeftEntity
+      // 
+      this.pnlLeftEntity.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+      this.pnlLeftEntity.Controls.Add(this.pnlEntityTransformation);
+      this.pnlLeftEntity.Controls.Add(this.pnlEntityPacks);
+      this.pnlLeftEntity.Dock = System.Windows.Forms.DockStyle.Left;
+      this.pnlLeftEntity.Location = new System.Drawing.Point(175, 66);
+      this.pnlLeftEntity.Name = "pnlLeftEntity";
+      this.pnlLeftEntity.Size = new System.Drawing.Size(175, 650);
+      this.pnlLeftEntity.TabIndex = 6;
+      this.pnlLeftEntity.Visible = false;
+      // 
+      // pnlEntityTransformation
+      // 
+      this.pnlEntityTransformation._Checked = false;
+      this.pnlEntityTransformation.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.pnlEntityTransformation.BORDERCOLOR = System.Drawing.Color.Black;
+      this.pnlEntityTransformation.BORDERRADIUS = 5;
+      this.pnlEntityTransformation.BORDERWIDTH = 1;
+      this.pnlEntityTransformation.Controls.Add(this.btnEntityStickToTerrain);
+      this.pnlEntityTransformation.Controls.Add(this.btnEntityRot);
+      this.pnlEntityTransformation.Controls.Add(this.btnEntityScl);
+      this.pnlEntityTransformation.Controls.Add(this.btnEntityObject);
+      this.pnlEntityTransformation.Controls.Add(this.btnEntityPos);
+      this.pnlEntityTransformation.Location = new System.Drawing.Point(3, 2);
+      this.pnlEntityTransformation.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
+      this.pnlEntityTransformation.Name = "pnlEntityTransformation";
+      this.pnlEntityTransformation.Size = new System.Drawing.Size(167, 108);
+      this.pnlEntityTransformation.TabIndex = 0;
+      this.pnlEntityTransformation.Text = "Transformation";
+      // 
+      // btnEntityStickToTerrain
+      // 
+      this.btnEntityStickToTerrain.BackColor = System.Drawing.Color.Transparent;
+      this.btnEntityStickToTerrain.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.btnEntityStickToTerrain.BORDERCOLOR = System.Drawing.Color.Black;
+      this.btnEntityStickToTerrain.BORDERRADIUS = 5;
+      this.btnEntityStickToTerrain.BORDERWIDTH = 0;
+      this.btnEntityStickToTerrain.CHECKABLE = true;
+      this.btnEntityStickToTerrain.Image = null;
+      this.btnEntityStickToTerrain.Location = new System.Drawing.Point(14, 75);
+      this.btnEntityStickToTerrain.Name = "btnEntityStickToTerrain";
+      this.btnEntityStickToTerrain.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+      this.btnEntityStickToTerrain.SCALEBORD = true;
+      this.btnEntityStickToTerrain.Size = new System.Drawing.Size(141, 20);
+      this.btnEntityStickToTerrain.TabIndex = 3;
+      this.btnEntityStickToTerrain.Text = "Stick to terrain";
+      this.btnEntityStickToTerrain.UseVisualStyleBackColor = false;
+      // 
+      // btnEntityRot
+      // 
+      this.btnEntityRot.BackColor = System.Drawing.SystemColors.ControlLightLight;
+      this.btnEntityRot.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEntityRot.BackgroundImage")));
+      this.btnEntityRot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+      this.btnEntityRot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnEntityRot.Location = new System.Drawing.Point(123, 31);
+      this.btnEntityRot.Name = "btnEntityRot";
+      this.btnEntityRot.Size = new System.Drawing.Size(32, 32);
+      this.btnEntityRot.TabIndex = 2;
+      this.btnEntityRot.Tag = "3";
+      this.btnEntityRot.UseVisualStyleBackColor = false;
+      this.btnEntityRot.Click += new System.EventHandler(this.btnEntityTransform_Click);
+      // 
+      // btnEntityScl
+      // 
+      this.btnEntityScl.BackColor = System.Drawing.SystemColors.ControlLightLight;
+      this.btnEntityScl.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEntityScl.BackgroundImage")));
+      this.btnEntityScl.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+      this.btnEntityScl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnEntityScl.Location = new System.Drawing.Point(87, 31);
+      this.btnEntityScl.Name = "btnEntityScl";
+      this.btnEntityScl.Size = new System.Drawing.Size(32, 32);
+      this.btnEntityScl.TabIndex = 1;
+      this.btnEntityScl.Tag = "2";
+      this.btnEntityScl.UseVisualStyleBackColor = false;
+      this.btnEntityScl.Click += new System.EventHandler(this.btnEntityTransform_Click);
+      // 
+      // btnEntityObject
+      // 
+      this.btnEntityObject.BackColor = System.Drawing.SystemColors.ControlLightLight;
+      this.btnEntityObject.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEntityObject.BackgroundImage")));
+      this.btnEntityObject.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+      this.btnEntityObject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnEntityObject.Location = new System.Drawing.Point(14, 31);
+      this.btnEntityObject.Name = "btnEntityObject";
+      this.btnEntityObject.Size = new System.Drawing.Size(32, 32);
+      this.btnEntityObject.TabIndex = 0;
+      this.btnEntityObject.Tag = "0";
+      this.btnEntityObject.UseVisualStyleBackColor = false;
+      this.btnEntityObject.Click += new System.EventHandler(this.btnEntityTransform_Click);
+      // 
+      // btnEntityPos
+      // 
+      this.btnEntityPos.BackColor = System.Drawing.SystemColors.ControlLightLight;
+      this.btnEntityPos.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnEntityPos.BackgroundImage")));
+      this.btnEntityPos.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+      this.btnEntityPos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnEntityPos.Location = new System.Drawing.Point(51, 31);
+      this.btnEntityPos.Name = "btnEntityPos";
+      this.btnEntityPos.Size = new System.Drawing.Size(32, 32);
+      this.btnEntityPos.TabIndex = 0;
+      this.btnEntityPos.Tag = "1";
+      this.btnEntityPos.UseVisualStyleBackColor = false;
+      this.btnEntityPos.Click += new System.EventHandler(this.btnEntityTransform_Click);
+      // 
+      // pnlEntityPacks
+      // 
+      this.pnlEntityPacks._Checked = false;
+      this.pnlEntityPacks.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.pnlEntityPacks.BORDERCOLOR = System.Drawing.Color.Black;
+      this.pnlEntityPacks.BORDERRADIUS = 5;
+      this.pnlEntityPacks.BORDERWIDTH = 1;
+      this.pnlEntityPacks.Controls.Add(this.awA_Button2);
+      this.pnlEntityPacks.Controls.Add(this.textBox1);
+      this.pnlEntityPacks.Controls.Add(this.awA_Button1);
+      this.pnlEntityPacks.Controls.Add(this.listBox1);
+      this.pnlEntityPacks.Location = new System.Drawing.Point(3, 112);
+      this.pnlEntityPacks.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
+      this.pnlEntityPacks.Name = "pnlEntityPacks";
+      this.pnlEntityPacks.Size = new System.Drawing.Size(167, 167);
+      this.pnlEntityPacks.TabIndex = 1;
+      this.pnlEntityPacks.Text = "Packs";
+      // 
+      // pnlLeftWater
+      // 
+      this.pnlLeftWater.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+      this.pnlLeftWater.Dock = System.Windows.Forms.DockStyle.Left;
+      this.pnlLeftWater.Location = new System.Drawing.Point(350, 66);
+      this.pnlLeftWater.Name = "pnlLeftWater";
+      this.pnlLeftWater.Size = new System.Drawing.Size(175, 650);
+      this.pnlLeftWater.TabIndex = 7;
+      this.pnlLeftWater.Visible = false;
+      // 
+      // cmsEntity
+      // 
+      this.cmsEntity.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.transformationToolStripMenuItem});
+      this.cmsEntity.Name = "cmsEntity";
+      this.cmsEntity.Size = new System.Drawing.Size(166, 26);
+      // 
+      // transformationToolStripMenuItem
+      // 
+      this.transformationToolStripMenuItem.Name = "transformationToolStripMenuItem";
+      this.transformationToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+      this.transformationToolStripMenuItem.Text = "Transformation...";
+      // 
+      // lbxTerrainTexturePacks
+      // 
+      this.lbxTerrainTexturePacks.FormattingEnabled = true;
+      this.lbxTerrainTexturePacks.Location = new System.Drawing.Point(5, 53);
+      this.lbxTerrainTexturePacks.Name = "lbxTerrainTexturePacks";
+      this.lbxTerrainTexturePacks.Size = new System.Drawing.Size(135, 108);
+      this.lbxTerrainTexturePacks.TabIndex = 0;
+      // 
+      // tbxTerrainTexturePacks
+      // 
+      this.tbxTerrainTexturePacks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.tbxTerrainTexturePacks.Location = new System.Drawing.Point(5, 31);
+      this.tbxTerrainTexturePacks.Name = "tbxTerrainTexturePacks";
+      this.tbxTerrainTexturePacks.Size = new System.Drawing.Size(135, 20);
+      this.tbxTerrainTexturePacks.TabIndex = 1;
+      // 
+      // btnTerrainTexturePacksAdd
+      // 
+      this.btnTerrainTexturePacksAdd.BackColor = System.Drawing.Color.Transparent;
+      this.btnTerrainTexturePacksAdd.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.btnTerrainTexturePacksAdd.BORDERCOLOR = System.Drawing.Color.Green;
+      this.btnTerrainTexturePacksAdd.BORDERRADIUS = 5;
+      this.btnTerrainTexturePacksAdd.BORDERWIDTH = 1;
+      this.btnTerrainTexturePacksAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      this.btnTerrainTexturePacksAdd.ForeColor = System.Drawing.Color.Green;
+      this.btnTerrainTexturePacksAdd.Image = null;
+      this.btnTerrainTexturePacksAdd.Location = new System.Drawing.Point(143, 31);
+      this.btnTerrainTexturePacksAdd.Name = "btnTerrainTexturePacksAdd";
+      this.btnTerrainTexturePacksAdd.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+      this.btnTerrainTexturePacksAdd.SCALEBORD = true;
+      this.btnTerrainTexturePacksAdd.Size = new System.Drawing.Size(20, 20);
+      this.btnTerrainTexturePacksAdd.TabIndex = 2;
+      this.btnTerrainTexturePacksAdd.Text = "+";
+      this.btnTerrainTexturePacksAdd.UseVisualStyleBackColor = false;
+      // 
+      // btnTerrainTexturePacksDel
+      // 
+      this.btnTerrainTexturePacksDel.BackColor = System.Drawing.Color.Transparent;
+      this.btnTerrainTexturePacksDel.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.btnTerrainTexturePacksDel.BORDERCOLOR = System.Drawing.Color.Red;
+      this.btnTerrainTexturePacksDel.BORDERRADIUS = 5;
+      this.btnTerrainTexturePacksDel.BORDERWIDTH = 1;
+      this.btnTerrainTexturePacksDel.Font = new System.Drawing.Font("Bauhaus 93", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.btnTerrainTexturePacksDel.ForeColor = System.Drawing.Color.Red;
+      this.btnTerrainTexturePacksDel.Image = null;
+      this.btnTerrainTexturePacksDel.Location = new System.Drawing.Point(143, 53);
+      this.btnTerrainTexturePacksDel.Name = "btnTerrainTexturePacksDel";
+      this.btnTerrainTexturePacksDel.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+      this.btnTerrainTexturePacksDel.SCALEBORD = true;
+      this.btnTerrainTexturePacksDel.Size = new System.Drawing.Size(20, 20);
+      this.btnTerrainTexturePacksDel.TabIndex = 3;
+      this.btnTerrainTexturePacksDel.Text = "-";
+      this.btnTerrainTexturePacksDel.UseVisualStyleBackColor = false;
+      // 
+      // listBox1
+      // 
+      this.listBox1.FormattingEnabled = true;
+      this.listBox1.Location = new System.Drawing.Point(3, 53);
+      this.listBox1.Name = "listBox1";
+      this.listBox1.Size = new System.Drawing.Size(135, 108);
+      this.listBox1.TabIndex = 0;
+      // 
+      // textBox1
+      // 
+      this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.textBox1.Location = new System.Drawing.Point(3, 31);
+      this.textBox1.Name = "textBox1";
+      this.textBox1.Size = new System.Drawing.Size(135, 20);
+      this.textBox1.TabIndex = 1;
+      // 
+      // awA_Button1
+      // 
+      this.awA_Button1.BackColor = System.Drawing.Color.Transparent;
+      this.awA_Button1.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.awA_Button1.BORDERCOLOR = System.Drawing.Color.Green;
+      this.awA_Button1.BORDERRADIUS = 5;
+      this.awA_Button1.BORDERWIDTH = 1;
+      this.awA_Button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      this.awA_Button1.ForeColor = System.Drawing.Color.Green;
+      this.awA_Button1.Image = null;
+      this.awA_Button1.Location = new System.Drawing.Point(141, 31);
+      this.awA_Button1.Name = "awA_Button1";
+      this.awA_Button1.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+      this.awA_Button1.SCALEBORD = true;
+      this.awA_Button1.Size = new System.Drawing.Size(20, 20);
+      this.awA_Button1.TabIndex = 2;
+      this.awA_Button1.Text = "+";
+      this.awA_Button1.UseVisualStyleBackColor = false;
+      // 
+      // awA_Button2
+      // 
+      this.awA_Button2.BackColor = System.Drawing.Color.Transparent;
+      this.awA_Button2.BACKCOLOR = System.Drawing.Color.Transparent;
+      this.awA_Button2.BORDERCOLOR = System.Drawing.Color.Red;
+      this.awA_Button2.BORDERRADIUS = 5;
+      this.awA_Button2.BORDERWIDTH = 1;
+      this.awA_Button2.Font = new System.Drawing.Font("Bauhaus 93", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.awA_Button2.ForeColor = System.Drawing.Color.Red;
+      this.awA_Button2.Image = null;
+      this.awA_Button2.Location = new System.Drawing.Point(141, 53);
+      this.awA_Button2.Name = "awA_Button2";
+      this.awA_Button2.PUSHEDCOLOR = System.Drawing.Color.FromArgb(((int)(((byte)(215)))), ((int)(((byte)(215)))), ((int)(((byte)(215)))));
+      this.awA_Button2.SCALEBORD = true;
+      this.awA_Button2.Size = new System.Drawing.Size(20, 20);
+      this.awA_Button2.TabIndex = 3;
+      this.awA_Button2.Text = "-";
+      this.awA_Button2.UseVisualStyleBackColor = false;
       // 
       // EditorForm
       // 
@@ -1141,11 +1271,6 @@
       this.panel3.PerformLayout();
       this.panel2.ResumeLayout(false);
       this.panel2.PerformLayout();
-      this.pnlTop.ResumeLayout(false);
-      this.pnlTopMain.ResumeLayout(false);
-      this.pnlLeftEntity.ResumeLayout(false);
-      this.pnlEntityTransformation.ResumeLayout(false);
-      this.cmsEntity.ResumeLayout(false);
       this.pnlTerrainTexturing.ResumeLayout(false);
       this.pnlTerrainTexturingDummy.ResumeLayout(false);
       this.panel15.ResumeLayout(false);
@@ -1153,6 +1278,15 @@
       this.panel17.ResumeLayout(false);
       this.panel17.PerformLayout();
       this.panel12.ResumeLayout(false);
+      this.pnlTerrainTexturePacks.ResumeLayout(false);
+      this.pnlTerrainTexturePacks.PerformLayout();
+      this.pnlTop.ResumeLayout(false);
+      this.pnlTopMain.ResumeLayout(false);
+      this.pnlLeftEntity.ResumeLayout(false);
+      this.pnlEntityTransformation.ResumeLayout(false);
+      this.pnlEntityPacks.ResumeLayout(false);
+      this.pnlEntityPacks.PerformLayout();
+      this.cmsEntity.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -1196,7 +1330,7 @@
         private System.Windows.Forms.Button btnEntityPos;
         private System.Windows.Forms.FlowLayoutPanel pnlLeftWater;
         private GUI_elements.Panel_Ex pnlTerrainTerraforming;
-        private GUI_elements.Panel_Ex panel_Ex1;
+        private GUI_elements.Panel_Ex pnlEntityPacks;
         private System.Windows.Forms.Panel pnlTerrainTerraformingDummy;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label label4;
@@ -1235,6 +1369,14 @@
         private System.Windows.Forms.Button btnTexturingCustom;
         private System.Windows.Forms.Button btnTexturingQuad;
         private System.Windows.Forms.Button btnTexturingRhomb;
-        private GUI_elements.Panel_Ex panel_Ex2;
+        private GUI_elements.Panel_Ex pnlTerrainTexturePacks;
+        private GUI_elements.AWA_Button btnTerrainTexturePacksDel;
+        private GUI_elements.AWA_Button btnTerrainTexturePacksAdd;
+        private System.Windows.Forms.TextBox tbxTerrainTexturePacks;
+        private System.Windows.Forms.ListBox lbxTerrainTexturePacks;
+        private GUI_elements.AWA_Button awA_Button2;
+        private System.Windows.Forms.TextBox textBox1;
+        private GUI_elements.AWA_Button awA_Button1;
+        private System.Windows.Forms.ListBox listBox1;
     }
 }

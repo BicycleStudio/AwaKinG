@@ -20,6 +20,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR	lpCmdLine
 	}
   EngineWrap::getInstance().resizeBuffer(Window::getInstance().getWidth(), Window::getInstance().getHeight());
   Map::getInstance().initialize("../../resources/map/testMap2.amp");
+  Terrain::getInstance().create(1,1);
 
   messageLoop();
 

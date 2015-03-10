@@ -5,6 +5,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include "../core/map/Map.h"
+#include "../core/map/Terrain.h"
 using namespace Shader;
 
 #define NUM_RENDER_TECHNIQUES 1
@@ -37,7 +38,8 @@ private:
 	void _prepareToRenderTechnique(Technique tech);
 	void _endScene();
 
-	void _renderTextureMapModel(Model* model, vector<XMFLOAT4X4*>* matrixs);
+  void _renderTextureMapModel(Model* model, vector<XMFLOAT4X4*>* matrixs);
+  void _renderTerrainTile(int id);
 	bool _initializeShaders();
 	bool _initializeRasterizerStates();
 	bool _initializeSamplerStates();

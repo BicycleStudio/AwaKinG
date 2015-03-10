@@ -199,7 +199,16 @@
 #pragma region render methods
 	void Render::update() {
 		_beginScene();
-
+    //TODO: terrain tesselation shader
+    //_prepareToRenderTechnique(_terrain);
+    if(Terrain::getInstance().getInitialized()) {
+      _prepareToRenderTechnique(_textureMap);
+      _immediateContext->IASetIndexBuffer(Terrain::getInstance().getIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+      _mapConstantBufferResource(&_textureMap.Buffers[0], Terrain::getInstance().getWorldMatrix());
+      _immediateContext->VSSetConstantBuffers(_textureMap.IndexsOfBuffers[0], 1, &_textureMap.Buffers[0]);
+      for(int i = 0; i < Terrain::getInstance().getNumTiles(); i++)
+        _renderTerrainTile(i);
+    }
 		_prepareToRenderTechnique(_textureMap);
 		for(uint i = 0; i<_models[MRT_TEXTURE_MAP].size(); i++)
 			_renderTextureMapModel(_models[MRT_TEXTURE_MAP][i], &_worldMatrix[MRT_TEXTURE_MAP][i]);
@@ -220,6 +229,12 @@
 		_immediateContext->PSSetShader(tech.PixelShader, nullptr, 0);
 		_immediateContext->IASetInputLayout(tech.InputLayout);
 	}
+  void Render::_renderTerrainTile(int id) {
+    UINT offset_ = 0;
+    _immediateContext->PSSetShaderResources(0, 1, Terrain::getInstance().getTexture(id));
+    _immediateContext->IASetVertexBuffers(0, 1, Terrain::getInstance().getVertexBuffer(id), &_textureMap.VertexStride, &offset_);
+    _immediateContext->DrawIndexed(Terrain::getInstance().getIndexCount(), 0, 0);
+  }
 	void Render::_renderTextureMapModel(Model* model, vector<XMFLOAT4X4*>* matrixs) {
 		UINT offset_ = 0;
 		_immediateContext->PSSetShaderResources(0, 1, model->getDiffuseMap());
