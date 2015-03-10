@@ -21,6 +21,7 @@ public:
   bool createTexture(string fileName, ID3D11ShaderResourceView** texture);
   bool createTexture(string fileName, D3DX11_IMAGE_LOAD_INFO* ili, ID3D11ShaderResourceView** texture);
   bool addModel(string modelName, XMFLOAT4X4* worldMatrix);
+  void saveResourceToFile(string fileName, ID3D11Resource* resource);
 
 	string errorMessage;
 	bool initialize(HWND hwnd, int sizeX, int sizeY);

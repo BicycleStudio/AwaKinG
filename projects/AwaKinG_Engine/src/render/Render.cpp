@@ -526,4 +526,7 @@
     if(SUCCEEDED(hr))return true;
     return false;
   }
+  void Render::saveResourceToFile(string fileName, ID3D11Resource* resource) {
+    D3DX11SaveTextureToFile(_immediateContext, resource, D3DX11_IMAGE_FILE_FORMAT::D3DX11_IFF_DDS, fileName.c_str());
+  }
 #pragma endregion

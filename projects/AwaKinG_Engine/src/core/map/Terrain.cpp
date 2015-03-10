@@ -7,15 +7,17 @@ Terrain::Terrain() {
   _numQuads = NUM_VERTS - 1;
   _numTileQuads = _numQuads * _numQuads;
   _numIndexs = _numTileQuads * 6;
-  _indexBuffer = 0;
-  _vertexBuffers = 0;
-  _numTiles = 0;
+  _indexBuffer = 0;_textures = 0;
+  _vertexBuffers = 0;_numTiles = 0;
+  _normalMap = 0;_heightMap = 0;
+  _indexes = 0; _pickToHeightMap = 0;
+  _heightMapToTiles = 0;
   _initialized = false;
 #ifdef _DLL_EXPORT
-  _2048dds = "../../../../media/_2048_3.dds";
+  _2048dds = "../../../../media/_2048.dds";
 #endif
 #ifdef _LIB_EXPORT
-  _2048dds = "../../media/_2048_3.dds";
+  _2048dds = "../../media/_2048.dds";
 #endif
 }
 void Terrain::shutdown() {
@@ -24,18 +26,23 @@ void Terrain::shutdown() {
     SAFE_RELEASE(_vertexBuffers[i]);
   for(int i = 0; i < _numTiles; i++)
     SAFE_RELEASE(_textures[i]);
-  delete[] _vertexBuffers;
-  delete[] _textures;
-  delete[] _normalMap;
-  delete[] _heightMap;
-  delete[] _indexes;
-  for(int i = 0; i < _maxId; i++)
-    delete[] _heightMapToTerrain[i];
-  delete[] _heightMapToTerrain;
-  for(int i = 0; i < _numTiles; i++)
-    delete[] _pickToHeightMap[i];
-  delete[] _pickToHeightMap;
-  
+  if(_vertexBuffers) { delete[] _vertexBuffers; _vertexBuffers = 0; }
+  if(_textures) { delete[] _textures; _textures = 0; }
+  if(_normalMap) { delete[] _normalMap; _normalMap = 0; }
+  if(_heightMap) { delete[] _heightMap; _heightMap = 0; }
+  if(_indexes) { delete[] _indexes; _indexes = 0; }
+  if(_heightMapToTiles) {
+    for(int i = 0; i < _maxId; i++)
+      delete[] _heightMapToTiles[i];
+    delete[] _heightMapToTiles;
+    _heightMapToTiles = 0;
+  }
+  if(_pickToHeightMap) {
+    for(int i = 0; i < _numTiles; i++)
+      delete[] _pickToHeightMap[i];
+    delete[] _pickToHeightMap;
+    _pickToHeightMap = 0;
+  }
   _numTiles = 0;
   _initialized = false;
 }
@@ -50,7 +57,10 @@ bool Terrain::create(int sizeX, int sizeY) {
   _generateHeightMap();
 
   XMStoreFloat4x4(&_worldMatrix, XMMatrixIdentity());
-  return _generateGeometry();
+  if(!_generateGeometry()) return false;
+  if(!_generateTextures()) return false;
+  _initialized = true;
+  return true;
 }
 void Terrain::_generateHeightMap() {
   _numTiles = _sizeX * _sizeY;
@@ -59,12 +69,12 @@ void Terrain::_generateHeightMap() {
   _halfSpaceRaw = 0.5f*(_numVertsInRaw-1)*CELL_SPACE;
   _halfSpaceCol = 0.5f*(_numVertsInCol-1)*CELL_SPACE;
   _maxId = _numVertsInRaw * _numVertsInCol;
-  _heightMapToTerrain = new int*[_maxId];
+  _heightMapToTiles = new int*[_maxId];
   _pickToHeightMap = new int*[_numTiles];
 
   for(int i = 0; i < _maxId; i++) {
-    _heightMapToTerrain[i] = new int[1];
-    _heightMapToTerrain[i][0] = 0;
+    _heightMapToTiles[i] = new int[1];
+    _heightMapToTiles[i][0] = 0;
   }
   for(int i = 0; i < _numTiles; i++)
     _pickToHeightMap[i] = new int[_numTileVerts];
@@ -82,57 +92,57 @@ void Terrain::_generateHeightMap() {
 
       _pickToHeightMap[i][j] = k + qwer + j + k_raw;
 
-      switch(_heightMapToTerrain[k + qwer + j + k_raw][0]) {
+      switch(_heightMapToTiles[k + qwer + j + k_raw][0]) {
       case 0:
-        _heightMapToTerrain[k + qwer + j + k_raw] = new int[3];
-        _heightMapToTerrain[k + qwer + j + k_raw][0] = 1;
-        _heightMapToTerrain[k + qwer + j + k_raw][1] = i;
-        _heightMapToTerrain[k + qwer + j + k_raw][2] = j;
+        _heightMapToTiles[k + qwer + j + k_raw] = new int[3];
+        _heightMapToTiles[k + qwer + j + k_raw][0] = 1;
+        _heightMapToTiles[k + qwer + j + k_raw][1] = i;
+        _heightMapToTiles[k + qwer + j + k_raw][2] = j;
         break;
       case 1:
-        savedI_ = _heightMapToTerrain[k + qwer + j + k_raw][1];
-        savedJ_ = _heightMapToTerrain[k + qwer + j + k_raw][2];
+        savedI_ = _heightMapToTiles[k + qwer + j + k_raw][1];
+        savedJ_ = _heightMapToTiles[k + qwer + j + k_raw][2];
 
-        _heightMapToTerrain[k + qwer + j + k_raw] = new int[5];
-        _heightMapToTerrain[k + qwer + j + k_raw][0] = 2;
-        _heightMapToTerrain[k + qwer + j + k_raw][1] = savedI_;
-        _heightMapToTerrain[k + qwer + j + k_raw][2] = savedJ_;
-        _heightMapToTerrain[k + qwer + j + k_raw][3] = i;
-        _heightMapToTerrain[k + qwer + j + k_raw][4] = j;
+        _heightMapToTiles[k + qwer + j + k_raw] = new int[5];
+        _heightMapToTiles[k + qwer + j + k_raw][0] = 2;
+        _heightMapToTiles[k + qwer + j + k_raw][1] = savedI_;
+        _heightMapToTiles[k + qwer + j + k_raw][2] = savedJ_;
+        _heightMapToTiles[k + qwer + j + k_raw][3] = i;
+        _heightMapToTiles[k + qwer + j + k_raw][4] = j;
         break;
       case 2:
-        savedI_ = _heightMapToTerrain[k + qwer + j + k_raw][1];
-        savedJ_ = _heightMapToTerrain[k + qwer + j + k_raw][2];
-        savedK_ = _heightMapToTerrain[k + qwer + j + k_raw][3];
-        savedL_ = _heightMapToTerrain[k + qwer + j + k_raw][4];
+        savedI_ = _heightMapToTiles[k + qwer + j + k_raw][1];
+        savedJ_ = _heightMapToTiles[k + qwer + j + k_raw][2];
+        savedK_ = _heightMapToTiles[k + qwer + j + k_raw][3];
+        savedL_ = _heightMapToTiles[k + qwer + j + k_raw][4];
 
-        _heightMapToTerrain[k + qwer + j + k_raw] = new int[7];
-        _heightMapToTerrain[k + qwer + j + k_raw][0] = 3;
-        _heightMapToTerrain[k + qwer + j + k_raw][1] = savedI_;
-        _heightMapToTerrain[k + qwer + j + k_raw][2] = savedJ_;
-        _heightMapToTerrain[k + qwer + j + k_raw][3] = savedK_;
-        _heightMapToTerrain[k + qwer + j + k_raw][4] = savedL_;
-        _heightMapToTerrain[k + qwer + j + k_raw][5] = i;
-        _heightMapToTerrain[k + qwer + j + k_raw][6] = j;
+        _heightMapToTiles[k + qwer + j + k_raw] = new int[7];
+        _heightMapToTiles[k + qwer + j + k_raw][0] = 3;
+        _heightMapToTiles[k + qwer + j + k_raw][1] = savedI_;
+        _heightMapToTiles[k + qwer + j + k_raw][2] = savedJ_;
+        _heightMapToTiles[k + qwer + j + k_raw][3] = savedK_;
+        _heightMapToTiles[k + qwer + j + k_raw][4] = savedL_;
+        _heightMapToTiles[k + qwer + j + k_raw][5] = i;
+        _heightMapToTiles[k + qwer + j + k_raw][6] = j;
         break;
       case 3:
-        savedI_ = _heightMapToTerrain[k + qwer + j + k_raw][1];
-        savedJ_ = _heightMapToTerrain[k + qwer + j + k_raw][2];
-        savedK_ = _heightMapToTerrain[k + qwer + j + k_raw][3];
-        savedL_ = _heightMapToTerrain[k + qwer + j + k_raw][4];
-        savedM_ = _heightMapToTerrain[k + qwer + j + k_raw][5];
-        savedN_ = _heightMapToTerrain[k + qwer + j + k_raw][6];
+        savedI_ = _heightMapToTiles[k + qwer + j + k_raw][1];
+        savedJ_ = _heightMapToTiles[k + qwer + j + k_raw][2];
+        savedK_ = _heightMapToTiles[k + qwer + j + k_raw][3];
+        savedL_ = _heightMapToTiles[k + qwer + j + k_raw][4];
+        savedM_ = _heightMapToTiles[k + qwer + j + k_raw][5];
+        savedN_ = _heightMapToTiles[k + qwer + j + k_raw][6];
 
-        _heightMapToTerrain[k + qwer + j + k_raw] = new int[9];
-        _heightMapToTerrain[k + qwer + j + k_raw][0] = 4;
-        _heightMapToTerrain[k + qwer + j + k_raw][1] = savedI_;
-        _heightMapToTerrain[k + qwer + j + k_raw][2] = savedJ_;
-        _heightMapToTerrain[k + qwer + j + k_raw][3] = savedK_;
-        _heightMapToTerrain[k + qwer + j + k_raw][4] = savedL_;
-        _heightMapToTerrain[k + qwer + j + k_raw][5] = savedM_;
-        _heightMapToTerrain[k + qwer + j + k_raw][6] = savedN_;
-        _heightMapToTerrain[k + qwer + j + k_raw][7] = i;
-        _heightMapToTerrain[k + qwer + j + k_raw][8] = j;
+        _heightMapToTiles[k + qwer + j + k_raw] = new int[9];
+        _heightMapToTiles[k + qwer + j + k_raw][0] = 4;
+        _heightMapToTiles[k + qwer + j + k_raw][1] = savedI_;
+        _heightMapToTiles[k + qwer + j + k_raw][2] = savedJ_;
+        _heightMapToTiles[k + qwer + j + k_raw][3] = savedK_;
+        _heightMapToTiles[k + qwer + j + k_raw][4] = savedL_;
+        _heightMapToTiles[k + qwer + j + k_raw][5] = savedM_;
+        _heightMapToTiles[k + qwer + j + k_raw][6] = savedN_;
+        _heightMapToTiles[k + qwer + j + k_raw][7] = i;
+        _heightMapToTiles[k + qwer + j + k_raw][8] = j;
         break;
       }
     }
@@ -144,7 +154,7 @@ void Terrain::_generateHeightMap() {
   _heightMap = new XMFLOAT3[_maxId];
   _normalMap = new XMFLOAT3[_maxId];
   for(int i = 0; i < _numVertsInCol; i++) {
-    for(int j = 0; j < _numVertsInRaw; j++) {
+    for(int j = 0; j <_numVertsInRaw; j++) {
       //TODO: height?
       float height_ = i + j;// +(rand() % 100) / 5.0f;
       _heightMap[i*_numVertsInCol + j] = XMFLOAT3(CELL_SPACE * i - halfHeight_, height_, CELL_SPACE * j - halfWidth_);
@@ -185,7 +195,9 @@ bool Terrain::_generateGeometry() {
     }
   }
   if(!_createIndexBuffer()) return false;
-
+  return true;
+}
+bool Terrain::_generateTextures() {
   D3DX11_IMAGE_LOAD_INFO ili_;
   //ili_.MipLevels = 0;
   ili_.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -203,8 +215,6 @@ bool Terrain::_generateGeometry() {
     errorMessage = "Create Texture error with path!";
     return false;
   }
-
-  _initialized = true;
   return true;
 }
 bool Terrain::_createIndexBuffer() {
@@ -261,19 +271,67 @@ bool Terrain::getInitialized() {
   return _initialized;
 }
 bool Terrain::save(string fileName) {
-  OPEN_STREAM(fileName, "w+");
-  WRITE_INT(_sizeX); WRITE_INT(_sizeX);
+  string textureName_ = fileName.substr(0, fileName.length() - 4);
+  OPEN_STREAM(fileName, "a");
+  WRITE_INT(_sizeX); WRITE_INT(_sizeY);
   Parser::getInstance().newLine();
   for(int tile = 0; tile < _numTiles; tile++)  {
-    for(int i = 0; i < _numTileVerts; i++) {
-      for(int j = 0; j < _numTileVerts; j++) {
-        WRITE_FLOAT(_heightMap[_pickToHeightMap[tile][i*_numTileVerts + j]].y);
+    for(int i = 0; i < NUM_VERTS; i++) {
+      for(int j = 0; j < NUM_VERTS; j++) {
+        WRITE_FLOAT(_heightMap[_pickToHeightMap[tile][i*NUM_VERTS + j]].y);
       }
     }
     Parser::getInstance().newLine();
-
+    //TODO: save textures
+    char* buf_ = new char[3];
+    sprintf_s(buf_, 3, "%d", tile);
+    ID3D11Resource* ress;		_textures[tile]->GetResource(&ress);
+    Render::getInstance().saveResourceToFile(textureName_ + buf_ + ".dds", ress);
   }
   CLOSE_STREAM();
+  return true;
+}
+bool Terrain::open(string fileName) {
+  shutdown();
+  READ_INT(&_sizeX); READ_INT(&_sizeY);
+  _generateHeightMap();
+  XMStoreFloat4x4(&_worldMatrix, XMMatrixIdentity());
+  if(!_generateGeometry()) {
+    errorMessage = "";
+    shutdown();
+    return false;
+  }
+  D3DX11_IMAGE_LOAD_INFO ili_;
+  //ili_.MipLevels = 0;
+  ili_.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+  ili_.Width = 2048; ili_.Height = 2048;
+  ili_.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+  ili_.CpuAccessFlags = 0;
+  ili_.MipFilter = D3D11_FILTER_TYPE_LINEAR;
+  ili_.FirstMipLevel = 1;
+  ili_.MiscFlags = 0;
+  ili_.Usage = D3D11_USAGE_DEFAULT;
+
+  _textures = new ID3D11ShaderResourceView*[_numTiles];
+  string textureName_ = fileName.substr(0, fileName.length()-4);
+
+  for(int tile = 0; tile < _numTiles; tile++) {
+    for(int i = 0; i < NUM_VERTS; i++) {
+      for(int j = 0; j < NUM_VERTS; j++) {
+        float height_ = 0.0f;
+        READ_FLOAT(&height_);
+        _heightMap[_pickToHeightMap[tile][i*NUM_VERTS + j]].y = height_;
+      }
+    }
+    //TODO: load textures: i think, that not >> 999  ??
+    char* buf_ = new char[3];
+    sprintf_s(buf_, 3, "%d", tile);
+    if(!Render::getInstance().createTexture(textureName_ + buf_ + ".dds", &ili_, &_textures[tile])) {
+      errorMessage = "Create Texture error with path!";
+      return false;
+    }
+  }
+  _initialized = true;
   return true;
 }
 float Terrain::getHeight(float x, float z) {

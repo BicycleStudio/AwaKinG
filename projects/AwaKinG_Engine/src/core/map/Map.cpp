@@ -22,11 +22,13 @@ void Map::update() {
 }
 bool Map::initialize() {
   shutdown();
+  Terrain::getInstance().shutdown();
   _cameraManager = new RedactorPlayer();
 	return true;
 }
 bool Map::initialize(string fileName) {
   shutdown();
+  Terrain::getInstance().shutdown();
   _cameraManager = new RedactorPlayer();
   OPEN_STREAM(fileName, "r");
 
@@ -52,11 +54,13 @@ bool Map::initialize(string fileName) {
     Render::getInstance().addModel(entityName_, entity_->getWorldMatrix());
   }
 
+  Terrain::getInstance().open(fileName);
   CLOSE_STREAM();
   return true;
 }
 bool Map::initializeTestScene1() {
   shutdown();
+  Terrain::getInstance().shutdown();
   _cameraManager = new RedactorPlayer();
   Entity *ent = new Entity();
   _entities.push_back(ent);

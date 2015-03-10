@@ -19,12 +19,13 @@ public:
   ID3D11Buffer* getIndexBuffer();
   XMFLOAT4X4* getWorldMatrix();
   bool save(string fileName);
-
+  bool open(string fileName);
 private:
   Terrain();
   Terrain(const Terrain&);
   void _generateHeightMap();
   bool _generateGeometry();
+  bool _generateTextures();
   bool _createIndexBuffer();
 
   int   _sizeX;
@@ -47,7 +48,7 @@ private:
   XMFLOAT3*	                  _heightMap;
   uint*			                  _indexes;
   int**							          _pickToHeightMap;
-  int**							          _heightMapToTerrain;
+  int**							          _heightMapToTiles;
 
   ID3D11Buffer*								_indexBuffer;
   ID3D11Buffer**							_vertexBuffers;
