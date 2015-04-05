@@ -24,12 +24,27 @@ using namespace std;
 
 #define CHECK_RESULT(hres, msg) if(FAILED(hres)){errorMessage = msg;return false; }
 #define SAFE_RELEASE(d3dpointer) if(d3dpointer){d3dpointer->Release(); d3dpointer = 0;}
+#define PI_180  0.0174532925f
 
 enum ModelRenderTechnique { MRT_TEXTURE_MAP = 0 };
 typedef unsigned int uint;
 
+struct int3 {
+  int3() {}
+  int3(int value) { x = value; y = value; z = value; }
+  int3(int x_, int y_, int z_) { x = x_; y = y_; z = z_; }
+  int x;
+  int y; 
+  int z;
+};
 namespace Vertex {
 	struct Default {
+    Default() {}
+    Default(XMFLOAT3 pos, XMFLOAT2 tutv, XMFLOAT3 nor) { 
+      position = pos;
+      texCoords = tutv;
+      normal = nor;
+    }
 		XMFLOAT3 position;
 		XMFLOAT2 texCoords;
 		XMFLOAT3 normal;

@@ -15,7 +15,6 @@ private:
   EngineWrap *_engine;
 };
 
-
 class EngineWrap
 {
 public:

@@ -122,6 +122,9 @@
     <ClCompile Include="src\core\Input.cpp" />
     <ClCompile Include="src\core\map\Entity.cpp" />
     <ClCompile Include="src\core\map\Map.cpp" />
+    <ClCompile Include="src\core\map\Terrain.cpp" />
+    <ClCompile Include="src\core\Parser.cpp" />
+    <ClCompile Include="src\render\Camera.cpp" />
     <ClCompile Include="src\render\Model.cpp" />
     <ClCompile Include="src\render\Render.cpp" />
   </ItemGroup>
@@ -131,8 +134,11 @@
     <ClInclude Include="src\core\Input.h" />
     <ClInclude Include="src\core\map\Entity.h" />
     <ClInclude Include="src\core\map\Map.h" />
+    <ClInclude Include="src\core\map\Terrain.h" />
+    <ClInclude Include="src\core\Parser.h" />
     <ClInclude Include="src\ErrorDefines.h" />
     <ClInclude Include="src\render\Additional.h" />
+    <ClInclude Include="src\render\Camera.h" />
     <ClInclude Include="src\render\Model.h" />
     <ClInclude Include="src\render\Render.h" />
   </ItemGroup>

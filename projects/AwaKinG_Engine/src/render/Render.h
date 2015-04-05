@@ -3,17 +3,29 @@
 
 #include "../ErrorDefines.h"
 #include "Model.h"
+#include "Camera.h"
+#include "../core/map/Map.h"
+#include "../core/map/Terrain.h"
 using namespace Shader;
 
-class Render
-{
+#define NUM_RENDER_TECHNIQUES 1
+
+class Render {
 public:
-	void update();
+  void update();
 	void shutdown();
+  void clear();
 	bool resizeBuffer(int sizeX, int sizeY);
+
+  bool createBuffer(D3D11_BUFFER_DESC* bd, D3D11_SUBRESOURCE_DATA* data, ID3D11Buffer** buff);
+  bool createTexture(string fileName, ID3D11ShaderResourceView** texture);
+  bool createTexture(string fileName, D3DX11_IMAGE_LOAD_INFO* ili, ID3D11ShaderResourceView** texture);
+  bool addModel(string modelName, XMFLOAT4X4* worldMatrix);
+  void saveResourceToFile(string fileName, ID3D11Resource* resource);
 
 	string errorMessage;
 	bool initialize(HWND hwnd, int sizeX, int sizeY);
+  bool createTestTri(XMFLOAT4X4* worldMatrix);
 
 	static Render& getInstance()  {
 		static Render render_;
@@ -27,13 +39,16 @@ private:
 	void _prepareToRenderTechnique(Technique tech);
 	void _endScene();
 
-	void _renderTextureMapModel(Model* model, vector<XMFLOAT4X4*>* matrixs);
+  void _renderTextureMapModel(Model* model, vector<XMFLOAT4X4*>* matrixs);
+  void _renderTerrainTile(int id);
 	bool _initializeShaders();
 	bool _initializeRasterizerStates();
 	bool _initializeSamplerStates();
 	bool _compileShaderFromFile(LPCSTR file, const D3D_SHADER_MACRO* pDefs, LPCSTR szEntry, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppBlobOut);
 	void _mapViewProjectionBufferResource();
 	void _mapConstantBufferResource(ID3D11Buffer** buffer, XMFLOAT4X4* matrix);
+  void _addNewModel(ModelRenderTechnique tech, Model* model, XMFLOAT4X4* worldMatrix);
+  void _addModel(ModelRenderTechnique tech, int modelIndex, XMFLOAT4X4* worldMatrix);
 
 #pragma region private vars
 	SystemConfiguration _config;
@@ -60,8 +75,8 @@ private:
 	#pragma endregion
 	#pragma region main vars
 		private:
-			vector<Model*>								_models[1];
-			vector<vector<XMFLOAT4X4*>>		_worldMatrix[1];
+      vector<Model*>								_models[NUM_RENDER_TECHNIQUES];
+      vector<vector<XMFLOAT4X4*>>		_worldMatrix[NUM_RENDER_TECHNIQUES];
 			int														_sizeX;
 			int														_sizeY;
 			float*												_sceneColor;

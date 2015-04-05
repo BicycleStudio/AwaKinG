@@ -3,6 +3,7 @@
 #include <vector>
 using namespace std;
 #include "../ErrorDefines.h"
+#include "../core/Input.h"
 
 class Engine
 {
@@ -24,7 +25,8 @@ private:
 	Engine(const Engine&);
 
 private:
-	bool			_active;
+  bool			_active;
+  bool			_initialized;
 };
 
 #endif // __ENGINE_H 

@@ -6,10 +6,9 @@ DestroyerEngineWrap EngineWrap::_destroyer;
 DestroyerEngineWrap::~DestroyerEngineWrap(){
   delete _engine;
 }
-void DestroyerEngineWrap::initialize(EngineWrap *p_engine){
-  _engine = p_engine;
+void DestroyerEngineWrap::initialize(EngineWrap *engine){
+  _engine = engine;
 }
-
 EngineWrap& EngineWrap::getInstance(){
   if(!_engine){
 		_engine = new EngineWrap();
@@ -17,7 +16,6 @@ EngineWrap& EngineWrap::getInstance(){
 	}
 	return *_engine;
 }
-
 EngineWrap::EngineWrap()
 {
 	_initialized = false;
@@ -30,7 +28,7 @@ bool EngineWrap::initialize(HWND mainHwnd, HWND hwnd){
 		OUTPUT_ERROR(Input::getInstance(), ED_INPUT);
 	if(!Engine::getInstance().initialize()) 
 		OUTPUT_ERROR(Engine::getInstance(), ED_ENGINE);
-	if(!Map::getInstance().initialize())
+  if(!Map::getInstance().initializeTestScene1())
 		OUTPUT_ERROR(Map::getInstance(), ED_MAP);
 	_initialized = true;
 	_active = true;
@@ -39,7 +37,9 @@ bool EngineWrap::initialize(HWND mainHwnd, HWND hwnd){
 	return true;
 }
 void EngineWrap::release(){
-	Engine::getInstance().shutdown();
+  Camera::getInstance().shutdown();
+  Map::getInstance().shutdown();
+  Engine::getInstance().shutdown();
 	Input::getInstance().shutdown();
 	Render::getInstance().shutdown();
 }
@@ -47,6 +47,8 @@ void EngineWrap::update(){
 	if(Engine::getInstance().getActive()) {
 		Input::getInstance().update();
 		Engine::getInstance().update();
+    Map::getInstance().update();
+    Camera::getInstance().update();
 		Render::getInstance().update();
 	}
 }
